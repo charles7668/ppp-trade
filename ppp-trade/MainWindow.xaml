@@ -3,10 +3,23 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:ppp_trade"
+        xmlns:viewModels="clr-namespace:ppp_trade.ViewModels"
+        xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance Type=viewModels:MainWindowViewModel}"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center">
+            <ComboBox Width="120" Margin="5"
+                      ItemsSource="{Binding ServerList}"
+                      SelectedItem="{Binding SelectedServer}">
+            </ComboBox>
+            <ComboBox Width="120" Margin="5"
+                      ItemsSource="{Binding LeagueList}"
+                      SelectedItem="{Binding SelectedLeague}" />
+            <ComboBox Width="150" Margin="5"
+                      ItemsSource="{Binding TradeTypeList}"
+                      SelectedItem="{Binding SelectedTradeType}" />
+        </StackPanel>
     </Grid>
 </Window>
