@@ -4,22 +4,21 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModels="clr-namespace:ppp_trade.ViewModels"
-        xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:hc="https://handyorg.github.io/handycontrol"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance Type=viewModels:MainWindowViewModel}"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
         <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center">
-            <ComboBox Width="120" Margin="5"
-                      ItemsSource="{Binding ServerList}"
-                      SelectedItem="{Binding SelectedServer}">
-            </ComboBox>
-            <ComboBox Width="120" Margin="5"
-                      ItemsSource="{Binding LeagueList}"
-                      SelectedItem="{Binding SelectedLeague}" />
-            <ComboBox Width="150" Margin="5"
-                      ItemsSource="{Binding TradeTypeList}"
-                      SelectedItem="{Binding SelectedTradeType}" />
+            <hc:ComboBox Width="120" Margin="5"
+                         ItemsSource="{Binding ServerList}"
+                         SelectedItem="{Binding SelectedServer}" />
+            <hc:ComboBox Width="120" Margin="5"
+                         ItemsSource="{Binding LeagueList}"
+                         SelectedItem="{Binding SelectedLeague}" />
+            <hc:ComboBox Width="150" Margin="5"
+                         ItemsSource="{Binding TradeTypeList}"
+                         SelectedItem="{Binding SelectedTradeType}" />
         </StackPanel>
     </Grid>
 </Window>
