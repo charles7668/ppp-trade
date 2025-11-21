@@ -38,9 +38,11 @@ public class ChineseTradParser : IParser
                     break;
                 case ParsingState.PARSING_ITEM_BASE:
                     parsedItem.ItemBase = line;
+                    parsingState = ParsingState.PARSING_UNKNOW;
                     break;
                 case ParsingState.PARSING_ITEM_TYPE:
                     parsedItem.ItemType = ResolveItemType(line);
+                    parsingState = ParsingState.PARSING_UNKNOW;
                     break;
                 case ParsingState.PARSING_REQUIREMENT:
                     List<string> reqTexts = [];
@@ -52,6 +54,7 @@ public class ChineseTradParser : IParser
                     }
 
                     parsedItem.Requirements = ResolveItemRequirements(reqTexts);
+                    parsingState = ParsingState.PARSING_UNKNOW;
                     break;
                 case ParsingState.PARSING_UNKNOW:
                     if (i == indexOfRarity)
