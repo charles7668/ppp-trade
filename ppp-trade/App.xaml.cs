@@ -1,14 +1,14 @@
 ﻿using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
+using ppp_trade.Models.Parsers;
 using ppp_trade.Services;
-using ppp_trade.ViewModels;
 
 namespace ppp_trade;
 
 /// <summary>
 /// Interaction logic for App.xaml
 /// </summary>
-public partial class App : Application
+public partial class App
 {
     public static IServiceProvider ServiceProvider { get; private set; } = null!;
 
@@ -16,8 +16,9 @@ public partial class App : Application
     {
         services.AddSingleton<PoeApiService>();
         services.AddSingleton<ClipboardMonitorService>();
-        services.AddSingleton<MainWindowViewModel>();
-        services.AddSingleton<MainWindow>();
+        services.AddScoped<IParser, EngParser>();
+        services.AddScoped<IParser, ChineseTradParser>();
+        services.AddSingleton<ParserFactory>();
     }
 
     protected override void OnStartup(StartupEventArgs e)

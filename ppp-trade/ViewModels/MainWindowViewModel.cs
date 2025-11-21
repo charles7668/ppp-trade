@@ -1,8 +1,12 @@
 using System.Diagnostics;
+using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using HandyControl.Controls;
+using HandyControl.Data;
 using Microsoft.Extensions.DependencyInjection;
 using ppp_trade.Enums;
+using ppp_trade.Models.Parsers;
 using ppp_trade.Services;
 
 namespace ppp_trade.ViewModels;
@@ -21,12 +25,15 @@ public partial class MainWindowViewModel : ObservableObject
 
         _poeApiService = App.ServiceProvider.GetRequiredService<PoeApiService>();
         _clipboardMonitorService = App.ServiceProvider.GetRequiredService<ClipboardMonitorService>();
+        _parserFactory = App.ServiceProvider.GetRequiredService<ParserFactory>();
         _selectedServer = _serverList[1];
         OnSelectedServerChanged(_selectedServer);
         _selectedTradeType = _tradeTypeList[1];
     }
 
     private readonly ClipboardMonitorService _clipboardMonitorService = null!;
+
+    private readonly ParserFactory _parserFactory = null!;
 
     private readonly PoeApiService _poeApiService = null!;
 
@@ -66,9 +73,22 @@ public partial class MainWindowViewModel : ObservableObject
         }
     }
 
-    private void OnClipboardChanged(object? sender, string e)
+    private void OnClipboardChanged(object? sender, string clipboardText)
     {
-        Debug.WriteLine($"Clipboard content: {e}");
+        Debug.WriteLine($"Clipboard content:\n {clipboardText}");
+        var parser = _parserFactory.GetParser(clipboardText);
+        if (parser == null)
+        {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                Growl.Warning(new GrowlInfo
+                {
+                    Message = "無法識別的物品格式",
+                    Token = "LogMsg",
+                    WaitTime = 2
+                });
+            });
+        }
     }
 
     partial void OnSelectedServerChanged(string? value)

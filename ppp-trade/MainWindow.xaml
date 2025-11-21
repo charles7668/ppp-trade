@@ -48,5 +48,9 @@
                 </StackPanel>
             </StackPanel>
         </Border>
+        <ScrollViewer VerticalScrollBarVisibility="Hidden" HorizontalAlignment="Right">
+            <StackPanel hc:Growl.Token="LogMsg" VerticalAlignment="Top"
+                        Margin="0,10,10,10" />
+        </ScrollViewer>
     </Grid>
 </Window>

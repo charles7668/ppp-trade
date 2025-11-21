@@ -1,12 +1,11 @@
-﻿using System.Windows;
-using ppp_trade.ViewModels;
+﻿using ppp_trade.ViewModels;
 
 namespace ppp_trade;
 
 /// <summary>
 /// Interaction logic for MainWindow.xaml
 /// </summary>
-public partial class MainWindow : Window
+public partial class MainWindow
 {
     public MainWindow()
     {
