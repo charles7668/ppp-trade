@@ -1,4 +1,6 @@
+using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
 using ppp_trade.Enums;
 using ppp_trade.Services;
@@ -18,18 +20,21 @@ public partial class MainWindowViewModel : ObservableObject
         }
 
         _poeApiService = App.ServiceProvider.GetRequiredService<PoeApiService>();
+        _clipboardMonitorService = App.ServiceProvider.GetRequiredService<ClipboardMonitorService>();
         _selectedServer = _serverList[1];
         OnSelectedServerChanged(_selectedServer);
         _selectedTradeType = _tradeTypeList[1];
     }
 
+    private readonly ClipboardMonitorService _clipboardMonitorService = null!;
+
     private readonly PoeApiService _poeApiService = null!;
 
     [ObservableProperty]
-    private CorruptedState _selectedCorruptedState = CorruptedState.ANY;
+    private IList<string> _leagueList = [];
 
     [ObservableProperty]
-    private IList<string> _leagueList = [];
+    private CorruptedState _selectedCorruptedState = CorruptedState.ANY;
 
     [ObservableProperty]
     private string? _selectedLeague;
@@ -61,10 +66,31 @@ public partial class MainWindowViewModel : ObservableObject
         }
     }
 
+    private void OnClipboardChanged(object? sender, string e)
+    {
+        Debug.WriteLine($"Clipboard content: {e}");
+    }
+
     partial void OnSelectedServerChanged(string? value)
     {
         var domain = value == "台服" ? "https://www.pathofexile.tw/" : "https://www.pathofexile.com/";
         _poeApiService.SwitchDomain(domain);
         LoadLeagues().ConfigureAwait(false);
+    }
+
+    [RelayCommand]
+    private Task WindowClosing()
+    {
+        _clipboardMonitorService.StopMonitoring();
+        return Task.CompletedTask;
+    }
+
+    [RelayCommand]
+    private async Task WindowLoaded()
+    {
+        // todo load settings
+        await LoadLeagues();
+        _clipboardMonitorService.ClipboardChanged += OnClipboardChanged;
+        _clipboardMonitorService.StartMonitoring();
     }
 }

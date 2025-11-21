@@ -12,6 +12,14 @@ public partial class App : Application
 {
     public static IServiceProvider ServiceProvider { get; private set; } = null!;
 
+    private void ConfigureServices(IServiceCollection services)
+    {
+        services.AddSingleton<PoeApiService>();
+        services.AddSingleton<ClipboardMonitorService>();
+        services.AddSingleton<MainWindowViewModel>();
+        services.AddSingleton<MainWindow>();
+    }
+
     protected override void OnStartup(StartupEventArgs e)
     {
         var serviceCollection = new ServiceCollection();
@@ -19,12 +27,5 @@ public partial class App : Application
 
         ServiceProvider = serviceCollection.BuildServiceProvider();
         base.OnStartup(e);
-    }
-
-    private void ConfigureServices(IServiceCollection services)
-    {
-        services.AddSingleton<PoeApiService>();
-        services.AddSingleton<MainWindowViewModel>();
-        services.AddSingleton<MainWindow>();
     }
 }
