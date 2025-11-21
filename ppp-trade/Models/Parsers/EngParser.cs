@@ -7,7 +7,7 @@ internal class EngParser : IParser
         return text.Contains("Item Class: ");
     }
 
-    public object Parse(string text)
+    public Item? Parse(string text)
     {
         throw new NotImplementedException();
     }
