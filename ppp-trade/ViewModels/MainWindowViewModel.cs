@@ -1,5 +1,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Extensions.DependencyInjection;
+using ppp_trade.Enums;
 using ppp_trade.Services;
 
 namespace ppp_trade.ViewModels;
@@ -15,6 +16,7 @@ public partial class MainWindowViewModel : ObservableObject
             _selectedTradeType = _tradeTypeList[1];
             return;
         }
+
         _poeApiService = App.ServiceProvider.GetRequiredService<PoeApiService>();
         _selectedServer = _serverList[1];
         OnSelectedServerChanged(_selectedServer);
@@ -22,6 +24,9 @@ public partial class MainWindowViewModel : ObservableObject
     }
 
     private readonly PoeApiService _poeApiService = null!;
+
+    [ObservableProperty]
+    private CorruptedState _selectedCorruptedState = CorruptedState.ANY;
 
     [ObservableProperty]
     private IList<string> _leagueList = [];

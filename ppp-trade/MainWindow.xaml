@@ -5,20 +5,36 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModels="clr-namespace:ppp_trade.ViewModels"
         xmlns:hc="https://handyorg.github.io/handycontrol"
+        xmlns:converters="clr-namespace:ppp_trade.Converters"
+        xmlns:enums="clr-namespace:ppp_trade.Enums"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance Type=viewModels:MainWindowViewModel, IsDesignTimeCreatable=True}"
         Title="MainWindow" Height="450" Width="800">
+    <Window.Resources>
+        <converters:EnumToBooleanConverter x:Key="EnumToBooleanConverter" />
+    </Window.Resources>
     <Grid>
-        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center">
-            <hc:ComboBox Width="120" Margin="5"
-                         ItemsSource="{Binding ServerList}"
-                         SelectedItem="{Binding SelectedServer}" />
-            <hc:ComboBox Width="120" Margin="5"
-                         ItemsSource="{Binding LeagueList}"
-                         SelectedItem="{Binding SelectedLeague}" />
-            <hc:ComboBox Width="150" Margin="5"
-                         ItemsSource="{Binding TradeTypeList}"
-                         SelectedItem="{Binding SelectedTradeType}" />
+        <StackPanel Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Center">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center">
+                <hc:ComboBox Width="120" Margin="5"
+                             ItemsSource="{Binding ServerList}"
+                             SelectedItem="{Binding SelectedServer}" />
+                <hc:ComboBox Width="120" Margin="5"
+                             ItemsSource="{Binding LeagueList}"
+                             SelectedItem="{Binding SelectedLeague}" />
+                <hc:ComboBox Width="150" Margin="5"
+                             ItemsSource="{Binding TradeTypeList}"
+                             SelectedItem="{Binding SelectedTradeType}" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center">
+                <Label>污染</Label>
+                <RadioButton Content="Any" GroupName="Corrupted" Margin="5"
+                             IsChecked="{Binding SelectedCorruptedState, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static enums:CorruptedState.ANY}}" />
+                <RadioButton Content="Yes" GroupName="Corrupted" Margin="5"
+                             IsChecked="{Binding SelectedCorruptedState, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static enums:CorruptedState.YES}}" />
+                <RadioButton Content="No" GroupName="Corrupted" Margin="5"
+                             IsChecked="{Binding SelectedCorruptedState, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static enums:CorruptedState.NO}}" />
+            </StackPanel>
         </StackPanel>
     </Grid>
 </Window>
