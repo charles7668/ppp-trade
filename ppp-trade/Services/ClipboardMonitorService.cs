@@ -11,6 +11,12 @@ public class ClipboardMonitorService
 
     private async Task MonitorClipboard(CancellationToken token)
     {
+        Application.Current.Dispatcher.Invoke(() =>
+        {
+            if (Clipboard.ContainsText())
+                _lastClipboardText = Clipboard.GetText();
+        });
+
         while (!token.IsCancellationRequested)
         {
             var currentText = string.Empty;
