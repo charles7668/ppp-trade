@@ -13,4 +13,6 @@ public struct Item
     public ItemType ItemType { get; set; }
 
     public IEnumerable<ItemRequirement> Requirements { get; set; }
+
+    public int ItemLevel { get; set; }
 }

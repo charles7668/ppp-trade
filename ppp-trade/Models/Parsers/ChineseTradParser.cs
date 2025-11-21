@@ -7,6 +7,7 @@ public class ChineseTradParser : IParser
     private const string RARITY_KEYWORD = "稀有度: ";
     private const string ITEM_TYPE_KEYWORD = "物品種類: ";
     private const string ITEM_REQUIREMENT_KEYWORD = "需求: ";
+    private const string ITEM_LEVEL_KEYWORD = "物品等級: ";
     private const string SPLIT_KEYWORK = "--------";
 
     public bool IsMatch(string text)
@@ -56,6 +57,11 @@ public class ChineseTradParser : IParser
                     parsedItem.Requirements = ResolveItemRequirements(reqTexts);
                     parsingState = ParsingState.PARSING_UNKNOW;
                     break;
+                case ParsingState.PARSING_ITEM_LEVEL:
+                    parsedItem.ItemLevel = int.Parse(line.Substring(ITEM_LEVEL_KEYWORD.Length,
+                        line.Length - ITEM_LEVEL_KEYWORD.Length));
+                    parsingState = ParsingState.PARSING_UNKNOW;
+                    break;
                 case ParsingState.PARSING_UNKNOW:
                     if (i == indexOfRarity)
                     {
@@ -71,6 +77,11 @@ public class ChineseTradParser : IParser
                     {
                         i--;
                         parsingState = ParsingState.PARSING_REQUIREMENT;
+                    }
+                    else if (line.StartsWith(ITEM_LEVEL_KEYWORD))
+                    {
+                        i--;
+                        parsingState = ParsingState.PARSING_ITEM_LEVEL;
                     }
 
                     break;
@@ -152,6 +163,7 @@ public class ChineseTradParser : IParser
         PARSING_ITEM_NAME,
         PARSING_ITEM_BASE,
         PARSING_REQUIREMENT,
+        PARSING_ITEM_LEVEL,
         PARSING_UNKNOW
     }
 }
