@@ -1,5 +1,4 @@
 using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
 using ppp_trade.Services;
 
@@ -9,13 +8,20 @@ public partial class MainWindowViewModel : ObservableObject
 {
     public MainWindowViewModel()
     {
+        // if in design mode
+        if (App.ServiceProvider == null!)
+        {
+            _selectedServer = _serverList[1];
+            _selectedTradeType = _tradeTypeList[1];
+            return;
+        }
         _poeApiService = App.ServiceProvider.GetRequiredService<PoeApiService>();
         _selectedServer = _serverList[1];
         OnSelectedServerChanged(_selectedServer);
         _selectedTradeType = _tradeTypeList[1];
     }
 
-    private readonly PoeApiService _poeApiService;
+    private readonly PoeApiService _poeApiService = null!;
 
     [ObservableProperty]
     private IList<string> _leagueList = [];

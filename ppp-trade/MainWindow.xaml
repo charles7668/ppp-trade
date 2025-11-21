@@ -6,7 +6,7 @@
         xmlns:viewModels="clr-namespace:ppp_trade.ViewModels"
         xmlns:hc="https://handyorg.github.io/handycontrol"
         mc:Ignorable="d"
-        d:DataContext="{d:DesignInstance Type=viewModels:MainWindowViewModel}"
+        d:DataContext="{d:DesignInstance Type=viewModels:MainWindowViewModel, IsDesignTimeCreatable=True}"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
         <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center">
