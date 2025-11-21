@@ -11,4 +11,6 @@ public struct Item
     public string ItemBase { get; set; }
 
     public ItemType ItemType { get; set; }
+
+    public IEnumerable<ItemRequirement> Requirements { get; set; }
 }

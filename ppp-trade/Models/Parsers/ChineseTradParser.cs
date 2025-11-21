@@ -6,6 +6,8 @@ public class ChineseTradParser : IParser
 {
     private const string RARITY_KEYWORD = "稀有度: ";
     private const string ITEM_TYPE_KEYWORD = "物品種類: ";
+    private const string ITEM_REQUIREMENT_KEYWORD = "需求: ";
+    private const string SPLIT_KEYWORK = "--------";
 
     public bool IsMatch(string text)
     {
@@ -40,6 +42,17 @@ public class ChineseTradParser : IParser
                 case ParsingState.PARSING_ITEM_TYPE:
                     parsedItem.ItemType = ResolveItemType(line);
                     break;
+                case ParsingState.PARSING_REQUIREMENT:
+                    List<string> reqTexts = [];
+                    i++;
+                    while (i < lines.Length && lines[i] != SPLIT_KEYWORK)
+                    {
+                        reqTexts.Add(lines[i]);
+                        i++;
+                    }
+
+                    parsedItem.Requirements = ResolveItemRequirements(reqTexts);
+                    break;
                 case ParsingState.PARSING_UNKNOW:
                     if (i == indexOfRarity)
                     {
@@ -51,12 +64,54 @@ public class ChineseTradParser : IParser
                         i--;
                         parsingState = ParsingState.PARSING_ITEM_TYPE;
                     }
+                    else if (line.StartsWith(ITEM_REQUIREMENT_KEYWORD))
+                    {
+                        i--;
+                        parsingState = ParsingState.PARSING_REQUIREMENT;
+                    }
 
                     break;
             }
         }
 
         return parsedItem;
+    }
+
+    private static IEnumerable<ItemRequirement> ResolveItemRequirements(IEnumerable<string> reqTexts)
+    {
+        const string reqLevelKeyword = "等級: ";
+        const string reqIntKeyword = "智慧: ";
+        const string reqStrKeyword = "力量: ";
+        const string reqDexKeyword = "敏捷: ";
+        Dictionary<string, ItemRequirementType> typeMap = new()
+        {
+            { reqLevelKeyword, ItemRequirementType.LEVEL },
+            { reqStrKeyword, ItemRequirementType.STR },
+            { reqDexKeyword, ItemRequirementType.DEX },
+            { reqIntKeyword, ItemRequirementType.INT }
+        };
+        List<ItemRequirement> results = [];
+        foreach (var reqText in reqTexts)
+        {
+            var key = reqLevelKeyword;
+            if (reqText.StartsWith(reqLevelKeyword))
+                key = reqLevelKeyword;
+            else if (reqText.StartsWith(reqIntKeyword))
+                key = reqIntKeyword;
+            else if (reqText.StartsWith(reqStrKeyword))
+                key = reqStrKeyword;
+            else if (reqText.StartsWith(reqDexKeyword))
+                key = reqDexKeyword;
+            var value = int.Parse(reqText.Substring(reqLevelKeyword.Length,
+                reqText.Length - reqLevelKeyword.Length));
+            results.Add(new ItemRequirement
+            {
+                ItemRequirementType = typeMap[key],
+                Value = value
+            });
+        }
+
+        return results;
     }
 
     private static ItemType ResolveItemType(string lineText)
@@ -93,6 +148,7 @@ public class ChineseTradParser : IParser
         PARSING_RARITY,
         PARSING_ITEM_NAME,
         PARSING_ITEM_BASE,
+        PARSING_REQUIREMENT,
         PARSING_UNKNOW
     }
 }
