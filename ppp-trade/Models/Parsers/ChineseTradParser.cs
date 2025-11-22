@@ -296,12 +296,41 @@ public class ChineseTradParser(CacheService cacheService) : IParser
         var substr = lineText.Substring(ITEM_TYPE_KEYWORD.Length, lineText.Length - ITEM_TYPE_KEYWORD.Length).Trim();
         var typeMap = new Dictionary<string, ItemType>
         {
+            { "爪", ItemType.CLAW },
+            { "匕首", ItemType.DAGGER },
+            { "法杖", ItemType.WAND },
+            { "單手劍", ItemType.ONE_HAND_SWORD },
+            { "單手斧", ItemType.ONE_HAND_AXE },
+            { "單手錘", ItemType.ONE_HAND_MACE },
+            { "權杖", ItemType.SCEPTRE },
+            { "符紋匕首", ItemType.RUNE_DAGGER },
+
+            { "弓", ItemType.BOW },
+            { "長杖", ItemType.STAFF },
+            { "雙手劍", ItemType.TWO_HAND_SWORD },
+            { "雙手斧", ItemType.TWO_HAND_AXE },
+            { "雙手錘", ItemType.TWO_HAND_MACE },
+            { "魚竿", ItemType.FISHING_ROD },
+
+            { "盾牌", ItemType.SHIELD },
+
+            { "頭部", ItemType.HELMET },
+            { "胸甲", ItemType.BODY_ARMOUR },
+            { "手套", ItemType.GLOVES },
+            { "鞋子", ItemType.BOOTS },
+            { "腰帶", ItemType.BELT },
+
+            { "項鍊", ItemType.AMULET },
+            { "戒指", ItemType.RING },
+
             { "異界地圖", ItemType.MAP },
             { "契約書", ItemType.CONTRACT },
             { "藍圖", ItemType.BLUEPRINT },
-            { "頭部", ItemType.HELMET },
             { "可堆疊通貨", ItemType.STACKABLE_CURRENCY },
-            { "命運卡", ItemType.DIVINATION_CARD }
+            { "命運卡", ItemType.DIVINATION_CARD },
+            { "珠寶", ItemType.JEWEL },
+            { "大型珠寶", ItemType.ABYSS_JEWEL },
+            { "護身符", ItemType.TALISMAN }
         };
 
         return typeMap.GetValueOrDefault(substr, ItemType.OTHER);
