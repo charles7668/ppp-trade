@@ -114,6 +114,7 @@ public class ChineseTradParser(CacheService cacheService) : IParser
                     }
 
                     parsedItem.Stats = ResolveStats(statTexts, statTw!);
+                    parsingState = ParsingState.PARSING_UNKNOW;
                     break;
                 case ParsingState.PARSING_UNKNOW:
                     if (i == indexOfRarity)
@@ -144,7 +145,7 @@ public class ChineseTradParser(CacheService cacheService) : IParser
         return parsedItem;
     }
 
-    private List<ItemStat> ResolveStats(IEnumerable<string> statTexts, List<StatGroup> stats)
+    private static List<ItemStat> ResolveStats(IEnumerable<string> statTexts, List<StatGroup> stats)
     {
         List<ItemStat> result = [];
 
