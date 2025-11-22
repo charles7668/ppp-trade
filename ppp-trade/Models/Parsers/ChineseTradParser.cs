@@ -1,14 +1,23 @@
-﻿using ppp_trade.Enums;
+﻿using System.IO;
+using System.Text.Json;
+using System.Text.RegularExpressions;
+using ppp_trade.Enums;
+using ppp_trade.Services;
 
 namespace ppp_trade.Models.Parsers;
 
-public class ChineseTradParser : IParser
+public class ChineseTradParser(CacheService cacheService) : IParser
 {
     private const string RARITY_KEYWORD = "稀有度: ";
     private const string ITEM_TYPE_KEYWORD = "物品種類: ";
     private const string ITEM_REQUIREMENT_KEYWORD = "需求: ";
     private const string ITEM_LEVEL_KEYWORD = "物品等級: ";
-    private const string SPLIT_KEYWORK = "--------";
+    private const string SPLIT_KEYWORD = "--------";
+    private const string IMPLICIT_KEYWORD = "(implicit)";
+    private const string STAT_EN_CACHE_KEY = "parser:stat_eng";
+    private const string STAT_TW_CACHE_KEY = "parser:stat_zh_tw";
+    private const string STAT_ID_TO_ENG_TEXT_MAP_CACHE_KEY = "parser:id_to_eng_text_map";
+    private readonly CacheService _cacheService = cacheService;
 
     public bool IsMatch(string text)
     {
@@ -17,6 +26,33 @@ public class ChineseTradParser : IParser
 
     public Item? Parse(string text)
     {
+        #region Get stat data
+
+        if (!_cacheService.TryGet(STAT_ID_TO_ENG_TEXT_MAP_CACHE_KEY, out Dictionary<(string, string), Stat>? idStatMap))
+        {
+            if (!_cacheService.TryGet(STAT_EN_CACHE_KEY, out List<StatGroup>? statEng))
+            {
+                statEng = LoadStats("stats_eng.json");
+                _cacheService.Set(STAT_EN_CACHE_KEY, statEng);
+            }
+
+            idStatMap = new Dictionary<(string, string), Stat>();
+
+            foreach (var group in statEng!)
+            foreach (var stat in group.Entries)
+                idStatMap.TryAdd((group.Id, stat.Id), stat);
+
+            _cacheService.Set(STAT_ID_TO_ENG_TEXT_MAP_CACHE_KEY, idStatMap);
+        }
+
+        if (!_cacheService.TryGet(STAT_TW_CACHE_KEY, out List<StatGroup>? statTw))
+        {
+            statTw = LoadStats("stats_zh_tw.json");
+            _cacheService.Set(STAT_TW_CACHE_KEY, statTw);
+        }
+
+        #endregion
+
         var lines = text.Split("\r\n");
         var indexOfRarity = Array.FindIndex(lines, l => l.StartsWith(RARITY_KEYWORD));
         if (indexOfRarity == -1)
@@ -48,7 +84,7 @@ public class ChineseTradParser : IParser
                 case ParsingState.PARSING_REQUIREMENT:
                     List<string> reqTexts = [];
                     i++;
-                    while (i < lines.Length && lines[i] != SPLIT_KEYWORK)
+                    while (i < lines.Length && lines[i] != SPLIT_KEYWORD)
                     {
                         reqTexts.Add(lines[i]);
                         i++;
@@ -60,7 +96,35 @@ public class ChineseTradParser : IParser
                 case ParsingState.PARSING_ITEM_LEVEL:
                     parsedItem.ItemLevel = int.Parse(line.Substring(ITEM_LEVEL_KEYWORD.Length,
                         line.Length - ITEM_LEVEL_KEYWORD.Length));
-                    parsingState = ParsingState.PARSING_UNKNOW;
+                    parsingState = ParsingState.PARSING_STAT;
+                    break;
+                case ParsingState.PARSING_STAT:
+                    var hasImplicit = false;
+                    List<string> statTexts = [];
+                    if (line == SPLIT_KEYWORD)
+                    {
+                        i++;
+                        if (line.Contains(IMPLICIT_KEYWORD)) hasImplicit = true;
+
+                        while (i < lines.Length && lines[i] != SPLIT_KEYWORD)
+                        {
+                            statTexts.Add(lines[i]);
+                            i++;
+                        }
+                    }
+
+                    if (hasImplicit && i < lines.Length && lines[i] == SPLIT_KEYWORD)
+                    {
+                        i++;
+
+                        while (i < lines.Length && lines[i] != SPLIT_KEYWORD)
+                        {
+                            statTexts.Add(lines[i]);
+                            i++;
+                        }
+                    }
+
+                    parsedItem.Stats = ResolveStats(statTexts, statTw, idStatMap);
                     break;
                 case ParsingState.PARSING_UNKNOW:
                     if (i == indexOfRarity)
@@ -89,6 +153,54 @@ public class ChineseTradParser : IParser
         }
 
         return parsedItem;
+    }
+
+    private List<ItemStat> ResolveStats(IEnumerable<string> statTexts , List<StatGroup> statTw , Dictionary<(string,string),Stat> idToStatEngMap)
+    {
+        List<ItemStat> result = [];
+        foreach (var stat in statTexts)
+        {
+            if (stat.Trim().EndsWith(IMPLICIT_KEYWORD))
+            {
+                var group = statTw.First(s => s.Id == "implicit");
+                foreach (var entry in group.Entries)
+                {
+                    var regex = entry.Text.Replace("#", "(\\d+)");
+                    var match = Regex.Match(stat, regex);
+                    if (match.Success)
+                    {
+                        int value;
+                        if (match.Groups.Count == 2)
+                            value = int.Parse(match.Groups[1].Value) + int.Parse(match.Groups[0].Value);
+                        else
+                            value = int.Parse(match.Groups[0].Value);
+                        var id = entry.Id;
+                        var statEng = idToStatEngMap[(group.Id, id)];
+                        result.Add(new ItemStat()
+                        {
+                            Stat = statEng,
+                            Value = value
+                        });
+                    }
+                }
+            }
+        }
+
+        return result;
+    }
+
+    private List<StatGroup> LoadStats(string fileName)
+    {
+        var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "configs", fileName);
+        if (!File.Exists(path))
+            return [];
+
+        var json = File.ReadAllText(path);
+        var options = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        };
+        return JsonSerializer.Deserialize<List<StatGroup>>(json, options) ?? [];
     }
 
     private static IEnumerable<ItemRequirement> ResolveItemRequirements(IEnumerable<string> reqTexts)
@@ -164,6 +276,7 @@ public class ChineseTradParser : IParser
         PARSING_ITEM_BASE,
         PARSING_REQUIREMENT,
         PARSING_ITEM_LEVEL,
+        PARSING_STAT,
         PARSING_UNKNOW
     }
 }

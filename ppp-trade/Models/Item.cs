@@ -14,5 +14,7 @@ public struct Item
 
     public IEnumerable<ItemRequirement> Requirements { get; set; }
 
+    public IEnumerable<ItemStat> Stats { get; set; }
+
     public int ItemLevel { get; set; }
 }
