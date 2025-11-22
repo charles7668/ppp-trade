@@ -126,18 +126,10 @@ public partial class MainWindowViewModel : ObservableObject
     private ItemVM? _parsedItemVM;
 
     [ObservableProperty]
-    private ObservableCollection<MatchedItemVM> _matchedItemVMs = [];
-
-    [ObservableProperty]
     private string? _matchedItemImage;
 
     [ObservableProperty]
     private ObservableCollection<PriceAnalysisVM> _priceAnalysisVMs = [];
-
-    public class MatchedItemVM
-    {
-
-    }
 
     public class PriceAnalysisVM
     {
