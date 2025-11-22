@@ -5,5 +5,6 @@ public enum Rarity
     NORMAL,
     MAGIC,
     RARE,
+    CURRENCY,
     UNIQUE
 }

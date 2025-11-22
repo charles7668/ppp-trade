@@ -77,7 +77,7 @@ public class ChineseTradParser(CacheService cacheService) : IParser
                     break;
                 case ParsingState.PARSING_ITEM_NAME:
                     parsedItem.ItemName = line;
-                    parsingState = ParsingState.PARSING_ITEM_BASE;
+                    parsingState = parsedItem.Rarity == Rarity.CURRENCY ? ParsingState.PARSING_UNKNOW : ParsingState.PARSING_ITEM_BASE;
                     break;
                 case ParsingState.PARSING_ITEM_BASE:
                     parsedItem.ItemBase = line;
@@ -338,6 +338,11 @@ public class ChineseTradParser(CacheService cacheService) : IParser
             return ItemType.HELMET;
         }
 
+        if (substr.StartsWith("可堆疊通貨"))
+        {
+            return ItemType.STACKABLE_CURRENCY;
+        }
+
         return ItemType.OTHER;
     }
 
@@ -354,6 +359,8 @@ public class ChineseTradParser(CacheService cacheService) : IParser
                 return Rarity.RARE;
             case "傳奇":
                 return Rarity.UNIQUE;
+            case "通貨":
+                return Rarity.CURRENCY;
         }
 
         return Rarity.NORMAL;
