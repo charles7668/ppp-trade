@@ -155,11 +155,11 @@ public class ChineseTradParser(CacheService cacheService) : IParser
         return parsedItem;
     }
 
-    private List<ItemStat> ResolveStats(IEnumerable<string> statTexts , List<StatGroup> statTw , Dictionary<(string,string),Stat> idToStatEngMap)
+    private List<ItemStat> ResolveStats(IEnumerable<string> statTexts, List<StatGroup> statTw,
+        Dictionary<(string, string), Stat> idToStatEngMap)
     {
         List<ItemStat> result = [];
         foreach (var stat in statTexts)
-        {
             if (stat.Trim().EndsWith(IMPLICIT_KEYWORD))
             {
                 var group = statTw.First(s => s.Id == "implicit");
@@ -176,7 +176,7 @@ public class ChineseTradParser(CacheService cacheService) : IParser
                             value = int.Parse(match.Groups[0].Value);
                         var id = entry.Id;
                         var statEng = idToStatEngMap[(group.Id, id)];
-                        result.Add(new ItemStat()
+                        result.Add(new ItemStat
                         {
                             Stat = statEng,
                             Value = value
@@ -184,7 +184,6 @@ public class ChineseTradParser(CacheService cacheService) : IParser
                     }
                 }
             }
-        }
 
         return result;
     }
@@ -259,10 +258,14 @@ public class ChineseTradParser(CacheService cacheService) : IParser
         var rarityStr = lineText.Substring(RARITY_KEYWORD.Length, lineText.Length - RARITY_KEYWORD.Length);
         switch (rarityStr)
         {
-            // todo 補充除了稀有外的稀有度case, 目前手邊資訊不足
+            case "普通":
+                break;
+            case "魔法":
+                return Rarity.MAGIC;
             case "稀有":
                 return Rarity.RARE;
-                break;
+            case "傳奇":
+                return Rarity.UNIQUE;
         }
 
         return Rarity.NORMAL;
