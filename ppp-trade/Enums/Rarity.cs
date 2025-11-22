@@ -6,5 +6,6 @@ public enum Rarity
     MAGIC,
     RARE,
     CURRENCY,
+    DIVINATION_CARD,
     UNIQUE
 }

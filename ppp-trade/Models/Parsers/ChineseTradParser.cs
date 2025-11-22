@@ -317,53 +317,34 @@ public class ChineseTradParser(CacheService cacheService) : IParser
     private static ItemType ResolveItemType(string lineText)
     {
         var substr = lineText.Substring(ITEM_TYPE_KEYWORD.Length, lineText.Length - ITEM_TYPE_KEYWORD.Length).Trim();
-        // todo 分析更多item type
-        if (substr.StartsWith("異界地圖"))
+        var typeMap = new Dictionary<string, ItemType>
         {
-            return ItemType.MAP;
-        }
+            { "異界地圖", ItemType.MAP },
+            { "契約書", ItemType.CONTRACT },
+            { "藍圖", ItemType.BLUEPRINT },
+            { "頭部", ItemType.HELMET },
+            { "可堆疊通貨", ItemType.STACKABLE_CURRENCY },
+            { "命運卡", ItemType.DIVINATION_CARD }
+        };
 
-        if (substr.StartsWith("契約書"))
-        {
-            return ItemType.CONTRACT;
-        }
-
-        if (substr.StartsWith("藍圖"))
-        {
-            return ItemType.BLUEPRINT;
-        }
-
-        if (substr.StartsWith("頭部"))
-        {
-            return ItemType.HELMET;
-        }
-
-        if (substr.StartsWith("可堆疊通貨"))
-        {
-            return ItemType.STACKABLE_CURRENCY;
-        }
-
-        return ItemType.OTHER;
+        return typeMap.GetValueOrDefault(substr, ItemType.OTHER);
     }
 
     private static Rarity ResolveRarity(string lineText)
     {
-        var rarityStr = lineText.Substring(RARITY_KEYWORD.Length, lineText.Length - RARITY_KEYWORD.Length);
-        switch (rarityStr)
+        var rarityStr = lineText.Substring(RARITY_KEYWORD.Length, lineText.Length - RARITY_KEYWORD.Length).Trim();
+        var result = rarityStr switch
         {
-            case "普通":
-                break;
-            case "魔法":
-                return Rarity.MAGIC;
-            case "稀有":
-                return Rarity.RARE;
-            case "傳奇":
-                return Rarity.UNIQUE;
-            case "通貨":
-                return Rarity.CURRENCY;
-        }
+            "普通" => Rarity.NORMAL,
+            "魔法" => Rarity.MAGIC,
+            "稀有" => Rarity.RARE,
+            "傳奇" => Rarity.UNIQUE,
+            "通貨" => Rarity.CURRENCY,
+            "命運卡" => Rarity.DIVINATION_CARD,
+            _ => Rarity.NORMAL
+        };
 
-        return Rarity.NORMAL;
+        return result;
     }
 
     private enum ParsingState
