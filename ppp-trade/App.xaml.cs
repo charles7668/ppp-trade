@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
+using ppp_trade.Mappings;
 using ppp_trade.Models.Parsers;
 using ppp_trade.Services;
 
@@ -21,6 +22,8 @@ public partial class App
         services.AddScoped<IParser, EngParser>();
         services.AddScoped<IParser, ChineseTradParser>();
         services.AddSingleton<ParserFactory>();
+        services.AddAutoMapper(_ => { }, typeof(MappingProfile));
+        services.AddLogging();
     }
 
     protected override void OnStartup(StartupEventArgs e)

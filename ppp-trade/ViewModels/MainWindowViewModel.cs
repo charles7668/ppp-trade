@@ -10,6 +10,7 @@ using ppp_trade.Enums;
 using ppp_trade.Models;
 using ppp_trade.Models.Parsers;
 using ppp_trade.Services;
+using AutoMapper;
 
 namespace ppp_trade.ViewModels;
 
@@ -28,6 +29,7 @@ public partial class MainWindowViewModel : ObservableObject
         _poeApiService = App.ServiceProvider.GetRequiredService<PoeApiService>();
         _clipboardMonitorService = App.ServiceProvider.GetRequiredService<ClipboardMonitorService>();
         _parserFactory = App.ServiceProvider.GetRequiredService<ParserFactory>();
+        _mapper = App.ServiceProvider.GetRequiredService<IMapper>();
         _selectedServer = _serverList[1];
         OnSelectedServerChanged(_selectedServer);
         _selectedTradeType = _tradeTypeList[1];
@@ -38,6 +40,8 @@ public partial class MainWindowViewModel : ObservableObject
     private readonly ParserFactory _parserFactory = null!;
 
     private readonly PoeApiService _poeApiService = null!;
+
+    private readonly IMapper _mapper = null!;
 
     [ObservableProperty]
     private IList<string> _leagueList = [];
@@ -140,22 +144,10 @@ public partial class MainWindowViewModel : ObservableObject
                     WaitTime = 2
                 });
             });
+            return;
         }
 
-        ParsedItemVM = new ItemVM()
-        {
-            ItemName = _parsedItem!.Value.ItemName,
-        };
-        foreach (var itemStat in _parsedItem.Value.Stats)
-        {
-            ParsedItemVM.StatVMs.Add(new ItemStatVM()
-            {
-                Id = itemStat.Stat.Id,
-                StatText = itemStat.Stat.Text,
-                Type = itemStat.Stat.Type,
-                MinValue = itemStat.Value
-            });
-        }
+        ParsedItemVM = _mapper.Map<ItemVM>(_parsedItem.Value);
 
         ItemInfoVisibility = Visibility.Visible;
     }
