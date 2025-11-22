@@ -23,6 +23,20 @@ public partial class MainWindowViewModel : ObservableObject
         {
             _selectedServer = _serverList[1];
             _selectedTradeType = _tradeTypeList[1];
+            _itemInfoVisibility = Visibility.Visible;
+            _parsedItemVM = new ItemVM()
+            {
+                ItemName = "Design Time Item Name",
+                StatVMs =
+                [
+                    new ItemStatVM()
+                    {
+                        StatText = "測試1",
+                        Type = "隨機"
+                    }
+                ]
+            };
+            
             return;
         }
 
