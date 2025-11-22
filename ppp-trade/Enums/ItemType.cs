@@ -35,6 +35,7 @@ public enum ItemType
     JEWEL,
     ABYSS_JEWEL,
     TALISMAN,
+    Quiver,
 
     #endregion
 

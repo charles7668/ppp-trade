@@ -1,5 +1,8 @@
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.IO;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -72,13 +75,14 @@ public partial class MainWindowViewModel : ObservableObject
                     Count = 1
                 },
             ];
-            
+
             return;
         }
 
         _poeApiService = App.ServiceProvider.GetRequiredService<PoeApiService>();
         _clipboardMonitorService = App.ServiceProvider.GetRequiredService<ClipboardMonitorService>();
         _parserFactory = App.ServiceProvider.GetRequiredService<ParserFactory>();
+        _cacheService = App.ServiceProvider.GetRequiredService<CacheService>();
         _mapper = App.ServiceProvider.GetRequiredService<IMapper>();
         _selectedServer = _serverList[1];
         OnSelectedServerChanged(_selectedServer);
@@ -90,6 +94,8 @@ public partial class MainWindowViewModel : ObservableObject
     private readonly ParserFactory _parserFactory = null!;
 
     private readonly PoeApiService _poeApiService = null!;
+
+    private readonly CacheService _cacheService = null!;
 
     private readonly IMapper _mapper = null!;
 
@@ -134,7 +140,9 @@ public partial class MainWindowViewModel : ObservableObject
     public class PriceAnalysisVM
     {
         public double Price { get; set; }
+
         public string? CurrencyImageUrl { get; set; }
+
         public int Count { get; set; }
     }
 
@@ -239,5 +247,156 @@ public partial class MainWindowViewModel : ObservableObject
         await LoadLeagues();
         _clipboardMonitorService.ClipboardChanged += OnClipboardChanged;
         _clipboardMonitorService.StartMonitoring();
+    }
+
+    private async Task<object?> GetQueryParamForUnique()
+    {
+        var queryItem = _parsedItem!.Value;
+        var nameMapCacheKey = "unique:tw2en:name";
+        var baseMapCacheKey = "unique:tw2en:base";
+        _cacheService.TryGet(baseMapCacheKey, out Dictionary<string, string>? baseMap);
+        if (!_cacheService.TryGet(nameMapCacheKey, out Dictionary<string, string>? nameMap))
+        {
+            var enNameFile = Path.Combine("configs", "unique_item_names_eng.json");
+            var twNameFile = Path.Combine("configs", "unique_item_names_tw.json");
+            var enBaseFile = Path.Combine("configs", "unique_item_bases_eng.json");
+            var twBaseFile = Path.Combine("configs", "unique_item_bases_tw.json");
+            if (!File.Exists(enNameFile) ||
+                !File.Exists(twNameFile) ||
+                !File.Exists(enBaseFile) ||
+                !File.Exists(twBaseFile))
+            {
+                Growl.Warning(new GrowlInfo
+                {
+                    Message = "缺失傳奇道具文字相關檔案",
+                    Token = "LogMsg",
+                    WaitTime = 2
+                });
+                return null;
+            }
+
+            var content = await File.ReadAllTextAsync(enNameFile);
+            var enNameList = JsonSerializer.Deserialize<List<string>>(content)!;
+            content = await File.ReadAllTextAsync(twNameFile);
+            var twNameList = JsonSerializer.Deserialize<List<string>>(content)!;
+            nameMap = new Dictionary<string, string>();
+            for (var i = 0; i < twNameList.Count; i++)
+            {
+                nameMap.Add(twNameList[i], enNameList[i]);
+            }
+
+            _cacheService.Set(nameMapCacheKey, nameMap);
+
+            content = await File.ReadAllTextAsync(enBaseFile);
+            var enBaseList = JsonSerializer.Deserialize<List<string>>(content)!;
+            content = await File.ReadAllTextAsync(twBaseFile);
+            var twBaseList = JsonSerializer.Deserialize<List<string>>(content)!;
+            baseMap = new Dictionary<string, string>();
+            for (var i = 0; i < twBaseList.Count; i++)
+            {
+                baseMap.Add(twBaseList[i], enBaseList[i]);
+            }
+
+            _cacheService.Set(baseMapCacheKey, baseMap);
+        }
+
+        var queryObj = new
+        {
+            status = "any",
+            name = nameMap![_parsedItem.Value.ItemName],
+            type = baseMap![_parsedItem.Value.ItemBase],
+            filters = new
+            {
+                type_filters = new
+                {
+                    disabled = false,
+                    filters = new
+                    {
+                        rarity = new
+                        {
+                            option = RarityToString(Rarity.UNIQUE)
+                        },
+                        category = new
+                        {
+                            option = ItemTypeToString(queryItem.ItemType)
+                        }
+                    }
+                },
+                misc_filters = new
+                {
+                    disabled = false,
+                    filters = new
+                    {
+                        corrupted = new
+                        {
+                            option = SelectedCorruptedState switch
+                            {
+                                CorruptedState.NO => "no",
+                                CorruptedState.YES => "yes",
+                                _ => "any"
+                            }
+                        }
+                    }
+                }
+            }
+        };
+        return queryObj;
+    }
+
+    [RelayCommand]
+    private async Task Query()
+    {
+        if (ParsedItemVM == null || _parsedItem == null)
+            return;
+        var queryItem = _parsedItem!.Value;
+        // todo complete method
+        if (queryItem.Rarity == Rarity.UNIQUE)
+        {
+            var queryParam = await GetQueryParamForUnique();
+            if (queryParam == null)
+                return;
+        }
+    }
+
+    private string? RarityToString(Rarity rarity)
+    {
+        return rarity switch
+        {
+            Rarity.UNIQUE => "unique",
+            Rarity.MAGIC => "magic",
+            Rarity.RARE => "rare",
+            _ => null
+        };
+    }
+
+    private string? ItemTypeToString(ItemType itemType)
+    {
+        return itemType switch
+        {
+            ItemType.HELMET => "armour.helmet",
+            ItemType.ONE_HAND_AXE => "weapon.oneaxe",
+            ItemType.ONE_HAND_MACE => "weapon.onemace",
+            ItemType.ONE_HAND_SWORD => "weapon.onesword",
+            ItemType.BOW => "weapon.bow",
+            ItemType.CLAW => "weapon.claw",
+            ItemType.DAGGER => "weapon.basedagger",
+            ItemType.RUNE_DAGGER => "weapon.runedagger",
+            ItemType.SCEPTRE => "weapon.sceptre",
+            ItemType.STAFF => "weapon.staff",
+            ItemType.TWO_HAND_AXE => "weapon.twoaxe",
+            ItemType.TWO_HAND_MACE => "weapon.twomace",
+            ItemType.TWO_HAND_SWORD => "weapon.twosword",
+            ItemType.WAND => "weapon.wand",
+            ItemType.FISHING_ROD => "weapon.rod",
+            ItemType.BODY_ARMOUR => "armour.chest",
+            ItemType.BOOTS => "armour.boots",
+            ItemType.GLOVES => "armour.gloves",
+            ItemType.SHIELD => "armour.shield",
+            ItemType.Quiver => "armour.quiver",
+            ItemType.AMULET => "accessory.amulet",
+            ItemType.BELT => "accessory.belt",
+            ItemType.RING => "accessory.ring",
+            _ => null
+        };
     }
 }

@@ -313,6 +313,7 @@ public class ChineseTradParser(CacheService cacheService) : IParser
             { "雙手錘", ItemType.TWO_HAND_MACE },
             { "魚竿", ItemType.FISHING_ROD },
 
+            { "箭袋", ItemType.Quiver },
             { "盾牌", ItemType.SHIELD },
 
             { "頭部", ItemType.HELMET },

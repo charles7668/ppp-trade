@@ -155,6 +155,11 @@
                             <Button HorizontalAlignment="Right" Background="White" Foreground="#0078D4"
                                     BorderBrush="#0078D4"
                                     BorderThickness="1" Margin="0,5,0,0" Padding="15,5">
+                                <b:Interaction.Triggers>
+                                    <b:EventTrigger EventName="Click">
+                                        <b:InvokeCommandAction Command="{Binding QueryCommand}" />
+                                    </b:EventTrigger>
+                                </b:Interaction.Triggers>
                                 查詢
                             </Button>
                         </hc:SimplePanel>
