@@ -5,5 +5,11 @@ public enum ItemType
     MAP,
     CONTRACT,
     BLUEPRINT,
+
+    #region Equipment
+
+    HELMET,
+
+    #endregion
     OTHER
 }

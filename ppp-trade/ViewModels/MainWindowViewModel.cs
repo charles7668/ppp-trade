@@ -88,7 +88,10 @@ public partial class MainWindowViewModel : ObservableObject
                     WaitTime = 2
                 });
             });
+            return;
         }
+
+        parser.Parse(clipboardText);
     }
 
     partial void OnSelectedServerChanged(string? value)

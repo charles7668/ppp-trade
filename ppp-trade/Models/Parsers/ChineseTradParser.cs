@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Diagnostics;
+using System.IO;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using ppp_trade.Enums;
@@ -10,10 +11,11 @@ public class ChineseTradParser(CacheService cacheService) : IParser
 {
     private const string RARITY_KEYWORD = "稀有度: ";
     private const string ITEM_TYPE_KEYWORD = "物品種類: ";
-    private const string ITEM_REQUIREMENT_KEYWORD = "需求: ";
+    private const string ITEM_REQUIREMENT_KEYWORD = "需求:";
     private const string ITEM_LEVEL_KEYWORD = "物品等級: ";
     private const string SPLIT_KEYWORD = "--------";
     private const string IMPLICIT_KEYWORD = "(implicit)";
+    private const string CRAFTED_KEYWORD = "(crafted)";
     private const string STAT_EN_CACHE_KEY = "parser:stat_eng";
     private const string STAT_TW_CACHE_KEY = "parser:stat_zh_tw";
     private const string STAT_ID_TO_ENG_TEXT_MAP_CACHE_KEY = "parser:id_to_eng_text_map";
@@ -40,7 +42,9 @@ public class ChineseTradParser(CacheService cacheService) : IParser
 
             foreach (var group in statEng!)
             foreach (var stat in group.Entries)
+            {
                 idStatMap.TryAdd((group.Id, stat.Id), stat);
+            }
 
             _cacheService.Set(STAT_ID_TO_ENG_TEXT_MAP_CACHE_KEY, idStatMap);
         }
@@ -56,7 +60,9 @@ public class ChineseTradParser(CacheService cacheService) : IParser
         var lines = text.Split("\r\n");
         var indexOfRarity = Array.FindIndex(lines, l => l.StartsWith(RARITY_KEYWORD));
         if (indexOfRarity == -1)
+        {
             return null;
+        }
 
         var parsedItem = new Item();
         var parsingState = ParsingState.PARSING_UNKNOW;
@@ -104,7 +110,10 @@ public class ChineseTradParser(CacheService cacheService) : IParser
                     if (line == SPLIT_KEYWORD)
                     {
                         i++;
-                        if (line.Contains(IMPLICIT_KEYWORD)) hasImplicit = true;
+                        if (lines[i].Contains(IMPLICIT_KEYWORD))
+                        {
+                            hasImplicit = true;
+                        }
 
                         while (i < lines.Length && lines[i] != SPLIT_KEYWORD)
                         {
@@ -124,7 +133,7 @@ public class ChineseTradParser(CacheService cacheService) : IParser
                         }
                     }
 
-                    parsedItem.Stats = ResolveStats(statTexts, statTw, idStatMap);
+                    parsedItem.Stats = ResolveStats(statTexts, statTw!, idStatMap!);
                     break;
                 case ParsingState.PARSING_UNKNOW:
                     if (i == indexOfRarity)
@@ -159,40 +168,97 @@ public class ChineseTradParser(CacheService cacheService) : IParser
         Dictionary<(string, string), Stat> idToStatEngMap)
     {
         List<ItemStat> result = [];
+
         foreach (var stat in statTexts)
+        {
             if (stat.Trim().EndsWith(IMPLICIT_KEYWORD))
             {
                 var group = statTw.First(s => s.Id == "implicit");
-                foreach (var entry in group.Entries)
+                var (statEng, value) = FindState(group, stat);
+                if (statEng != null)
                 {
-                    var regex = entry.Text.Replace("#", "(\\d+)");
-                    var match = Regex.Match(stat, regex);
-                    if (match.Success)
+                    result.Add(new ItemStat
                     {
-                        int value;
-                        if (match.Groups.Count == 2)
-                            value = int.Parse(match.Groups[1].Value) + int.Parse(match.Groups[0].Value);
-                        else
-                            value = int.Parse(match.Groups[0].Value);
-                        var id = entry.Id;
-                        var statEng = idToStatEngMap[(group.Id, id)];
-                        result.Add(new ItemStat
-                        {
-                            Stat = statEng,
-                            Value = value
-                        });
+                        Stat = statEng,
+                        Value = value
+                    });
+                }
+            }
+            else if (stat.Trim().EndsWith(CRAFTED_KEYWORD))
+            {
+                var group = statTw.First(s => s.Id == "crafted");
+                var (statEng, value) = FindState(group, stat);
+                if (statEng != null)
+                {
+                    result.Add(new ItemStat
+                    {
+                        Stat = statEng,
+                        Value = value
+                    });
+                }
+            }
+            else
+            {
+                var group = statTw.First(s => s.Id == "explicit");
+                var (statEng, value) = FindState(group, stat);
+                if (statEng != null)
+                {
+                    result.Add(new ItemStat
+                    {
+                        Stat = statEng,
+                        Value = value
+                    });
+                }
+            }
+        }
+
+        return result;
+
+        (Stat?, int) FindState(StatGroup group, string stat)
+        {
+            foreach (var entry in group.Entries)
+            {
+                var regex = entry.Text.Replace("+#", "([+-]\\d+)");
+                regex = regex.Replace("#", "(\\d+)");
+                try
+                {
+                    var match = Regex.Match(stat, regex);
+                    if (!match.Success)
+                    {
+                        continue;
                     }
+
+                    int value;
+                    if (match.Groups.Count == 3)
+                    {
+                        value = int.Parse(match.Groups[2].Value) + int.Parse(match.Groups[1].Value);
+                    }
+                    else
+                    {
+                        value = int.Parse(match.Groups[1].Value);
+                    }
+
+                    var id = entry.Id;
+                    var statEng = idToStatEngMap[(group.Id, id)];
+                    return (statEng, value);
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine(e.Message);
                 }
             }
 
-        return result;
+            return (null, 0);
+        }
     }
 
     private List<StatGroup> LoadStats(string fileName)
     {
         var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "configs", fileName);
         if (!File.Exists(path))
+        {
             return [];
+        }
 
         var json = File.ReadAllText(path);
         var options = new JsonSerializerOptions
@@ -220,13 +286,22 @@ public class ChineseTradParser(CacheService cacheService) : IParser
         {
             var key = reqLevelKeyword;
             if (reqText.StartsWith(reqLevelKeyword))
+            {
                 key = reqLevelKeyword;
+            }
             else if (reqText.StartsWith(reqIntKeyword))
+            {
                 key = reqIntKeyword;
+            }
             else if (reqText.StartsWith(reqStrKeyword))
+            {
                 key = reqStrKeyword;
+            }
             else if (reqText.StartsWith(reqDexKeyword))
+            {
                 key = reqDexKeyword;
+            }
+
             var value = int.Parse(reqText.Substring(reqLevelKeyword.Length,
                 reqText.Length - reqLevelKeyword.Length));
             results.Add(new ItemRequirement
@@ -244,11 +319,24 @@ public class ChineseTradParser(CacheService cacheService) : IParser
         var substr = lineText.Substring(ITEM_TYPE_KEYWORD.Length, lineText.Length - ITEM_TYPE_KEYWORD.Length).Trim();
         // todo 分析更多item type
         if (substr.StartsWith("異界地圖"))
+        {
             return ItemType.MAP;
+        }
+
         if (substr.StartsWith("契約書"))
+        {
             return ItemType.CONTRACT;
+        }
+
         if (substr.StartsWith("藍圖"))
+        {
             return ItemType.BLUEPRINT;
+        }
+
+        if (substr.StartsWith("頭部"))
+        {
+            return ItemType.HELMET;
+        }
 
         return ItemType.OTHER;
     }
