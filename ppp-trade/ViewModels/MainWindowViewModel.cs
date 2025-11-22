@@ -1,6 +1,6 @@
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Windows;
-using System.Windows.Documents;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using HandyControl.Controls;
@@ -24,6 +24,7 @@ public partial class MainWindowViewModel : ObservableObject
             _selectedServer = _serverList[1];
             _selectedTradeType = _tradeTypeList[1];
             _itemInfoVisibility = Visibility.Visible;
+            _matchedItemVisibility = Visibility.Visible;
             _parsedItemVM = new ItemVM()
             {
                 ItemName = "Design Time Item Name",
@@ -36,6 +37,41 @@ public partial class MainWindowViewModel : ObservableObject
                     }
                 ]
             };
+
+            _matchedItemImage =
+                "https://web.poecdn.com/gen/image/WzI1LDE0LHsiZiI6IjJESXRlbXMvQXJtb3Vycy9IZWxtZXRzL01hc2tDcm93biIsInciOjIsImgiOjIsInNjYWxlIjoxfV0/dbad72643e/MaskCrown.png";
+
+            _priceAnalysisVMs =
+            [
+                new PriceAnalysisVM
+                {
+                    Price = 2,
+                    CurrencyImageUrl =
+                        "https://web.poecdn.com/gen/image/WzI1LDE0LHsiZiI6IjJESXRlbXMvQ3VycmVuY3kvQ3VycmVuY3lSZXJvbGxSYXJlIiwic2NhbGUiOjF9XQ/46a2347805/CurrencyRerollRare.png",
+                    Count = 2
+                },
+                new PriceAnalysisVM
+                {
+                    Price = 3,
+                    CurrencyImageUrl =
+                        "https://web.poecdn.com/gen/image/WzI1LDE0LHsiZiI6IjJESXRlbXMvQ3VycmVuY3kvQ3VycmVuY3lSZXJvbGxSYXJlIiwic2NhbGUiOjF9XQ/46a2347805/CurrencyRerollRare.png",
+                    Count = 2
+                },
+                new PriceAnalysisVM
+                {
+                    Price = 1,
+                    CurrencyImageUrl =
+                        "https://web.poecdn.com/gen/image/WzI1LDE0LHsiZiI6IjJESXRlbXMvQ3VycmVuY3kvQ3VycmVuY3lSZXJvbGxSYXJlIiwic2NhbGUiOjF9XQ/46a2347805/CurrencyRerollRare.png",
+                    Count = 1
+                },
+                new PriceAnalysisVM
+                {
+                    Price = 5,
+                    CurrencyImageUrl =
+                        "https://web.poecdn.com/gen/image/WzI1LDE0LHsiZiI6IjJESXRlbXMvQ3VycmVuY3kvQ3VycmVuY3lSZXJvbGxSYXJlIiwic2NhbGUiOjF9XQ/46a2347805/CurrencyRerollRare.png",
+                    Count = 1
+                },
+            ];
             
             return;
         }
@@ -81,10 +117,34 @@ public partial class MainWindowViewModel : ObservableObject
     [ObservableProperty]
     private Visibility _itemInfoVisibility = Visibility.Hidden;
 
+    [ObservableProperty]
+    private Visibility _matchedItemVisibility = Visibility.Hidden;
+
     private Item? _parsedItem;
 
     [ObservableProperty]
     private ItemVM? _parsedItemVM;
+
+    [ObservableProperty]
+    private ObservableCollection<MatchedItemVM> _matchedItemVMs = [];
+
+    [ObservableProperty]
+    private string? _matchedItemImage;
+
+    [ObservableProperty]
+    private ObservableCollection<PriceAnalysisVM> _priceAnalysisVMs = [];
+
+    public class MatchedItemVM
+    {
+
+    }
+
+    public class PriceAnalysisVM
+    {
+        public double Price { get; set; }
+        public string? CurrencyImageUrl { get; set; }
+        public int Count { get; set; }
+    }
 
     public class ItemVM
     {
