@@ -10,7 +10,7 @@
         xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance Type=viewModels:MainWindowViewModel, IsDesignTimeCreatable=True}"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="650" Width="800">
     <b:Interaction.Triggers>
         <b:EventTrigger EventName="Loaded">
             <b:InvokeCommandAction Command="{Binding WindowLoadedCommand}" />
@@ -23,31 +23,139 @@
         <converters:EnumToBooleanConverter x:Key="EnumToBooleanConverter" />
     </Window.Resources>
     <Grid>
-        <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="5" Padding="10" Margin="10"
-                VerticalAlignment="Top" HorizontalAlignment="Center">
-            <StackPanel Orientation="Vertical">
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center">
-                    <hc:ComboBox Width="120" Margin="5"
-                                 ItemsSource="{Binding ServerList}"
-                                 SelectedItem="{Binding SelectedServer}" />
-                    <hc:ComboBox Width="120" Margin="5"
-                                 ItemsSource="{Binding LeagueList}"
-                                 SelectedItem="{Binding SelectedLeague}" />
-                    <hc:ComboBox Width="150" Margin="5"
-                                 ItemsSource="{Binding TradeTypeList}"
-                                 SelectedItem="{Binding SelectedTradeType}" />
-                </StackPanel>
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center">
-                    <Label>污染</Label>
-                    <RadioButton Content="Any" GroupName="Corrupted" Margin="5"
-                                 IsChecked="{Binding SelectedCorruptedState, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static enums:CorruptedState.ANY}}" />
-                    <RadioButton Content="Yes" GroupName="Corrupted" Margin="5"
-                                 IsChecked="{Binding SelectedCorruptedState, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static enums:CorruptedState.YES}}" />
-                    <RadioButton Content="No" GroupName="Corrupted" Margin="5"
-                                 IsChecked="{Binding SelectedCorruptedState, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static enums:CorruptedState.NO}}" />
-                </StackPanel>
+        <ScrollViewer>
+            <StackPanel>
+                <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="5" Padding="10" Margin="10"
+                        VerticalAlignment="Top" HorizontalAlignment="Center">
+                    <StackPanel Orientation="Vertical">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center">
+                            <hc:ComboBox Width="120" Margin="5"
+                                         ItemsSource="{Binding ServerList}"
+                                         SelectedItem="{Binding SelectedServer}" />
+                            <hc:ComboBox Width="120" Margin="5"
+                                         ItemsSource="{Binding LeagueList}"
+                                         SelectedItem="{Binding SelectedLeague}" />
+                            <hc:ComboBox Width="150" Margin="5"
+                                         ItemsSource="{Binding TradeTypeList}"
+                                         SelectedItem="{Binding SelectedTradeType}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center">
+                            <Label>污染</Label>
+                            <RadioButton Content="Any" GroupName="Corrupted" Margin="5"
+                                         IsChecked="{Binding SelectedCorruptedState, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static enums:CorruptedState.ANY}}" />
+                            <RadioButton Content="Yes" GroupName="Corrupted" Margin="5"
+                                         IsChecked="{Binding SelectedCorruptedState, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static enums:CorruptedState.YES}}" />
+                            <RadioButton Content="No" GroupName="Corrupted" Margin="5"
+                                         IsChecked="{Binding SelectedCorruptedState, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static enums:CorruptedState.NO}}" />
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+                <Border Visibility="{Binding ItemInfoVisibility}">
+                    <StackPanel>
+                        <StackPanel.Resources>
+                            <Style TargetType="TextBlock" BasedOn="{StaticResource TextBlockBaseStyle}">
+                                <Setter Property="FontSize" Value="24"></Setter>
+                            </Style>
+                        </StackPanel.Resources>
+                        <TextBlock HorizontalAlignment="Center">物品名稱</TextBlock>
+                        <TextBlock Text="{Binding ParsedItemVM.ItemName, StringFormat='『{0}』', FallbackValue=''}"
+                                   HorizontalAlignment="Center" />
+                        <DataGrid ItemsSource="{Binding ParsedItemVM.StatVMs , FallbackValue=''}"
+                                  AutoGenerateColumns="False"
+                                  Width="500px"
+                                  HeadersVisibility="All" RowHeaderWidth="0" CanUserAddRows="False"
+                                  BorderThickness="0" Background="Transparent"
+                                  PreviewMouseLeftButtonDown="DataGrid_PreviewMouseLeftButtonDown">
+                            <DataGrid.Resources>
+                                <Style TargetType="DataGridRow">
+                                    <Setter Property="Background" Value="Transparent" />
+                                    <Setter Property="BorderBrush" Value="Transparent" />
+                                    <Style.Triggers>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter Property="Background" Value="Transparent" />
+                                            <Setter Property="BorderBrush" Value="Transparent" />
+                                        </Trigger>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="Transparent" />
+                                            <Setter Property="BorderBrush" Value="Transparent" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                                <Style TargetType="DataGridCell">
+                                    <Setter Property="Background" Value="Transparent" />
+                                    <Setter Property="BorderBrush" Value="Transparent" />
+                                    <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                                    <Style.Triggers>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter Property="Background" Value="Transparent" />
+                                            <Setter Property="BorderBrush" Value="Transparent" />
+                                            <Setter Property="Foreground" Value="Black" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </DataGrid.Resources>
+                            <DataGrid.Columns>
+                                <DataGridCheckBoxColumn Header="查詢"
+                                                        Binding="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                        Width="50" />
+                                <DataGridTemplateColumn Header="種類" Width="80">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Setter Property="Text" Value="{Binding Type}" />
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Type}" Value="implicit">
+                                                                <Setter Property="Foreground" Value="#5555FF" />
+                                                                <Setter Property="Text" Value="固定" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding Type}" Value="explicit">
+                                                                <Setter Property="Foreground" Value="Gray" />
+                                                                <Setter Property="Text" Value="隨機" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding Type}" Value="crafted">
+                                                                <Setter Property="Foreground" Value="#B5A6C7" />
+                                                                <Setter Property="Text" Value="工藝" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTextColumn Header="詞綴內容" Binding="{Binding StatText}" IsReadOnly="True"
+                                                    Width="*">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="TextWrapping" Value="Wrap" />
+                                            <Setter Property="VerticalAlignment" Value="Center" />
+                                            <Setter Property="Margin" Value="5" />
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+                                <DataGridTemplateColumn Header="最小值" Width="80">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBox Text="{Binding MinValue, Mode=TwoWay}" Margin="2" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="最大值" Width="80">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBox Text="{Binding MaxValue,Mode=TwoWay}" Margin="2" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                </Border>
             </StackPanel>
-        </Border>
+
+        </ScrollViewer>
         <ScrollViewer VerticalScrollBarVisibility="Hidden" HorizontalAlignment="Right">
             <StackPanel hc:Growl.Token="LogMsg" VerticalAlignment="Top"
                         Margin="0,10,10,10" />

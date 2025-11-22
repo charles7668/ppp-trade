@@ -1,11 +1,13 @@
 using System.Diagnostics;
 using System.Windows;
+using System.Windows.Documents;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using HandyControl.Controls;
 using HandyControl.Data;
 using Microsoft.Extensions.DependencyInjection;
 using ppp_trade.Enums;
+using ppp_trade.Models;
 using ppp_trade.Models.Parsers;
 using ppp_trade.Services;
 
@@ -58,6 +60,39 @@ public partial class MainWindowViewModel : ObservableObject
     [ObservableProperty]
     private IList<string> _tradeTypeList = ["即刻購買以及面交", "僅限即刻購買", "僅限面交", "任何"];
 
+    [ObservableProperty]
+    private Visibility _itemInfoVisibility = Visibility.Hidden;
+
+    private Item? _parsedItem;
+
+    [ObservableProperty]
+    private ItemVM? _parsedItemVM;
+
+    public class ItemVM
+    {
+        public string? ItemName { get; set; }
+
+        public List<ItemStatVM> StatVMs { get; set; } = [];
+    }
+
+    public partial class ItemStatVM : ObservableObject
+    {
+        public string? Id { get; set; }
+
+        public string? Type { get; set; }
+
+        public string? StatText { get; set; }
+
+        [ObservableProperty]
+        private bool _isSelected;
+
+        [ObservableProperty]
+        private int? _minValue;
+
+        [ObservableProperty]
+        private int? _maxValue;
+    }
+
     private async Task LoadLeagues()
     {
         try
@@ -91,7 +126,38 @@ public partial class MainWindowViewModel : ObservableObject
             return;
         }
 
-        parser.Parse(clipboardText);
+        ItemInfoVisibility = Visibility.Hidden;
+
+        _parsedItem = parser.Parse(clipboardText);
+        if (_parsedItem == null)
+        {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                Growl.Warning(new GrowlInfo
+                {
+                    Message = "無法識別的物品格式",
+                    Token = "LogMsg",
+                    WaitTime = 2
+                });
+            });
+        }
+
+        ParsedItemVM = new ItemVM()
+        {
+            ItemName = _parsedItem!.Value.ItemName,
+        };
+        foreach (var itemStat in _parsedItem.Value.Stats)
+        {
+            ParsedItemVM.StatVMs.Add(new ItemStatVM()
+            {
+                Id = itemStat.Stat.Id,
+                StatText = itemStat.Stat.Text,
+                Type = itemStat.Stat.Type,
+                MinValue = itemStat.Value
+            });
+        }
+
+        ItemInfoVisibility = Visibility.Visible;
     }
 
     partial void OnSelectedServerChanged(string? value)
