@@ -16,10 +16,7 @@ public class ChineseTradParser(CacheService cacheService) : IParser
     private const string SPLIT_KEYWORD = "--------";
     private const string IMPLICIT_KEYWORD = "(implicit)";
     private const string CRAFTED_KEYWORD = "(crafted)";
-    private const string STAT_EN_CACHE_KEY = "parser:stat_eng";
     private const string STAT_TW_CACHE_KEY = "parser:stat_zh_tw";
-    private const string STAT_ID_TO_ENG_TEXT_MAP_CACHE_KEY = "parser:id_to_eng_text_map";
-    private readonly CacheService _cacheService = cacheService;
 
     public bool IsMatch(string text)
     {
@@ -30,29 +27,10 @@ public class ChineseTradParser(CacheService cacheService) : IParser
     {
         #region Get stat data
 
-        if (!_cacheService.TryGet(STAT_ID_TO_ENG_TEXT_MAP_CACHE_KEY, out Dictionary<(string, string), Stat>? idStatMap))
-        {
-            if (!_cacheService.TryGet(STAT_EN_CACHE_KEY, out List<StatGroup>? statEng))
-            {
-                statEng = LoadStats("stats_eng.json");
-                _cacheService.Set(STAT_EN_CACHE_KEY, statEng);
-            }
-
-            idStatMap = new Dictionary<(string, string), Stat>();
-
-            foreach (var group in statEng!)
-            foreach (var stat in group.Entries)
-            {
-                idStatMap.TryAdd((group.Id, stat.Id), stat);
-            }
-
-            _cacheService.Set(STAT_ID_TO_ENG_TEXT_MAP_CACHE_KEY, idStatMap);
-        }
-
-        if (!_cacheService.TryGet(STAT_TW_CACHE_KEY, out List<StatGroup>? statTw))
+        if (!cacheService.TryGet(STAT_TW_CACHE_KEY, out List<StatGroup>? statTw))
         {
             statTw = LoadStats("stats_zh_tw.json");
-            _cacheService.Set(STAT_TW_CACHE_KEY, statTw);
+            cacheService.Set(STAT_TW_CACHE_KEY, statTw);
         }
 
         #endregion
@@ -77,7 +55,9 @@ public class ChineseTradParser(CacheService cacheService) : IParser
                     break;
                 case ParsingState.PARSING_ITEM_NAME:
                     parsedItem.ItemName = line;
-                    parsingState = parsedItem.Rarity == Rarity.CURRENCY ? ParsingState.PARSING_UNKNOW : ParsingState.PARSING_ITEM_BASE;
+                    parsingState = parsedItem.Rarity == Rarity.CURRENCY
+                        ? ParsingState.PARSING_UNKNOW
+                        : ParsingState.PARSING_ITEM_BASE;
                     break;
                 case ParsingState.PARSING_ITEM_BASE:
                     parsedItem.ItemBase = line;
@@ -133,7 +113,7 @@ public class ChineseTradParser(CacheService cacheService) : IParser
                         }
                     }
 
-                    parsedItem.Stats = ResolveStats(statTexts, statTw!, idStatMap!);
+                    parsedItem.Stats = ResolveStats(statTexts, statTw!);
                     break;
                 case ParsingState.PARSING_UNKNOW:
                     if (i == indexOfRarity)
@@ -164,8 +144,7 @@ public class ChineseTradParser(CacheService cacheService) : IParser
         return parsedItem;
     }
 
-    private List<ItemStat> ResolveStats(IEnumerable<string> statTexts, List<StatGroup> statTw,
-        Dictionary<(string, string), Stat> idToStatEngMap)
+    private List<ItemStat> ResolveStats(IEnumerable<string> statTexts, List<StatGroup> stats)
     {
         List<ItemStat> result = [];
 
@@ -173,7 +152,7 @@ public class ChineseTradParser(CacheService cacheService) : IParser
         {
             if (stat.Trim().EndsWith(IMPLICIT_KEYWORD))
             {
-                var group = statTw.First(s => s.Id == "implicit");
+                var group = stats.First(s => s.Id == "implicit");
                 var (statEng, value) = FindState(group, stat);
                 if (statEng != null)
                 {
@@ -186,7 +165,7 @@ public class ChineseTradParser(CacheService cacheService) : IParser
             }
             else if (stat.Trim().EndsWith(CRAFTED_KEYWORD))
             {
-                var group = statTw.First(s => s.Id == "crafted");
+                var group = stats.First(s => s.Id == "crafted");
                 var (statEng, value) = FindState(group, stat);
                 if (statEng != null)
                 {
@@ -199,7 +178,7 @@ public class ChineseTradParser(CacheService cacheService) : IParser
             }
             else
             {
-                var group = statTw.First(s => s.Id == "explicit");
+                var group = stats.First(s => s.Id == "explicit");
                 var (statEng, value) = FindState(group, stat);
                 if (statEng != null)
                 {
@@ -238,9 +217,7 @@ public class ChineseTradParser(CacheService cacheService) : IParser
                         value = int.Parse(match.Groups[1].Value);
                     }
 
-                    var id = entry.Id;
-                    var statEng = idToStatEngMap[(group.Id, id)];
-                    return (statEng, value);
+                    return (entry, value);
                 }
                 catch (Exception e)
                 {
