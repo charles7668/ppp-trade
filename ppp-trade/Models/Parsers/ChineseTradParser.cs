@@ -12,6 +12,7 @@ public class ChineseTradParser(CacheService cacheService) : IParser
     private const string RARITY_KEYWORD = "稀有度: ";
     private const string ITEM_TYPE_KEYWORD = "物品種類: ";
     private const string ITEM_REQUIREMENT_KEYWORD = "需求:";
+    private const string ITEM_SOCKET_KEYWORD = "插槽: ";
     private const string ITEM_LEVEL_KEYWORD = "物品等級: ";
     private const string SPLIT_KEYWORD = "--------";
     private const string IMPLICIT_KEYWORD = "(implicit)";
@@ -116,6 +117,14 @@ public class ChineseTradParser(CacheService cacheService) : IParser
                     parsedItem.Stats = ResolveStats(statTexts, statTw!);
                     parsingState = ParsingState.PARSING_UNKNOW;
                     break;
+                case ParsingState.PARSING_LINK:
+                    var socketInfoText = line.Substring(ITEM_SOCKET_KEYWORD.Length,
+                        line.Length - ITEM_SOCKET_KEYWORD.Length);
+                    socketInfoText = Regex.Replace(socketInfoText, "[A-Z]", "");
+                    var split = socketInfoText.Split(' ');
+                    parsedItem.Link = split.Select(linkText => linkText.Length).Prepend(0).Max();
+                    parsingState = ParsingState.PARSING_UNKNOW;
+                    break;
                 case ParsingState.PARSING_UNKNOW:
                     if (i == indexOfRarity)
                     {
@@ -136,6 +145,11 @@ public class ChineseTradParser(CacheService cacheService) : IParser
                     {
                         i--;
                         parsingState = ParsingState.PARSING_ITEM_LEVEL;
+                    }
+                    else if (line.StartsWith(ITEM_SOCKET_KEYWORD))
+                    {
+                        i--;
+                        parsingState = ParsingState.PARSING_LINK;
                     }
 
                     break;
@@ -359,6 +373,7 @@ public class ChineseTradParser(CacheService cacheService) : IParser
     {
         PARSING_ITEM_TYPE,
         PARSING_RARITY,
+        PARSING_LINK,
         PARSING_ITEM_NAME,
         PARSING_ITEM_BASE,
         PARSING_REQUIREMENT,

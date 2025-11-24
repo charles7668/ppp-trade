@@ -17,4 +17,6 @@ public struct Item
     public IEnumerable<ItemStat> Stats { get; set; }
 
     public int ItemLevel { get; set; }
+
+    public int Link { get; set; }
 }
