@@ -214,6 +214,7 @@ public class ChineseTradParser(CacheService cacheService) : IParser
             {
                 var regex = entry.Text.Replace("+#", "([+-]\\d+)");
                 regex = regex.Replace("#", "(\\d+)");
+                regex = $"^{regex}";
                 try
                 {
                     var match = Regex.Match(stat, regex);
