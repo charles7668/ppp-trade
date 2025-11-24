@@ -60,6 +60,34 @@
                         <TextBlock HorizontalAlignment="Center">物品名稱</TextBlock>
                         <TextBlock Text="{Binding ParsedItemVM.ItemName, StringFormat='『{0}』', FallbackValue=''}"
                                    HorizontalAlignment="Center" />
+                        <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="5" Padding="10" Margin="10"
+                                VerticalAlignment="Top" HorizontalAlignment="Center">
+                            <StackPanel>
+                                <hc:SimpleStackPanel Orientation="Horizontal">
+                                    <CheckBox
+                                        IsChecked="{Binding ParsedItemVM.FilterItemLevel,Mode=TwoWay,FallbackValue=False}">
+                                        物品等級
+                                    </CheckBox>
+                                    <TextBox Margin="2" Width="80"
+                                             Text="{Binding ParsedItemVM.ItemLevelMin,FallbackValue=''}" />
+                                    <TextBox Margin="2" Width="80"
+                                             Text="{Binding ParsedItemVM.ItemLevelMax, FallbackValue=''}" />
+                                    <CheckBox IsEnabled="False">稀有度</CheckBox>
+                                    <ComboBox Margin="2" Width="80"
+                                              IsEnabled="False"
+                                              ItemsSource="{Binding SelectableRarity}"
+                                              SelectedItem="{Binding ParsedItemVM.Rarity}" />
+                                </hc:SimpleStackPanel>
+                                <hc:SimpleStackPanel Orientation="Horizontal">
+                                    <CheckBox>連線數量</CheckBox>
+                                    <TextBox Margin="2" Width="80" Text="{Binding ParsedItemVM.LinkCountMin}" />
+                                    <TextBox Margin="2" Width="80" Text="{Binding ParsedItemVM.LinkCountMax}" />
+                                    <CheckBox IsEnabled="False">物品分類</CheckBox>
+                                    <TextBox Margin="2" Width="80" IsEnabled="False"
+                                             Text="{Binding ParsedItemVM.ItemBase}" />
+                                </hc:SimpleStackPanel>
+                            </StackPanel>
+                        </Border>
                         <DataGrid ItemsSource="{Binding ParsedItemVM.StatVMs , FallbackValue=''}"
                                   AutoGenerateColumns="False"
                                   Width="500px"
@@ -166,7 +194,7 @@
                     </StackPanel>
                 </Border>
                 <StackPanel Visibility="{Binding MatchedItemVisibility}">
-                    <TextBlock Text="{Binding MatchedItemVMs.Count , StringFormat='共 {0} 筆資料符合'}"
+                    <TextBlock Text="{Binding PriceAnalysisVMs.Count , StringFormat='共 {0} 筆資料符合'}"
                                HorizontalAlignment="Center" />
                     <Image Width="100" Height="100" Margin="5" Source="{Binding MatchedItemImage}">
                         <Image.Style>

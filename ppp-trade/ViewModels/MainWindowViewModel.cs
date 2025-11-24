@@ -2,7 +2,6 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Text.Json;
-using System.Text.Json.Nodes;
 using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -83,8 +82,16 @@ public partial class MainWindowViewModel : ObservableObject
         _clipboardMonitorService = App.ServiceProvider.GetRequiredService<ClipboardMonitorService>();
         _parserFactory = App.ServiceProvider.GetRequiredService<ParserFactory>();
         _cacheService = App.ServiceProvider.GetRequiredService<CacheService>();
+        _gameStringService = App.ServiceProvider.GetRequiredService<GameStringService>();
         _mapper = App.ServiceProvider.GetRequiredService<IMapper>();
         _selectedServer = _serverList[1];
+        _selectableRarity =
+        [
+            _gameStringService.Get(GameString.NORMAL)!,
+            _gameStringService.Get(GameString.MAGIC)!,
+            _gameStringService.Get(GameString.RARE)!,
+            _gameStringService.Get(GameString.UNIQUE)!,
+        ];
         OnSelectedServerChanged(_selectedServer);
         _selectedTradeType = _tradeTypeList[1];
     }
@@ -97,7 +104,12 @@ public partial class MainWindowViewModel : ObservableObject
 
     private readonly CacheService _cacheService = null!;
 
+    private readonly GameStringService _gameStringService = null!;
+
     private readonly IMapper _mapper = null!;
+
+    [ObservableProperty]
+    private IList<string> _selectableRarity = null!;
 
     [ObservableProperty]
     private IList<string> _leagueList = [];
@@ -149,6 +161,20 @@ public partial class MainWindowViewModel : ObservableObject
     public class ItemVM
     {
         public string? ItemName { get; set; }
+
+        public int? ItemLevelMin { get; set; }
+
+        public int? ItemLevelMax { get; set; }
+
+        public bool FilterItemLevel { get; set; }
+
+        public string? Rarity { get; set; }
+
+        public int? LinkCountMin { get; set; }
+
+        public int? LinkCountMax { get; set; }
+
+        public string? ItemBase { get; set; }
 
         public List<ItemStatVM> StatVMs { get; set; } = [];
     }
@@ -221,7 +247,19 @@ public partial class MainWindowViewModel : ObservableObject
             return;
         }
 
-        ParsedItemVM = _mapper.Map<ItemVM>(_parsedItem.Value);
+        ParsedItemVM = _mapper.Map<ItemVM>(_parsedItem.Value, opt =>
+        {
+            opt.AfterMap((_, dest) =>
+            {
+                dest.Rarity = _parsedItem.Value.Rarity switch
+                {
+                    Rarity.MAGIC => _gameStringService.Get(GameString.MAGIC)!,
+                    Rarity.RARE => _gameStringService.Get(GameString.RARE)!,
+                    Rarity.UNIQUE => _gameStringService.Get(GameString.UNIQUE)!,
+                    _ => _gameStringService.Get(GameString.NORMAL)!
+                };
+            });
+        });
 
         ItemInfoVisibility = Visibility.Visible;
     }

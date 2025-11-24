@@ -19,6 +19,7 @@ public partial class App
         services.AddSingleton<ClipboardMonitorService>();
         services.AddMemoryCache();
         services.AddSingleton<CacheService>();
+        services.AddSingleton<GameStringService>();
         services.AddScoped<IParser, EngParser>();
         services.AddScoped<IParser, ChineseTradParser>();
         services.AddSingleton<ParserFactory>();
