@@ -15,6 +15,7 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.MinValue, opt => opt.MapFrom(src => src.Value));
 
         CreateMap<Item, MainWindowViewModel.ItemVM>()
+            .ForMember(dest => dest.ItemName, opt => opt.MapFrom(src => src.ItemName + " " + src.ItemBase))
             .ForMember(dest => dest.StatVMs, opt => opt.MapFrom(src => src.Stats));
     }
 }
