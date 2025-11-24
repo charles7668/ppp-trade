@@ -208,7 +208,7 @@ public class ChineseTradParser(CacheService cacheService) : IParser
 
         return result;
 
-        (Stat?, int) FindState(StatGroup group, string stat)
+        (Stat?, int?) FindState(StatGroup group, string stat)
         {
             foreach (var entry in group.Entries)
             {
@@ -222,15 +222,12 @@ public class ChineseTradParser(CacheService cacheService) : IParser
                         continue;
                     }
 
-                    int value;
-                    if (match.Groups.Count == 3)
+                    int? value = match.Groups.Count switch
                     {
-                        value = int.Parse(match.Groups[2].Value) + int.Parse(match.Groups[1].Value);
-                    }
-                    else
-                    {
-                        value = int.Parse(match.Groups[1].Value);
-                    }
+                        3 => int.Parse(match.Groups[2].Value) + int.Parse(match.Groups[1].Value),
+                        > 1 => int.Parse(match.Groups[1].Value),
+                        _ => null
+                    };
 
                     return (entry, value);
                 }
@@ -240,7 +237,7 @@ public class ChineseTradParser(CacheService cacheService) : IParser
                 }
             }
 
-            return (null, 0);
+            return (null, null);
         }
     }
 
