@@ -118,11 +118,7 @@ public class ChineseTradParser(CacheService cacheService) : IParser
                     parsingState = ParsingState.PARSING_UNKNOW;
                     break;
                 case ParsingState.PARSING_LINK:
-                    var socketInfoText = line.Substring(ITEM_SOCKET_KEYWORD.Length,
-                        line.Length - ITEM_SOCKET_KEYWORD.Length);
-                    socketInfoText = Regex.Replace(socketInfoText, "[A-Z]", "");
-                    var split = socketInfoText.Split(' ');
-                    parsedItem.Link = split.Select(linkText => linkText.Length).Prepend(0).Max();
+                    parsedItem.Link = ResolveLinkCount(line);
                     parsingState = ParsingState.PARSING_UNKNOW;
                     break;
                 case ParsingState.PARSING_UNKNOW:
@@ -157,89 +153,6 @@ public class ChineseTradParser(CacheService cacheService) : IParser
         }
 
         return parsedItem;
-    }
-
-    private static List<ItemStat> ResolveStats(IEnumerable<string> statTexts, List<StatGroup> stats)
-    {
-        List<ItemStat> result = [];
-
-        foreach (var stat in statTexts)
-        {
-            if (stat.Trim().EndsWith(IMPLICIT_KEYWORD))
-            {
-                var group = stats.First(s => s.Id == "implicit");
-                var (statEng, value) = FindState(group, stat);
-                if (statEng != null)
-                {
-                    result.Add(new ItemStat
-                    {
-                        Stat = statEng,
-                        Value = value
-                    });
-                }
-            }
-            else if (stat.Trim().EndsWith(CRAFTED_KEYWORD))
-            {
-                var group = stats.First(s => s.Id == "crafted");
-                var (statEng, value) = FindState(group, stat);
-                if (statEng != null)
-                {
-                    result.Add(new ItemStat
-                    {
-                        Stat = statEng,
-                        Value = value
-                    });
-                }
-            }
-            else
-            {
-                var group = stats.First(s => s.Id == "explicit");
-                var (statEng, value) = FindState(group, stat);
-                if (statEng != null)
-                {
-                    result.Add(new ItemStat
-                    {
-                        Stat = statEng,
-                        Value = value
-                    });
-                }
-            }
-        }
-
-        return result;
-
-        (Stat?, int?) FindState(StatGroup group, string stat)
-        {
-            foreach (var entry in group.Entries)
-            {
-                var regex = entry.Text.Replace("+#", "([+-]\\d+)");
-                regex = regex.Replace("#", "(\\d+)");
-                regex = $"^{regex}";
-                try
-                {
-                    var match = Regex.Match(stat, regex);
-                    if (!match.Success)
-                    {
-                        continue;
-                    }
-
-                    int? value = match.Groups.Count switch
-                    {
-                        3 => int.Parse(match.Groups[2].Value) + int.Parse(match.Groups[1].Value),
-                        > 1 => int.Parse(match.Groups[1].Value),
-                        _ => null
-                    };
-
-                    return (entry, value);
-                }
-                catch (Exception e)
-                {
-                    Debug.WriteLine(e.Message);
-                }
-            }
-
-            return (null, null);
-        }
     }
 
     private List<StatGroup> LoadStats(string fileName)
@@ -350,6 +263,15 @@ public class ChineseTradParser(CacheService cacheService) : IParser
         return typeMap.GetValueOrDefault(substr, ItemType.OTHER);
     }
 
+    private static int ResolveLinkCount(string line)
+    {
+        var socketInfoText = line.Substring(ITEM_SOCKET_KEYWORD.Length,
+            line.Length - ITEM_SOCKET_KEYWORD.Length);
+        socketInfoText = Regex.Replace(socketInfoText, "[A-Z]", "");
+        var split = socketInfoText.Split(' ');
+        return split.Select(linkText => linkText.Length).Prepend(0).Max() + 1;
+    }
+
     private static Rarity ResolveRarity(string lineText)
     {
         var rarityStr = lineText.Substring(RARITY_KEYWORD.Length, lineText.Length - RARITY_KEYWORD.Length).Trim();
@@ -365,6 +287,89 @@ public class ChineseTradParser(CacheService cacheService) : IParser
         };
 
         return result;
+    }
+
+    private static List<ItemStat> ResolveStats(IEnumerable<string> statTexts, List<StatGroup> stats)
+    {
+        List<ItemStat> result = [];
+
+        foreach (var stat in statTexts)
+        {
+            if (stat.Trim().EndsWith(IMPLICIT_KEYWORD))
+            {
+                var group = stats.First(s => s.Id == "implicit");
+                var (statEng, value) = FindState(group, stat);
+                if (statEng != null)
+                {
+                    result.Add(new ItemStat
+                    {
+                        Stat = statEng,
+                        Value = value
+                    });
+                }
+            }
+            else if (stat.Trim().EndsWith(CRAFTED_KEYWORD))
+            {
+                var group = stats.First(s => s.Id == "crafted");
+                var (statEng, value) = FindState(group, stat);
+                if (statEng != null)
+                {
+                    result.Add(new ItemStat
+                    {
+                        Stat = statEng,
+                        Value = value
+                    });
+                }
+            }
+            else
+            {
+                var group = stats.First(s => s.Id == "explicit");
+                var (statEng, value) = FindState(group, stat);
+                if (statEng != null)
+                {
+                    result.Add(new ItemStat
+                    {
+                        Stat = statEng,
+                        Value = value
+                    });
+                }
+            }
+        }
+
+        return result;
+
+        (Stat?, int?) FindState(StatGroup group, string stat)
+        {
+            foreach (var entry in group.Entries)
+            {
+                var regex = entry.Text.Replace("+#", "([+-]\\d+)");
+                regex = regex.Replace("#", "(\\d+)");
+                regex = $"^{regex}";
+                try
+                {
+                    var match = Regex.Match(stat, regex);
+                    if (!match.Success)
+                    {
+                        continue;
+                    }
+
+                    int? value = match.Groups.Count switch
+                    {
+                        3 => int.Parse(match.Groups[2].Value) + int.Parse(match.Groups[1].Value),
+                        > 1 => int.Parse(match.Groups[1].Value),
+                        _ => null
+                    };
+
+                    return (entry, value);
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine(e.Message);
+                }
+            }
+
+            return (null, null);
+        }
     }
 
     private enum ParsingState
