@@ -1,6 +1,4 @@
-using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Dynamic;
 using System.IO;
 using System.Text.Json;
 using System.Text.Json.Nodes;
@@ -394,21 +392,18 @@ public partial class MainWindowViewModel : ObservableObject
                 misc_filters = new
                 {
                     disabled = false,
-                    filters = new
-                    {
-                        corrupted = new
-                        {
-                            option = SelectedCorruptedState switch
-                            {
-                                CorruptedState.NO => "no",
-                                CorruptedState.YES => "yes",
-                                _ => "any"
-                            }
-                        }
-                    }
+                    filters = new Dictionary<string, object>()
                 }
             }
         };
+        if (SelectedCorruptedState != CorruptedState.ANY)
+        {
+            queryObj.filters.misc_filters.filters["corrupted"] = new
+            {
+                option = SelectedCorruptedState == CorruptedState.YES ? "yes" : "no"
+            };
+        }
+
         return queryObj;
     }
 
