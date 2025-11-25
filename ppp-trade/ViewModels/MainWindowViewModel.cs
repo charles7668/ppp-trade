@@ -166,7 +166,13 @@ public partial class MainWindowViewModel : ObservableObject
 
         public int? ItemLevelMax { get; set; }
 
-        public bool FilterItemLevel { get; set; }
+        public bool FilterItemLevel { get; set; } = true;
+
+        public bool FilterRarity { get; set; } = true;
+
+        public bool FilterLink { get; set; } = true;
+
+        public bool FilterItemBase { get; set; }
 
         public string? Rarity { get; set; }
 
@@ -247,11 +253,17 @@ public partial class MainWindowViewModel : ObservableObject
             return;
         }
 
-        ParsedItemVM = _mapper.Map<ItemVM>(_parsedItem.Value, opt =>
+        ParsedItemVM = MapItemToView(_parsedItem.Value);
+        ItemInfoVisibility = Visibility.Visible;
+    }
+
+    private ItemVM MapItemToView(Item item)
+    {
+        return _mapper.Map<ItemVM>(item, opt =>
         {
             opt.AfterMap((_, dest) =>
             {
-                dest.Rarity = _parsedItem.Value.Rarity switch
+                dest.Rarity = item.Rarity switch
                 {
                     Rarity.MAGIC => _gameStringService.Get(GameString.MAGIC)!,
                     Rarity.RARE => _gameStringService.Get(GameString.RARE)!,
@@ -260,8 +272,6 @@ public partial class MainWindowViewModel : ObservableObject
                 };
             });
         });
-
-        ItemInfoVisibility = Visibility.Visible;
     }
 
     partial void OnSelectedServerChanged(string? value)

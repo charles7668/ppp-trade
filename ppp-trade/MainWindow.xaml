@@ -65,24 +65,23 @@
                             <StackPanel>
                                 <hc:SimpleStackPanel Orientation="Horizontal">
                                     <CheckBox
-                                        IsChecked="{Binding ParsedItemVM.FilterItemLevel,Mode=TwoWay,FallbackValue=False}">
+                                        IsChecked="{Binding ParsedItemVM.FilterItemLevel,Mode=TwoWay}">
                                         物品等級
                                     </CheckBox>
                                     <TextBox Margin="2" Width="80"
                                              Text="{Binding ParsedItemVM.ItemLevelMin,FallbackValue=''}" />
                                     <TextBox Margin="2" Width="80"
                                              Text="{Binding ParsedItemVM.ItemLevelMax, FallbackValue=''}" />
-                                    <CheckBox IsEnabled="False">稀有度</CheckBox>
+                                    <CheckBox IsChecked="{Binding ParsedItemVM.FilterRarity,Mode=TwoWay}">稀有度</CheckBox>
                                     <ComboBox Margin="2" Width="80"
-                                              IsEnabled="False"
                                               ItemsSource="{Binding SelectableRarity}"
                                               SelectedItem="{Binding ParsedItemVM.Rarity}" />
                                 </hc:SimpleStackPanel>
                                 <hc:SimpleStackPanel Orientation="Horizontal">
-                                    <CheckBox>連線數量</CheckBox>
+                                    <CheckBox IsChecked="{Binding ParsedItemVM.FilterLink,Mode=TwoWay}">連線數量</CheckBox>
                                     <TextBox Margin="2" Width="80" Text="{Binding ParsedItemVM.LinkCountMin}" />
                                     <TextBox Margin="2" Width="80" Text="{Binding ParsedItemVM.LinkCountMax}" />
-                                    <CheckBox IsEnabled="False">物品分類</CheckBox>
+                                    <CheckBox IsChecked="{Binding ParsedItemVM.FilterItemBase , Mode= TwoWay}">物品分類</CheckBox>
                                     <TextBox Margin="2" Width="80" IsEnabled="False"
                                              Text="{Binding ParsedItemVM.ItemBase}" />
                                 </hc:SimpleStackPanel>
