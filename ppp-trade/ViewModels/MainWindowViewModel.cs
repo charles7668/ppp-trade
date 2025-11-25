@@ -163,6 +163,8 @@ public partial class MainWindowViewModel : ObservableObject
 
         public string? MatchedItemImage { get; set; }
 
+        public string? QueryId { get; set; }
+
         public List<PriceAnalysisVM> PriceAnalysisVMs { get; set; } = [];
     }
 
@@ -488,6 +490,7 @@ public partial class MainWindowViewModel : ObservableObject
             var results = fetched["result"].Deserialize<List<string>>()!;
             var total = fetched["total"]!.GetValue<int>();
             matchItem.Count = total;
+            matchItem.QueryId = queryId;
             // todo analyze x-rate-limit-ip-state to limit request rate
             List<JsonNode> nodes = [];
             for (var i = 0; i < 4; i++)
@@ -580,6 +583,16 @@ public partial class MainWindowViewModel : ObservableObject
             Rarity.RARE => "rare",
             _ => null
         };
+    }
+
+    [RelayCommand]
+    private void OpenTradeSite()
+    {
+        Process.Start(new ProcessStartInfo
+        {
+            FileName = _poeApiService.GetSearchWebsiteUrl(MatchedItem?.QueryId ?? "", SelectedLeague ?? ""),
+            UseShellExecute = true
+        });
     }
 
     private string? ItemTypeToString(ItemType itemType)

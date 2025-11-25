@@ -1,5 +1,4 @@
 using System.Net.Http;
-using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
@@ -10,6 +9,23 @@ namespace ppp_trade.Services;
 public class PoeApiService
 {
     private string _domain = "http://localhost";
+
+    public async Task<JsonObject> FetchItems(IEnumerable<string> ids, string queryId)
+    {
+        var idStrings = string.Join(',', ids);
+        using var client = new HttpClient();
+        client.DefaultRequestHeaders.Add("User-Agent", "ppp-trade/1.0");
+        client.DefaultRequestHeaders.Add("Accept", "*/*");
+        var normalizeDomain = _domain.TrimEnd('/') + "/";
+        var requestUrl = $"{normalizeDomain}api/trade/fetch/{idStrings}?query={queryId}";
+        var response = await client.GetAsync(requestUrl);
+        response.EnsureSuccessStatusCode();
+        var content = await response.Content.ReadAsStringAsync();
+
+        var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+        return JsonSerializer.Deserialize<JsonObject>(content, options) ??
+               throw new InvalidOperationException("Empty response");
+    }
 
     public async Task<List<LeagueInfo>> GetLeaguesAsync()
     {
@@ -36,21 +52,10 @@ public class PoeApiService
                throw new InvalidOperationException("API returned null for league list.");
     }
 
-    public async Task<JsonObject> FetchItems(IEnumerable<string> ids, string queryId)
+    public string GetSearchWebsiteUrl(string queryId, string league)
     {
-        var idStrings = string.Join(',', ids);
-        using var client = new HttpClient();
-        client.DefaultRequestHeaders.Add("User-Agent", "ppp-trade/1.0");
-        client.DefaultRequestHeaders.Add("Accept", "*/*");
         var normalizeDomain = _domain.TrimEnd('/') + "/";
-        var requestUrl = $"{normalizeDomain}api/trade/fetch/{idStrings}?query={queryId}";
-        var response = await client.GetAsync(requestUrl);
-        response.EnsureSuccessStatusCode();
-        var content = await response.Content.ReadAsStringAsync();
-
-        var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-        return JsonSerializer.Deserialize<JsonObject>(content, options) ??
-               throw new InvalidOperationException("Empty response");
+        return $"{normalizeDomain}trade/search/{league}/{queryId}";
     }
 
     public async Task<JsonObject> GetTradeSearchResultAsync(string league, string query)

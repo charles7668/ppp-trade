@@ -209,6 +209,17 @@
                 <StackPanel Visibility="{Binding MatchedItemVisibility}">
                     <TextBlock Text="{Binding MatchedItem.Count , StringFormat='共 {0} 筆資料符合'}"
                                HorizontalAlignment="Center" />
+                    <Button Height="40"
+                            Foreground="#0078D4"
+                            BorderBrush="#0078D4"
+                            BorderThickness="1">
+                        <b:Interaction.Triggers>
+                            <b:EventTrigger EventName="Click">
+                                <b:InvokeCommandAction Command="{Binding OpenTradeSiteCommand}" />
+                            </b:EventTrigger>
+                        </b:Interaction.Triggers>
+                        <TextBlock Text="{Binding SelectedServer, StringFormat='{}{0} 打開交易市集'}" />
+                    </Button>
                     <Image Width="100" Height="100" Margin="5" Source="{Binding MatchedItem.MatchedItemImage}">
                         <Image.Style>
                             <Style TargetType="Image">
