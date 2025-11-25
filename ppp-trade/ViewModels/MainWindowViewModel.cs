@@ -1,7 +1,9 @@
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Dynamic;
 using System.IO;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -27,12 +29,12 @@ public partial class MainWindowViewModel : ObservableObject
             _selectedTradeType = _tradeTypeList[1];
             _itemInfoVisibility = Visibility.Visible;
             _matchedItemVisibility = Visibility.Visible;
-            _parsedItemVM = new ItemVM()
+            _parsedItemVM = new ItemVM
             {
                 ItemName = "Design Time Item Name",
                 StatVMs =
                 [
-                    new ItemStatVM()
+                    new ItemStatVM
                     {
                         StatText = "測試1",
                         Type = "隨機"
@@ -40,40 +42,43 @@ public partial class MainWindowViewModel : ObservableObject
                 ]
             };
 
-            _matchedItemImage =
-                "https://web.poecdn.com/gen/image/WzI1LDE0LHsiZiI6IjJESXRlbXMvQXJtb3Vycy9IZWxtZXRzL01hc2tDcm93biIsInciOjIsImgiOjIsInNjYWxlIjoxfV0/dbad72643e/MaskCrown.png";
-
-            _priceAnalysisVMs =
-            [
-                new PriceAnalysisVM
-                {
-                    Price = 2,
-                    CurrencyImageUrl =
-                        "https://web.poecdn.com/gen/image/WzI1LDE0LHsiZiI6IjJESXRlbXMvQ3VycmVuY3kvQ3VycmVuY3lSZXJvbGxSYXJlIiwic2NhbGUiOjF9XQ/46a2347805/CurrencyRerollRare.png",
-                    Count = 2
-                },
-                new PriceAnalysisVM
-                {
-                    Price = 3,
-                    CurrencyImageUrl =
-                        "https://web.poecdn.com/gen/image/WzI1LDE0LHsiZiI6IjJESXRlbXMvQ3VycmVuY3kvQ3VycmVuY3lSZXJvbGxSYXJlIiwic2NhbGUiOjF9XQ/46a2347805/CurrencyRerollRare.png",
-                    Count = 2
-                },
-                new PriceAnalysisVM
-                {
-                    Price = 1,
-                    CurrencyImageUrl =
-                        "https://web.poecdn.com/gen/image/WzI1LDE0LHsiZiI6IjJESXRlbXMvQ3VycmVuY3kvQ3VycmVuY3lSZXJvbGxSYXJlIiwic2NhbGUiOjF9XQ/46a2347805/CurrencyRerollRare.png",
-                    Count = 1
-                },
-                new PriceAnalysisVM
-                {
-                    Price = 5,
-                    CurrencyImageUrl =
-                        "https://web.poecdn.com/gen/image/WzI1LDE0LHsiZiI6IjJESXRlbXMvQ3VycmVuY3kvQ3VycmVuY3lSZXJvbGxSYXJlIiwic2NhbGUiOjF9XQ/46a2347805/CurrencyRerollRare.png",
-                    Count = 1
-                },
-            ];
+            _matchedItem = new MatchedItemVM
+            {
+                Count = 0,
+                MatchedItemImage =
+                    "https://web.poecdn.com/gen/image/WzI1LDE0LHsiZiI6IjJESXRlbXMvQXJtb3Vycy9IZWxtZXRzL01hc2tDcm93biIsInciOjIsImgiOjIsInNjYWxlIjoxfV0/dbad72643e/MaskCrown.png",
+                PriceAnalysisVMs =
+                [
+                    new PriceAnalysisVM
+                    {
+                        Price = 2,
+                        CurrencyImageUrl =
+                            "https://web.poecdn.com/gen/image/WzI1LDE0LHsiZiI6IjJESXRlbXMvQ3VycmVuY3kvQ3VycmVuY3lSZXJvbGxSYXJlIiwic2NhbGUiOjF9XQ/46a2347805/CurrencyRerollRare.png",
+                        Count = 2
+                    },
+                    new PriceAnalysisVM
+                    {
+                        Price = 3,
+                        CurrencyImageUrl =
+                            "https://web.poecdn.com/gen/image/WzI1LDE0LHsiZiI6IjJESXRlbXMvQ3VycmVuY3kvQ3VycmVuY3lSZXJvbGxSYXJlIiwic2NhbGUiOjF9XQ/46a2347805/CurrencyRerollRare.png",
+                        Count = 2
+                    },
+                    new PriceAnalysisVM
+                    {
+                        Price = 1,
+                        CurrencyImageUrl =
+                            "https://web.poecdn.com/gen/image/WzI1LDE0LHsiZiI6IjJESXRlbXMvQ3VycmVuY3kvQ3VycmVuY3lSZXJvbGxSYXJlIiwic2NhbGUiOjF9XQ/46a2347805/CurrencyRerollRare.png",
+                        Count = 1
+                    },
+                    new PriceAnalysisVM
+                    {
+                        Price = 5,
+                        CurrencyImageUrl =
+                            "https://web.poecdn.com/gen/image/WzI1LDE0LHsiZiI6IjJESXRlbXMvQ3VycmVuY3kvQ3VycmVuY3lSZXJvbGxSYXJlIiwic2NhbGUiOjF9XQ/46a2347805/CurrencyRerollRare.png",
+                        Count = 1
+                    }
+                ]
+            };
 
             return;
         }
@@ -144,13 +149,24 @@ public partial class MainWindowViewModel : ObservableObject
     private ItemVM? _parsedItemVM;
 
     [ObservableProperty]
-    private string? _matchedItemImage;
+    private bool _canQuery = true;
 
     [ObservableProperty]
-    private ObservableCollection<PriceAnalysisVM> _priceAnalysisVMs = [];
+    private MatchedItemVM? _matchedItem;
+
+    public class MatchedItemVM
+    {
+        public int Count { get; set; }
+
+        public string? MatchedItemImage { get; set; }
+
+        public List<PriceAnalysisVM> PriceAnalysisVMs { get; set; } = [];
+    }
 
     public class PriceAnalysisVM
     {
+        public string? Currency { get; set; }
+
         public double Price { get; set; }
 
         public string? CurrencyImageUrl { get; set; }
@@ -391,20 +407,145 @@ public partial class MainWindowViewModel : ObservableObject
         return queryObj;
     }
 
-    [RelayCommand]
+    [RelayCommand(CanExecute = nameof(CanQuery))]
     private async Task Query()
     {
-        if (ParsedItemVM == null || _parsedItem == null)
-            return;
-        var queryItem = _parsedItem!.Value;
-        // todo complete method
-        if (queryItem.Rarity == Rarity.UNIQUE)
+        try
         {
-            var queryParam = await GetQueryParamForUnique();
-            if (queryParam == null)
+            MatchedItemVisibility = Visibility.Hidden;
+            CanQuery = false;
+            if (ParsedItemVM == null || _parsedItem == null)
+            {
                 return;
+            }
+
+            if (SelectedLeague == null)
+            {
+                Growl.Warning(new GrowlInfo
+                {
+                    Message = "請先選擇聯盟",
+                    Token = "LogMsg",
+                    WaitTime = 2
+                });
+                return;
+            }
+
+            var queryItem = _parsedItem!.Value;
+            // todo complete method
+            object? queryParam = null;
+            if (queryItem.Rarity == Rarity.UNIQUE)
+            {
+                queryParam = await GetQueryParamForUnique();
+            }
+
+            if (queryParam == null)
+            {
+                Growl.Warning(new GrowlInfo
+                {
+                    Message = "無法解析查詢參數",
+                    Token = "LogMsg",
+                    WaitTime = 2
+                });
+                return;
+            }
+
+            var query = new
+            {
+                query = queryParam,
+                sort = new
+                {
+                    price = "asc"
+                }
+            };
+            MatchedItem = await AnalysisPriceAsync(query, SelectedLeague!);
+            MatchedItemVisibility = Visibility.Visible;
+        }
+        finally
+        {
+            CanQuery = true;
         }
     }
+
+    private async Task<MatchedItemVM> AnalysisPriceAsync(object queryObj, string league)
+    {
+        var json = JsonSerializer.Serialize(queryObj);
+        Debug.WriteLine(json);
+        List<PriceAnalysisVM> analysis = [];
+        var matchItem = new MatchedItemVM();
+        try
+        {
+            var fetched = await _poeApiService.GetTradeSearchResultAsync(league, json);
+            Debug.WriteLine(JsonSerializer.Serialize(fetched));
+            if (!fetched.ContainsKey("id") || !fetched.ContainsKey("result"))
+            {
+                throw new ArgumentException("search result not contain 'id' or 'result' field");
+            }
+
+            var queryId = fetched["id"]!.ToString();
+            var results = fetched["result"].Deserialize<List<string>>()!;
+            var total = fetched["total"]!.GetValue<int>();
+            matchItem.Count = total;
+            // todo analyze x-rate-limit-ip-state to limit request rate
+            List<JsonNode> nodes = [];
+            for (var i = 0; i < 4; i++)
+            {
+                var end = (i + 1) * 10;
+                List<string> fetchIds = [];
+                for (var j = i * 10; j < Math.Min(end, results.Count); j++)
+                {
+                    fetchIds.Add(results[j]);
+                }
+
+                var fetchItems = await _poeApiService.FetchItems(fetchIds, queryId);
+                if (!fetchItems.ContainsKey("result"))
+                {
+                    throw new ArgumentException("fetch result not contain 'result' field");
+                }
+
+                nodes.AddRange(fetchItems["result"]!.AsArray()!);
+            }
+
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+            matchItem.MatchedItemImage = null;
+            if (nodes.Count > 0)
+            {
+                matchItem.MatchedItemImage = nodes[0]["item"]["icon"].ToString();
+            }
+
+            var priceInfos = nodes.Select(x =>
+                new
+                {
+                    type = x["listing"]["price"]["type"].ToString(),
+                    amount = x["listing"]["price"]["amount"].GetValue<int>(),
+                    currency = x["listing"]["price"]["currency"].ToString()
+                });
+            var groups = priceInfos.GroupBy(x => (x.amount, x.currency));
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+            foreach (var group in groups)
+            {
+                analysis.Add(new PriceAnalysisVM
+                {
+                    Count = group.Count(),
+                    Currency = group.Key.currency,
+                    Price = group.Key.amount
+                });
+            }
+        }
+        catch (Exception ex)
+        {
+            Growl.Warning(new GrowlInfo
+            {
+                Message = ex.Message,
+                Token = "LogMsg",
+                WaitTime = 2
+            });
+            Debug.WriteLine(ex);
+        }
+
+        matchItem.PriceAnalysisVMs = analysis;
+
+        return matchItem;
+    } 
 
     private string? RarityToString(Rarity rarity)
     {

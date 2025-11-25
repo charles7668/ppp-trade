@@ -1,4 +1,5 @@
 using System.Net.Http;
+using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
@@ -35,13 +36,35 @@ public class PoeApiService
                throw new InvalidOperationException("API returned null for league list.");
     }
 
-    public async Task<JsonObject> GetTradeSearchResultAsync(string league, object query)
+    public async Task<JsonObject> FetchItems(IEnumerable<string> ids, string queryId)
+    {
+        var idStrings = string.Join(',', ids);
+        using var client = new HttpClient();
+        client.DefaultRequestHeaders.Add("User-Agent", "ppp-trade/1.0");
+        client.DefaultRequestHeaders.Add("Accept", "*/*");
+        var normalizeDomain = _domain.TrimEnd('/') + "/";
+        var requestUrl = $"{normalizeDomain}api/trade/fetch/{idStrings}?query={queryId}";
+        var response = await client.GetAsync(requestUrl);
+        response.EnsureSuccessStatusCode();
+        var content = await response.Content.ReadAsStringAsync();
+
+        var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+        return JsonSerializer.Deserialize<JsonObject>(content, options) ??
+               throw new InvalidOperationException("Empty response");
+    }
+
+    public async Task<JsonObject> GetTradeSearchResultAsync(string league, string query)
     {
         using var client = new HttpClient();
         client.DefaultRequestHeaders.Add("User-Agent", "ppp-trade/1.0");
+        client.DefaultRequestHeaders.Add("Accept", "*/*");
         var normalizeDomain = _domain.TrimEnd('/') + "/";
-        var response = await client.PostAsync($"{normalizeDomain}api/trade/search/{league}",
-            new StringContent(JsonSerializer.Serialize(query), Encoding.UTF8, "application/json"));
+        var reqContent = new StringContent(query, Encoding.UTF8, "application/json");
+        var request = new HttpRequestMessage(HttpMethod.Post, $"{normalizeDomain}api/trade/search/{league}")
+        {
+            Content = reqContent
+        };
+        var response = await client.SendAsync(request);
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync();
 

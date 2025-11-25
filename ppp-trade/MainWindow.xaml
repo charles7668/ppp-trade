@@ -193,20 +193,20 @@
                     </StackPanel>
                 </Border>
                 <StackPanel Visibility="{Binding MatchedItemVisibility}">
-                    <TextBlock Text="{Binding PriceAnalysisVMs.Count , StringFormat='共 {0} 筆資料符合'}"
+                    <TextBlock Text="{Binding MatchedItem.Count , StringFormat='共 {0} 筆資料符合'}"
                                HorizontalAlignment="Center" />
-                    <Image Width="100" Height="100" Margin="5" Source="{Binding MatchedItemImage}">
+                    <Image Width="100" Height="100" Margin="5" Source="{Binding MatchedItem.MatchedItemImage}">
                         <Image.Style>
                             <Style TargetType="Image">
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding MatchedItemImage}" Value="{x:Null}">
+                                    <DataTrigger Binding="{Binding MatchedItem.MatchedItemImage}" Value="{x:Null}">
                                         <Setter Property="Visibility" Value="Collapsed" />
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
                         </Image.Style>
                     </Image>
-                    <ItemsControl ItemsSource="{Binding PriceAnalysisVMs}">
+                    <ItemsControl ItemsSource="{Binding MatchedItem.PriceAnalysisVMs}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal" Margin="5" HorizontalAlignment="Center">
