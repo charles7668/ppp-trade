@@ -20,6 +20,7 @@ public partial class App
         services.AddMemoryCache();
         services.AddSingleton<CacheService>();
         services.AddSingleton<GameStringService>();
+        services.AddSingleton<IconService>();
         services.AddScoped<IParser, EngParser>();
         services.AddScoped<IParser, ChineseTradParser>();
         services.AddSingleton<ParserFactory>();

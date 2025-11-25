@@ -88,6 +88,7 @@ public partial class MainWindowViewModel : ObservableObject
         _parserFactory = App.ServiceProvider.GetRequiredService<ParserFactory>();
         _cacheService = App.ServiceProvider.GetRequiredService<CacheService>();
         _gameStringService = App.ServiceProvider.GetRequiredService<GameStringService>();
+        _iconService = App.ServiceProvider.GetRequiredService<IconService>();
         _mapper = App.ServiceProvider.GetRequiredService<IMapper>();
         _selectedServer = _serverList[1];
         _selectableRarity =
@@ -110,6 +111,8 @@ public partial class MainWindowViewModel : ObservableObject
     private readonly CacheService _cacheService = null!;
 
     private readonly GameStringService _gameStringService = null!;
+
+    private readonly IconService _iconService = null!;
 
     private readonly IMapper _mapper = null!;
 
@@ -523,11 +526,13 @@ public partial class MainWindowViewModel : ObservableObject
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
             foreach (var group in groups)
             {
+                var currency = JudgeCurrency(group.Key.currency);
                 analysis.Add(new PriceAnalysisVM
                 {
                     Count = group.Count(),
                     Currency = group.Key.currency,
-                    Price = group.Key.amount
+                    Price = group.Key.amount,
+                    CurrencyImageUrl = _iconService.GetCurrencyIcon(currency)
                 });
             }
         }
@@ -545,7 +550,26 @@ public partial class MainWindowViewModel : ObservableObject
         matchItem.PriceAnalysisVMs = analysis;
 
         return matchItem;
-    } 
+    }
+
+    private Currency? JudgeCurrency(string currencyText)
+    {
+        if (string.IsNullOrWhiteSpace(currencyText))
+        {
+            return null;
+        }
+
+        // normalize text to upper case
+        var standardizedName = currencyText.Replace('-', '_').ToUpperInvariant();
+
+        var parseState = Enum.TryParse(standardizedName, out Currency currency);
+        if (parseState)
+        {
+            return currency;
+        }
+
+        return null;
+    }
 
     private string? RarityToString(Rarity rarity)
     {
