@@ -124,6 +124,9 @@ public partial class MainWindowViewModel : ObservableObject
     private CorruptedState _selectedCorruptedState = CorruptedState.ANY;
 
     [ObservableProperty]
+    private CollapseByAccount _selectedCollapseState = CollapseByAccount.NO;
+
+    [ObservableProperty]
     private string? _selectedLeague;
 
     [ObservableProperty]
@@ -413,6 +416,10 @@ public partial class MainWindowViewModel : ObservableObject
                         sale_type = new
                         {
                             option = "priced"
+                        },
+                        collapse = new
+                        {
+                            option = SelectedCollapseState == CollapseByAccount.YES ? "yes" : "no"
                         }
                     }
                 }

@@ -53,6 +53,13 @@
                             <RadioButton Content="No" GroupName="Corrupted" Margin="5"
                                          IsChecked="{Binding SelectedCorruptedState, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static enums:CorruptedState.NO}}" />
                         </StackPanel>
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center">
+                            <Label>依帳號折疊</Label>
+                            <RadioButton Content="Yes" GroupName="CollapseByAccount" Margin="5"
+                                         IsChecked="{Binding SelectedCollapseState, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static enums:CollapseByAccount.YES}}" />
+                            <RadioButton Content="No" GroupName="CollapseByAccount" Margin="5"
+                                         IsChecked="{Binding SelectedCollapseState, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static enums:CollapseByAccount.NO}}" />
+                        </StackPanel>
                     </StackPanel>
                 </Border>
                 <Border Visibility="{Binding ItemInfoVisibility}">
