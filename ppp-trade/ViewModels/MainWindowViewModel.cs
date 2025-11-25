@@ -367,9 +367,21 @@ public partial class MainWindowViewModel : ObservableObject
             _cacheService.Set(baseMapCacheKey, baseMap);
         }
 
+        var tradeTypeIndex = TradeTypeList.IndexOf(SelectedTradeType!);
+        var tradeType = tradeTypeIndex switch
+        {
+            0 => "available",
+            1 => "securable",
+            2 => "online",
+            _ => "any"
+        };
+
         var queryObj = new
         {
-            status = "any",
+            status = new
+            {
+                any = tradeType
+            },
             name = nameMap![_parsedItem.Value.ItemName],
             type = baseMap![_parsedItem.Value.ItemBase],
             filters = new
@@ -393,6 +405,16 @@ public partial class MainWindowViewModel : ObservableObject
                 {
                     disabled = false,
                     filters = new Dictionary<string, object>()
+                },
+                trade_filters = new
+                {
+                    filters = new
+                    {
+                        sale_type = new
+                        {
+                            option = "priced"
+                        }
+                    }
                 }
             }
         };
