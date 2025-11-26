@@ -140,6 +140,10 @@
                                                     <Style TargetType="TextBlock">
                                                         <Setter Property="Text" Value="{Binding Type}" />
                                                         <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Type}" Value="pseudo">
+                                                                <Setter Property="Foreground" Value="Yellow" />
+                                                                <Setter Property="Text" Value="偽屬性" />
+                                                            </DataTrigger>
                                                             <DataTrigger Binding="{Binding Type}" Value="implicit">
                                                                 <Setter Property="Foreground" Value="#5555FF" />
                                                                 <Setter Property="Text" Value="固定" />
