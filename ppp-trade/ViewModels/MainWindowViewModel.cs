@@ -388,7 +388,7 @@ public partial class MainWindowViewModel : ObservableObject
         {
             status = new
             {
-                any = tradeType
+                option = tradeType
             },
             name = nameMap![_parsedItem.Value.ItemName],
             type = baseMap![_parsedItem.Value.ItemBase],
