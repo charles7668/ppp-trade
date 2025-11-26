@@ -272,6 +272,67 @@ public class ChineseTradParser(CacheService cacheService) : IParser
         return split.Select(linkText => linkText.Length).Prepend(0).Max() + 1;
     }
 
+    private static List<ItemStat> ResolvePseudoStats(IEnumerable<ItemStat> itemStats, StatGroup pseudoStatGroup)
+    {
+        var mapping = new Dictionary<string, List<string>>
+        {
+            {
+                // cold resistance
+                "explicit.stat_4220027924",
+                [
+                    "pseudo.pseudo_total_cold_resistance",
+                    "pseudo.pseudo_total_elemental_resistance",
+                    "pseudo.pseudo_total_resistance"
+                ]
+            },
+            {
+                // fire resistance
+                "explicit.stat_3372524247",
+                [
+                    "pseudo.pseudo_total_fire_resistance",
+                    "pseudo.pseudo_total_elemental_resistance",
+                    "pseudo.pseudo_total_resistance"
+                ]
+            },
+            {
+                // lightning resistance
+                "explicit.stat_1671376347",
+                [
+                    "pseudo.pseudo_total_lightning_resistance",
+                    "pseudo.pseudo_total_elemental_resistance",
+                    "pseudo.pseudo_total_resistance"
+                ]
+            }
+        };
+
+        var pseudoDict = new Dictionary<string, int>();
+
+        foreach (var stat in itemStats)
+        {
+            var statId = stat.Stat.Id;
+            if (!mapping.TryGetValue(statId, out var value))
+            {
+                continue;
+            }
+
+            foreach (var pseudoId in value)
+            {
+                pseudoDict.TryAdd(pseudoId, 0);
+
+                if (stat.Value != null)
+                {
+                    pseudoDict[pseudoId] += (int)stat.Value;
+                }
+            }
+        }
+
+        return pseudoDict.Select(p => new ItemStat
+        {
+            Stat = pseudoStatGroup.Entries.First(x => x.Id == p.Key),
+            Value = p.Value
+        }).ToList();
+    }
+
     private static Rarity ResolveRarity(string lineText)
     {
         var rarityStr = lineText.Substring(RARITY_KEYWORD.Length, lineText.Length - RARITY_KEYWORD.Length).Trim();
@@ -293,12 +354,12 @@ public class ChineseTradParser(CacheService cacheService) : IParser
     {
         List<ItemStat> result = [];
 
-        foreach (var stat in statTexts)
+        foreach (var statText in statTexts)
         {
-            if (stat.Trim().EndsWith(IMPLICIT_KEYWORD))
+            if (statText.Trim().EndsWith(IMPLICIT_KEYWORD))
             {
                 var group = stats.First(s => s.Id == "implicit");
-                var (statEng, value) = FindState(group, stat);
+                var (statEng, value) = FindState(group, statText);
                 if (statEng != null)
                 {
                     result.Add(new ItemStat
@@ -308,15 +369,15 @@ public class ChineseTradParser(CacheService cacheService) : IParser
                     });
                 }
             }
-            else if (stat.Trim().EndsWith(CRAFTED_KEYWORD))
+            else if (statText.Trim().EndsWith(CRAFTED_KEYWORD))
             {
                 var group = stats.First(s => s.Id == "crafted");
-                var (statEng, value) = FindState(group, stat);
-                if (statEng != null)
+                var (state, value) = FindState(group, statText);
+                if (state != null)
                 {
                     result.Add(new ItemStat
                     {
-                        Stat = statEng,
+                        Stat = state,
                         Value = value
                     });
                 }
@@ -324,17 +385,21 @@ public class ChineseTradParser(CacheService cacheService) : IParser
             else
             {
                 var group = stats.First(s => s.Id == "explicit");
-                var (statEng, value) = FindState(group, stat);
-                if (statEng != null)
+                var (state, value) = FindState(group, statText);
+                if (state != null)
                 {
                     result.Add(new ItemStat
                     {
-                        Stat = statEng,
+                        Stat = state,
                         Value = value
                     });
                 }
             }
         }
+
+        var pseudoStats = ResolvePseudoStats(result, stats.First(s => s.Id == "pseudo"));
+
+        result.InsertRange(0, pseudoStats);
 
         return result;
 
