@@ -3,6 +3,7 @@ using System.IO;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Windows;
+using AutoMapper;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using HandyControl.Controls;
@@ -12,7 +13,6 @@ using ppp_trade.Enums;
 using ppp_trade.Models;
 using ppp_trade.Models.Parsers;
 using ppp_trade.Services;
-using AutoMapper;
 
 namespace ppp_trade.ViewModels;
 
@@ -77,7 +77,7 @@ public partial class MainWindowViewModel : ObservableObject
                     }
                 ]
             };
-            _rateLimitMessage = $"請求過於頻繁，需等待 0 秒...";
+            _rateLimitMessage = "請求過於頻繁，需等待 0 秒...";
             _rateLimitVisibility = Visibility.Visible;
             return;
         }
@@ -96,39 +96,64 @@ public partial class MainWindowViewModel : ObservableObject
             _gameStringService.Get(GameString.NORMAL)!,
             _gameStringService.Get(GameString.MAGIC)!,
             _gameStringService.Get(GameString.RARE)!,
-            _gameStringService.Get(GameString.UNIQUE)!,
+            _gameStringService.Get(GameString.UNIQUE)!
         ];
         OnSelectedServerChanged(_selectedServer);
         _selectedTradeType = _tradeTypeList[1];
     }
 
-    private readonly ClipboardMonitorService _clipboardMonitorService = null!;
-
-    private readonly ParserFactory _parserFactory = null!;
-
-    private readonly PoeApiService _poeApiService = null!;
-
     private readonly CacheService _cacheService = null!;
+
+    private readonly ClipboardMonitorService _clipboardMonitorService = null!;
 
     private readonly GameStringService _gameStringService = null!;
 
     private readonly IconService _iconService = null!;
 
-    private readonly RateLimitParser _rateLimitParser = null!;
-
     private readonly IMapper _mapper = null!;
 
+    private readonly ParserFactory _parserFactory = null!;
+
+    private readonly PoeApiService _poeApiService = null!;
+
+    private readonly RateLimitParser _rateLimitParser = null!;
+
     [ObservableProperty]
-    private IList<string> _selectableRarity = null!;
+    private bool _canQuery = true;
+
+    [ObservableProperty]
+    private Visibility _itemInfoVisibility = Visibility.Hidden;
 
     [ObservableProperty]
     private IList<string> _leagueList = [];
 
     [ObservableProperty]
-    private CorruptedState _selectedCorruptedState = CorruptedState.ANY;
+    private MatchedItemVM? _matchedItem;
+
+    [ObservableProperty]
+    private Visibility _matchedItemVisibility = Visibility.Hidden;
+
+    private Item? _parsedItem;
+
+    [ObservableProperty]
+    private ItemVM? _parsedItemVM;
+
+    private CancellationTokenSource _queryCts = new();
+
+    [ObservableProperty]
+    private string? _rateLimitMessage;
+
+    [ObservableProperty]
+    private Visibility _rateLimitVisibility = Visibility.Collapsed;
+
+    [ObservableProperty]
+    private IList<string> _selectableRarity = null!;
 
     [ObservableProperty]
     private CollapseByAccount _selectedCollapseState = CollapseByAccount.NO;
+
+    [ObservableProperty]
+    private CorruptedState _selectedCorruptedState = CorruptedState.ANY;
 
     [ObservableProperty]
     private string? _selectedLeague;
@@ -145,192 +170,106 @@ public partial class MainWindowViewModel : ObservableObject
     [ObservableProperty]
     private IList<string> _tradeTypeList = ["即刻購買以及面交", "僅限即刻購買", "僅限面交", "任何"];
 
-    [ObservableProperty]
-    private Visibility _itemInfoVisibility = Visibility.Hidden;
-
-    [ObservableProperty]
-    private Visibility _matchedItemVisibility = Visibility.Hidden;
-
-    private Item? _parsedItem;
-
-    [ObservableProperty]
-    private ItemVM? _parsedItemVM;
-
-    [ObservableProperty]
-    private bool _canQuery = true;
-
-    [ObservableProperty]
-    private MatchedItemVM? _matchedItem;
-
-    private CancellationTokenSource _queryCts = new();
-
-    [ObservableProperty]
-    private string? _rateLimitMessage;
-
-    [ObservableProperty]
-    private Visibility _rateLimitVisibility = Visibility.Collapsed;
-
     private Task _waitTimeTask = Task.CompletedTask;
 
-    public class MatchedItemVM
+    private async Task<MatchedItemVM> AnalysisPriceAsync(object queryObj, string league)
     {
-        public int Count { get; set; }
-
-        public string? MatchedItemImage { get; set; }
-
-        public string? QueryId { get; set; }
-
-        public List<PriceAnalysisVM> PriceAnalysisVMs { get; set; } = [];
-    }
-
-    public class PriceAnalysisVM
-    {
-        public string? Currency { get; set; }
-
-        public double Price { get; set; }
-
-        public string? CurrencyImageUrl { get; set; }
-
-        public int Count { get; set; }
-    }
-
-    public class ItemVM
-    {
-        public string? ItemName { get; set; }
-
-        public int? ItemLevelMin { get; set; }
-
-        public int? ItemLevelMax { get; set; }
-
-        public bool FilterItemLevel { get; set; } = true;
-
-        public bool FilterRarity { get; set; } = true;
-
-        public bool FilterLink { get; set; } = true;
-
-        public bool FilterItemBase { get; set; }
-
-        public string? Rarity { get; set; }
-
-        public int? LinkCountMin { get; set; }
-
-        public int? LinkCountMax { get; set; }
-
-        public string? ItemBase { get; set; }
-
-        public List<ItemStatVM> StatVMs { get; set; } = [];
-    }
-
-    public partial class ItemStatVM : ObservableObject
-    {
-        public string? Id { get; set; }
-
-        public string? Type { get; set; }
-
-        public string? StatText { get; set; }
-
-        [ObservableProperty]
-        private bool _isSelected;
-
-        [ObservableProperty]
-        private int? _minValue;
-
-        [ObservableProperty]
-        private int? _maxValue;
-    }
-
-    private async Task LoadLeagues()
-    {
+        var json = JsonSerializer.Serialize(queryObj);
+        Debug.WriteLine(json);
+        List<PriceAnalysisVM> analysis = [];
+        var matchItem = new MatchedItemVM();
         try
         {
-            var leagues = await _poeApiService.GetLeaguesAsync();
-            LeagueList = leagues.Where(l => l.Realm == "pc").Select(l => l.Text).ToList();
-            if (LeagueList.Any())
-                SelectedLeague = LeagueList[0];
-        }
-        catch
-        {
-            // todo show error message
-        }
-    }
-
-    private void OnClipboardChanged(object? sender, string clipboardText)
-    {
-        Debug.WriteLine($"Clipboard content:\n {clipboardText}");
-        var parser = _parserFactory.GetParser(clipboardText);
-        if (parser == null)
-        {
-            Application.Current.Dispatcher.Invoke(() =>
+            _queryCts = new CancellationTokenSource();
+            await _waitTimeTask;
+            var fetched = await _poeApiService.GetTradeSearchResultAsync(league, json);
+            Debug.WriteLine(JsonSerializer.Serialize(fetched));
+            if (!fetched.ContainsKey("id") || !fetched.ContainsKey("result"))
             {
-                Growl.Warning(new GrowlInfo
+                throw new ArgumentException("search result not contain 'id' or 'result' field");
+            }
+
+            var needWaitTime = _rateLimitParser.GetWaitTimeForRateLimit(fetched["rate-limit"].Deserialize<string?>(),
+                fetched["rate-limit-state"].Deserialize<string?>());
+
+            await WaitWithCountdown(needWaitTime, _queryCts.Token);
+
+            var queryId = fetched["id"]!.ToString();
+            var results = fetched["result"].Deserialize<List<string>>()!;
+            var total = fetched["total"]!.GetValue<int>();
+            matchItem.Count = total;
+            matchItem.QueryId = queryId;
+
+            List<JsonNode> nodes = [];
+            for (var i = 0; i < 4; i++)
+            {
+                var end = (i + 1) * 10;
+                List<string> fetchIds = [];
+                for (var j = i * 10; j < Math.Min(end, results.Count); j++)
                 {
-                    Message = "無法識別的物品格式",
-                    Token = "LogMsg",
-                    WaitTime = 2
+                    fetchIds.Add(results[j]);
+                }
+
+                var fetchItems = await _poeApiService.FetchItems(fetchIds, queryId);
+                needWaitTime = _rateLimitParser.GetWaitTimeForRateLimit(
+                    fetched["rate-limit"].Deserialize<string?>(),
+                    fetched["rate-limit-state"].Deserialize<string?>());
+
+                await WaitWithCountdown(needWaitTime, _queryCts.Token);
+                if (!fetchItems.ContainsKey("result"))
+                {
+                    throw new ArgumentException("fetch result not contain 'result' field");
+                }
+
+                nodes.AddRange(fetchItems["result"]!.AsArray()!);
+            }
+
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+            matchItem.MatchedItemImage = null;
+            if (nodes.Count > 0)
+            {
+                matchItem.MatchedItemImage = nodes[0]["item"]["icon"].ToString();
+            }
+
+            var priceInfos = nodes.Select(x =>
+                new
+                {
+                    type = x["listing"]["price"]["type"].ToString(),
+                    amount = x["listing"]["price"]["amount"].GetValue<int>(),
+                    currency = x["listing"]["price"]["currency"].ToString()
                 });
-            });
-            return;
-        }
-
-        ItemInfoVisibility = Visibility.Hidden;
-
-        _parsedItem = parser.Parse(clipboardText);
-        if (_parsedItem == null)
-        {
-            Application.Current.Dispatcher.Invoke(() =>
+            var groups = priceInfos.GroupBy(x => (x.amount, x.currency));
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+            foreach (var group in groups)
             {
-                Growl.Warning(new GrowlInfo
+                var currency = JudgeCurrency(group.Key.currency);
+                analysis.Add(new PriceAnalysisVM
                 {
-                    Message = "無法識別的物品格式",
-                    Token = "LogMsg",
-                    WaitTime = 2
+                    Count = group.Count(),
+                    Currency = group.Key.currency,
+                    Price = group.Key.amount,
+                    CurrencyImageUrl = _iconService.GetCurrencyIcon(currency)
                 });
+            }
+        }
+        catch (TaskCanceledException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            Growl.Warning(new GrowlInfo
+            {
+                Message = ex.Message,
+                Token = "LogMsg",
+                WaitTime = 2
             });
-            return;
+            Debug.WriteLine(ex);
         }
 
-        ParsedItemVM = MapItemToView(_parsedItem.Value);
-        ItemInfoVisibility = Visibility.Visible;
-    }
+        matchItem.PriceAnalysisVMs = analysis;
 
-    private ItemVM MapItemToView(Item item)
-    {
-        return _mapper.Map<ItemVM>(item, opt =>
-        {
-            opt.AfterMap((_, dest) =>
-            {
-                dest.Rarity = item.Rarity switch
-                {
-                    Rarity.MAGIC => _gameStringService.Get(GameString.MAGIC)!,
-                    Rarity.RARE => _gameStringService.Get(GameString.RARE)!,
-                    Rarity.UNIQUE => _gameStringService.Get(GameString.UNIQUE)!,
-                    _ => _gameStringService.Get(GameString.NORMAL)!
-                };
-            });
-        });
-    }
-
-    partial void OnSelectedServerChanged(string? value)
-    {
-        var domain = value == "台服" ? "https://www.pathofexile.tw/" : "https://www.pathofexile.com/";
-        _poeApiService.SwitchDomain(domain);
-        LoadLeagues().ConfigureAwait(false);
-    }
-
-    [RelayCommand]
-    private Task WindowClosing()
-    {
-        _clipboardMonitorService.StopMonitoring();
-        return Task.CompletedTask;
-    }
-
-    [RelayCommand]
-    private async Task WindowLoaded()
-    {
-        // todo load settings
-        await LoadLeagues();
-        _clipboardMonitorService.ClipboardChanged += OnClipboardChanged;
-        _clipboardMonitorService.StartMonitoring();
+        return matchItem;
     }
 
     private async Task<object?> GetQueryParamForUnique()
@@ -450,6 +389,146 @@ public partial class MainWindowViewModel : ObservableObject
         return queryObj;
     }
 
+    private string? ItemTypeToString(ItemType itemType)
+    {
+        return itemType switch
+        {
+            ItemType.HELMET => "armour.helmet",
+            ItemType.ONE_HAND_AXE => "weapon.oneaxe",
+            ItemType.ONE_HAND_MACE => "weapon.onemace",
+            ItemType.ONE_HAND_SWORD => "weapon.onesword",
+            ItemType.BOW => "weapon.bow",
+            ItemType.CLAW => "weapon.claw",
+            ItemType.DAGGER => "weapon.basedagger",
+            ItemType.RUNE_DAGGER => "weapon.runedagger",
+            ItemType.SCEPTRE => "weapon.sceptre",
+            ItemType.STAFF => "weapon.staff",
+            ItemType.TWO_HAND_AXE => "weapon.twoaxe",
+            ItemType.TWO_HAND_MACE => "weapon.twomace",
+            ItemType.TWO_HAND_SWORD => "weapon.twosword",
+            ItemType.WAND => "weapon.wand",
+            ItemType.FISHING_ROD => "weapon.rod",
+            ItemType.BODY_ARMOUR => "armour.chest",
+            ItemType.BOOTS => "armour.boots",
+            ItemType.GLOVES => "armour.gloves",
+            ItemType.SHIELD => "armour.shield",
+            ItemType.Quiver => "armour.quiver",
+            ItemType.AMULET => "accessory.amulet",
+            ItemType.BELT => "accessory.belt",
+            ItemType.RING => "accessory.ring",
+            _ => null
+        };
+    }
+
+    private Currency? JudgeCurrency(string currencyText)
+    {
+        if (string.IsNullOrWhiteSpace(currencyText))
+        {
+            return null;
+        }
+
+        // normalize text to upper case
+        var standardizedName = currencyText.Replace('-', '_').ToUpperInvariant();
+
+        var parseState = Enum.TryParse(standardizedName, out Currency currency);
+        if (parseState)
+        {
+            return currency;
+        }
+
+        return null;
+    }
+
+    private async Task LoadLeagues()
+    {
+        try
+        {
+            var leagues = await _poeApiService.GetLeaguesAsync();
+            LeagueList = leagues.Where(l => l.Realm == "pc").Select(l => l.Text).ToList();
+            if (LeagueList.Any())
+            {
+                SelectedLeague = LeagueList[0];
+            }
+        }
+        catch
+        {
+            // todo show error message
+        }
+    }
+
+    private ItemVM MapItemToView(Item item)
+    {
+        return _mapper.Map<ItemVM>(item, opt =>
+        {
+            opt.AfterMap((_, dest) =>
+            {
+                dest.Rarity = item.Rarity switch
+                {
+                    Rarity.MAGIC => _gameStringService.Get(GameString.MAGIC)!,
+                    Rarity.RARE => _gameStringService.Get(GameString.RARE)!,
+                    Rarity.UNIQUE => _gameStringService.Get(GameString.UNIQUE)!,
+                    _ => _gameStringService.Get(GameString.NORMAL)!
+                };
+            });
+        });
+    }
+
+    private void OnClipboardChanged(object? sender, string clipboardText)
+    {
+        Debug.WriteLine($"Clipboard content:\n {clipboardText}");
+        var parser = _parserFactory.GetParser(clipboardText);
+        if (parser == null)
+        {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                Growl.Warning(new GrowlInfo
+                {
+                    Message = "無法識別的物品格式",
+                    Token = "LogMsg",
+                    WaitTime = 2
+                });
+            });
+            return;
+        }
+
+        ItemInfoVisibility = Visibility.Hidden;
+
+        _parsedItem = parser.Parse(clipboardText);
+        if (_parsedItem == null)
+        {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                Growl.Warning(new GrowlInfo
+                {
+                    Message = "無法識別的物品格式",
+                    Token = "LogMsg",
+                    WaitTime = 2
+                });
+            });
+            return;
+        }
+
+        ParsedItemVM = MapItemToView(_parsedItem.Value);
+        ItemInfoVisibility = Visibility.Visible;
+    }
+
+    partial void OnSelectedServerChanged(string? value)
+    {
+        var domain = value == "台服" ? "https://www.pathofexile.tw/" : "https://www.pathofexile.com/";
+        _poeApiService.SwitchDomain(domain);
+        LoadLeagues().ConfigureAwait(false);
+    }
+
+    [RelayCommand]
+    private void OpenTradeSite()
+    {
+        Process.Start(new ProcessStartInfo
+        {
+            FileName = _poeApiService.GetSearchWebsiteUrl(MatchedItem?.QueryId ?? "", SelectedLeague ?? ""),
+            UseShellExecute = true
+        });
+    }
+
     [RelayCommand(CanExecute = nameof(CanQuery))]
     private async Task Query()
     {
@@ -508,12 +587,24 @@ public partial class MainWindowViewModel : ObservableObject
             {
                 return;
             }
+
             MatchedItemVisibility = Visibility.Visible;
         }
         finally
         {
             CanQuery = true;
         }
+    }
+
+    private string? RarityToString(Rarity rarity)
+    {
+        return rarity switch
+        {
+            Rarity.UNIQUE => "unique",
+            Rarity.MAGIC => "magic",
+            Rarity.RARE => "rare",
+            _ => null
+        };
     }
 
     private async Task WaitWithCountdown(int waitTimeMs, CancellationToken ct)
@@ -539,174 +630,86 @@ public partial class MainWindowViewModel : ObservableObject
         await Task.Delay(waitTimeMs, ct);
     }
 
-    private async Task<MatchedItemVM> AnalysisPriceAsync(object queryObj, string league)
+    [RelayCommand]
+    private Task WindowClosing()
     {
-        var json = JsonSerializer.Serialize(queryObj);
-        Debug.WriteLine(json);
-        List<PriceAnalysisVM> analysis = [];
-        var matchItem = new MatchedItemVM();
-        try
-        {
-            _queryCts = new CancellationTokenSource();
-            await _waitTimeTask;
-            var fetched = await _poeApiService.GetTradeSearchResultAsync(league, json);
-            Debug.WriteLine(JsonSerializer.Serialize(fetched));
-            if (!fetched.ContainsKey("id") || !fetched.ContainsKey("result"))
-            {
-                throw new ArgumentException("search result not contain 'id' or 'result' field");
-            }
-
-            var needWaitTime = _rateLimitParser.GetWaitTimeForRateLimit(fetched["rate-limit"].Deserialize<string?>(),
-                fetched["rate-limit-state"].Deserialize<string?>());
-
-            await WaitWithCountdown(needWaitTime, _queryCts.Token);
-
-            var queryId = fetched["id"]!.ToString();
-            var results = fetched["result"].Deserialize<List<string>>()!;
-            var total = fetched["total"]!.GetValue<int>();
-            matchItem.Count = total;
-            matchItem.QueryId = queryId;
-
-            List<JsonNode> nodes = [];
-            for (var i = 0; i < 4; i++)
-            {
-                var end = (i + 1) * 10;
-                List<string> fetchIds = [];
-                for (var j = i * 10; j < Math.Min(end, results.Count); j++)
-                {
-                    fetchIds.Add(results[j]);
-                }
-
-                var fetchItems = await _poeApiService.FetchItems(fetchIds, queryId);
-                needWaitTime = _rateLimitParser.GetWaitTimeForRateLimit(
-                    fetched["rate-limit"].Deserialize<string?>(),
-                    fetched["rate-limit-state"].Deserialize<string?>());
-
-                await WaitWithCountdown(needWaitTime, _queryCts.Token);
-                if (!fetchItems.ContainsKey("result"))
-                {
-                    throw new ArgumentException("fetch result not contain 'result' field");
-                }
-
-                nodes.AddRange(fetchItems["result"]!.AsArray()!);
-            }
-
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
-            matchItem.MatchedItemImage = null;
-            if (nodes.Count > 0)
-            {
-                matchItem.MatchedItemImage = nodes[0]["item"]["icon"].ToString();
-            }
-
-            var priceInfos = nodes.Select(x =>
-                new
-                {
-                    type = x["listing"]["price"]["type"].ToString(),
-                    amount = x["listing"]["price"]["amount"].GetValue<int>(),
-                    currency = x["listing"]["price"]["currency"].ToString()
-                });
-            var groups = priceInfos.GroupBy(x => (x.amount, x.currency));
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
-            foreach (var group in groups)
-            {
-                var currency = JudgeCurrency(group.Key.currency);
-                analysis.Add(new PriceAnalysisVM
-                {
-                    Count = group.Count(),
-                    Currency = group.Key.currency,
-                    Price = group.Key.amount,
-                    CurrencyImageUrl = _iconService.GetCurrencyIcon(currency)
-                });
-            }
-        }
-        catch (TaskCanceledException)
-        {
-            throw;
-        }
-        catch (Exception ex)
-        {
-            Growl.Warning(new GrowlInfo
-            {
-                Message = ex.Message,
-                Token = "LogMsg",
-                WaitTime = 2
-            });
-            Debug.WriteLine(ex);
-        }
-
-        matchItem.PriceAnalysisVMs = analysis;
-
-        return matchItem;
-    }
-
-    private Currency? JudgeCurrency(string currencyText)
-    {
-        if (string.IsNullOrWhiteSpace(currencyText))
-        {
-            return null;
-        }
-
-        // normalize text to upper case
-        var standardizedName = currencyText.Replace('-', '_').ToUpperInvariant();
-
-        var parseState = Enum.TryParse(standardizedName, out Currency currency);
-        if (parseState)
-        {
-            return currency;
-        }
-
-        return null;
-    }
-
-    private string? RarityToString(Rarity rarity)
-    {
-        return rarity switch
-        {
-            Rarity.UNIQUE => "unique",
-            Rarity.MAGIC => "magic",
-            Rarity.RARE => "rare",
-            _ => null
-        };
+        _clipboardMonitorService.StopMonitoring();
+        return Task.CompletedTask;
     }
 
     [RelayCommand]
-    private void OpenTradeSite()
+    private async Task WindowLoaded()
     {
-        Process.Start(new ProcessStartInfo
-        {
-            FileName = _poeApiService.GetSearchWebsiteUrl(MatchedItem?.QueryId ?? "", SelectedLeague ?? ""),
-            UseShellExecute = true
-        });
+        // todo load settings
+        await LoadLeagues();
+        _clipboardMonitorService.ClipboardChanged += OnClipboardChanged;
+        _clipboardMonitorService.StartMonitoring();
     }
 
-    private string? ItemTypeToString(ItemType itemType)
+    public class MatchedItemVM
     {
-        return itemType switch
-        {
-            ItemType.HELMET => "armour.helmet",
-            ItemType.ONE_HAND_AXE => "weapon.oneaxe",
-            ItemType.ONE_HAND_MACE => "weapon.onemace",
-            ItemType.ONE_HAND_SWORD => "weapon.onesword",
-            ItemType.BOW => "weapon.bow",
-            ItemType.CLAW => "weapon.claw",
-            ItemType.DAGGER => "weapon.basedagger",
-            ItemType.RUNE_DAGGER => "weapon.runedagger",
-            ItemType.SCEPTRE => "weapon.sceptre",
-            ItemType.STAFF => "weapon.staff",
-            ItemType.TWO_HAND_AXE => "weapon.twoaxe",
-            ItemType.TWO_HAND_MACE => "weapon.twomace",
-            ItemType.TWO_HAND_SWORD => "weapon.twosword",
-            ItemType.WAND => "weapon.wand",
-            ItemType.FISHING_ROD => "weapon.rod",
-            ItemType.BODY_ARMOUR => "armour.chest",
-            ItemType.BOOTS => "armour.boots",
-            ItemType.GLOVES => "armour.gloves",
-            ItemType.SHIELD => "armour.shield",
-            ItemType.Quiver => "armour.quiver",
-            ItemType.AMULET => "accessory.amulet",
-            ItemType.BELT => "accessory.belt",
-            ItemType.RING => "accessory.ring",
-            _ => null
-        };
+        public int Count { get; set; }
+
+        public string? MatchedItemImage { get; set; }
+
+        public string? QueryId { get; set; }
+
+        public List<PriceAnalysisVM> PriceAnalysisVMs { get; set; } = [];
+    }
+
+    public class PriceAnalysisVM
+    {
+        public string? Currency { get; set; }
+
+        public double Price { get; set; }
+
+        public string? CurrencyImageUrl { get; set; }
+
+        public int Count { get; set; }
+    }
+
+    public class ItemVM
+    {
+        public string? ItemName { get; set; }
+
+        public int? ItemLevelMin { get; set; }
+
+        public int? ItemLevelMax { get; set; }
+
+        public bool FilterItemLevel { get; set; } = true;
+
+        public bool FilterRarity { get; set; } = true;
+
+        public bool FilterLink { get; set; } = true;
+
+        public bool FilterItemBase { get; set; }
+
+        public string? Rarity { get; set; }
+
+        public int? LinkCountMin { get; set; }
+
+        public int? LinkCountMax { get; set; }
+
+        public string? ItemBase { get; set; }
+
+        public List<ItemStatVM> StatVMs { get; set; } = [];
+    }
+
+    public partial class ItemStatVM : ObservableObject
+    {
+        [ObservableProperty]
+        private bool _isSelected;
+
+        [ObservableProperty]
+        private int? _maxValue;
+
+        [ObservableProperty]
+        private int? _minValue;
+
+        public string? Id { get; set; }
+
+        public string? Type { get; set; }
+
+        public string? StatText { get; set; }
     }
 }
