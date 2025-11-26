@@ -86,6 +86,7 @@ public partial class MainWindowViewModel : ObservableObject
         _parserFactory = App.ServiceProvider.GetRequiredService<ParserFactory>();
         _cacheService = App.ServiceProvider.GetRequiredService<CacheService>();
         _gameStringService = App.ServiceProvider.GetRequiredService<GameStringService>();
+        _rateLimitParser = App.ServiceProvider.GetRequiredService<RateLimitParser>();
         _iconService = App.ServiceProvider.GetRequiredService<IconService>();
         _mapper = App.ServiceProvider.GetRequiredService<IMapper>();
         _selectedServer = _serverList[1];
@@ -111,6 +112,8 @@ public partial class MainWindowViewModel : ObservableObject
     private readonly GameStringService _gameStringService = null!;
 
     private readonly IconService _iconService = null!;
+
+    private readonly RateLimitParser _rateLimitParser = null!;
 
     private readonly IMapper _mapper = null!;
 
@@ -157,6 +160,8 @@ public partial class MainWindowViewModel : ObservableObject
 
     [ObservableProperty]
     private MatchedItemVM? _matchedItem;
+
+    private CancellationTokenSource _queryCts = new();
 
     public class MatchedItemVM
     {
@@ -486,7 +491,14 @@ public partial class MainWindowViewModel : ObservableObject
                     price = "asc"
                 }
             };
-            MatchedItem = await AnalysisPriceAsync(query, SelectedLeague!);
+            try
+            {
+                MatchedItem = await AnalysisPriceAsync(query, SelectedLeague!);
+            }
+            catch (TaskCanceledException)
+            {
+                return;
+            }
             MatchedItemVisibility = Visibility.Visible;
         }
         finally
@@ -503,12 +515,18 @@ public partial class MainWindowViewModel : ObservableObject
         var matchItem = new MatchedItemVM();
         try
         {
+            _queryCts = new();
             var fetched = await _poeApiService.GetTradeSearchResultAsync(league, json);
             Debug.WriteLine(JsonSerializer.Serialize(fetched));
             if (!fetched.ContainsKey("id") || !fetched.ContainsKey("result"))
             {
                 throw new ArgumentException("search result not contain 'id' or 'result' field");
             }
+
+            var needWaitTime = _rateLimitParser.GetWaitTimeForRateLimit(fetched["rate-limit"].Deserialize<string?>(),
+                fetched["rate-limit-state"].Deserialize<string?>());
+
+            await Task.Delay(needWaitTime, _queryCts.Token);
 
             var queryId = fetched["id"]!.ToString();
             var results = fetched["result"].Deserialize<List<string>>()!;
@@ -527,6 +545,11 @@ public partial class MainWindowViewModel : ObservableObject
                 }
 
                 var fetchItems = await _poeApiService.FetchItems(fetchIds, queryId);
+                needWaitTime = _rateLimitParser.GetWaitTimeForRateLimit(
+                    fetched["rate-limit"].Deserialize<string?>(),
+                    fetched["rate-limit-state"].Deserialize<string?>());
+
+                await Task.Delay(needWaitTime, _queryCts.Token);
                 if (!fetchItems.ContainsKey("result"))
                 {
                     throw new ArgumentException("fetch result not contain 'result' field");
@@ -562,6 +585,10 @@ public partial class MainWindowViewModel : ObservableObject
                     CurrencyImageUrl = _iconService.GetCurrencyIcon(currency)
                 });
             }
+        }
+        catch (TaskCanceledException)
+        {
+            throw;
         }
         catch (Exception ex)
         {
