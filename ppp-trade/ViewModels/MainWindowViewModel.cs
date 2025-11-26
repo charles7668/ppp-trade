@@ -2,6 +2,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using System.Text.Json.Serialization;
 using System.Windows;
 using AutoMapper;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -174,7 +175,11 @@ public partial class MainWindowViewModel : ObservableObject
 
     private async Task<MatchedItemVM> AnalysisPriceAsync(object queryObj, string league)
     {
-        var json = JsonSerializer.Serialize(queryObj);
+        JsonSerializerOptions serializerOptions = new JsonSerializerOptions()
+        {
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+        };
+        var json = JsonSerializer.Serialize(queryObj, serializerOptions);
         Debug.WriteLine(json);
         List<PriceAnalysisVM> analysis = [];
         var matchItem = new MatchedItemVM();
@@ -272,9 +277,8 @@ public partial class MainWindowViewModel : ObservableObject
         return matchItem;
     }
 
-    private async Task<object?> GetQueryParamForUnique()
+    private async Task<(string? uniqueName, string? uniqueBase)> MapUniqueNameAsync(string legendName, string legendBase)
     {
-        var queryItem = _parsedItem!.Value;
         var nameMapCacheKey = "unique:tw2en:name";
         var baseMapCacheKey = "unique:tw2en:base";
         _cacheService.TryGet(baseMapCacheKey, out Dictionary<string, string>? baseMap);
@@ -289,13 +293,7 @@ public partial class MainWindowViewModel : ObservableObject
                 !File.Exists(enBaseFile) ||
                 !File.Exists(twBaseFile))
             {
-                Growl.Warning(new GrowlInfo
-                {
-                    Message = "缺失傳奇道具文字相關檔案",
-                    Token = "LogMsg",
-                    WaitTime = 2
-                });
-                return null;
+                return (null, null);
             }
 
             var content = await File.ReadAllTextAsync(enNameFile);
@@ -323,6 +321,46 @@ public partial class MainWindowViewModel : ObservableObject
             _cacheService.Set(baseMapCacheKey, baseMap);
         }
 
+        return (nameMap![legendName], baseMap![legendBase]);
+    }
+
+    private IEnumerable<object> GetStatsQueryParam()
+    {
+        var statList = new List<object>();
+        Debug.Assert(ParsedItemVM != null);
+        foreach (var statVM in ParsedItemVM.StatVMs)
+        {
+            statList.Add(new
+            {
+                id = statVM.Id,
+                disabled = !statVM.IsSelected,
+                value = statVM.MinValue == null && statVM.MaxValue == null
+                    ? null
+                    : new
+                    {
+                        min = statVM.MinValue,
+                        max = statVM.MaxValue
+                    }
+            });
+        }
+
+
+        return
+        [
+            new
+            {
+                type = "and",
+                filters = statList
+            }
+        ];
+    }
+
+    private async Task<object> GetQueryParam()
+    {
+        Debug.Assert(ParsedItemVM != null);
+        Debug.Assert(_parsedItem != null);
+        var queryItem = _parsedItem.Value;
+
         var tradeTypeIndex = TradeTypeList.IndexOf(SelectedTradeType!);
         var tradeType = tradeTypeIndex switch
         {
@@ -331,15 +369,33 @@ public partial class MainWindowViewModel : ObservableObject
             2 => "online",
             _ => "any"
         };
+        string? itemName = null;
+        string? baseName = null;
+        if (queryItem.Rarity == Rarity.UNIQUE)
+        {
+            (itemName, baseName) = await MapUniqueNameAsync(queryItem.ItemName, queryItem.ItemBase);
+            if (itemName == null)
+            {
+                throw new FileNotFoundException("缺失傳奇道具文字相關檔案");
+            }
+        }
+        else if(ParsedItemVM.FilterItemBase)
+        {
+            // todo create item base mapping
+            baseName = queryItem.ItemBase;
+        }
 
-        var queryObj = new
+        var statsParam = GetStatsQueryParam().ToList();
+
+        return new
         {
             status = new
             {
                 option = tradeType
             },
-            name = nameMap![_parsedItem.Value.ItemName],
-            type = baseMap![_parsedItem.Value.ItemBase],
+            name = itemName,
+            type = baseName,
+            stats = statsParam.Count == 0 ? null : statsParam,
             filters = new
             {
                 type_filters = new
@@ -349,7 +405,7 @@ public partial class MainWindowViewModel : ObservableObject
                     {
                         rarity = new
                         {
-                            option = RarityToString(Rarity.UNIQUE)
+                            option = RarityToString(queryItem.Rarity)
                         },
                         category = new
                         {
@@ -360,7 +416,15 @@ public partial class MainWindowViewModel : ObservableObject
                 misc_filters = new
                 {
                     disabled = false,
-                    filters = new Dictionary<string, object>()
+                    filters = new
+                    {
+                        corrupted = SelectedCorruptedState switch
+                        {
+                            CorruptedState.ANY => null,
+                            CorruptedState.YES => "yes",
+                            _ => "no"
+                        }
+                    }
                 },
                 trade_filters = new
                 {
@@ -378,15 +442,6 @@ public partial class MainWindowViewModel : ObservableObject
                 }
             }
         };
-        if (SelectedCorruptedState != CorruptedState.ANY)
-        {
-            queryObj.filters.misc_filters.filters["corrupted"] = new
-            {
-                option = SelectedCorruptedState == CorruptedState.YES ? "yes" : "no"
-            };
-        }
-
-        return queryObj;
     }
 
     private string? ItemTypeToString(ItemType itemType)
@@ -552,19 +607,17 @@ public partial class MainWindowViewModel : ObservableObject
                 return;
             }
 
-            var queryItem = _parsedItem!.Value;
             // todo complete method
-            object? queryParam = null;
-            if (queryItem.Rarity == Rarity.UNIQUE)
+            object queryParam;
+            try
             {
-                queryParam = await GetQueryParamForUnique();
+                queryParam = await GetQueryParam();
             }
-
-            if (queryParam == null)
+            catch (Exception e)
             {
                 Growl.Warning(new GrowlInfo
                 {
-                    Message = "無法解析查詢參數",
+                    Message = e.Message,
                     Token = "LogMsg",
                     WaitTime = 2
                 });
@@ -600,6 +653,7 @@ public partial class MainWindowViewModel : ObservableObject
     {
         return rarity switch
         {
+            Rarity.NORMAL => "normal",
             Rarity.UNIQUE => "unique",
             Rarity.MAGIC => "magic",
             Rarity.RARE => "rare",
