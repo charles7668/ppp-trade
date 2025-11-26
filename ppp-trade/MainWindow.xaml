@@ -199,6 +199,10 @@
                         </hc:SimplePanel>
                     </StackPanel>
                 </Border>
+                <Border Background="#FFF4CE" CornerRadius="4" Padding="10,5" Margin="0,0,0,10"
+                        Visibility="{Binding RateLimitVisibility}" HorizontalAlignment="Center">
+                    <TextBlock Text="{Binding RateLimitMessage}" Foreground="#E6A23C" VerticalAlignment="Center" />
+                </Border>
                 <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10">
                     <StackPanel.Style>
                         <Style TargetType="StackPanel">

@@ -77,7 +77,8 @@ public partial class MainWindowViewModel : ObservableObject
                     }
                 ]
             };
-
+            _rateLimitMessage = $"請求過於頻繁，需等待 0 秒...";
+            _rateLimitVisibility = Visibility.Visible;
             return;
         }
 
@@ -162,6 +163,14 @@ public partial class MainWindowViewModel : ObservableObject
     private MatchedItemVM? _matchedItem;
 
     private CancellationTokenSource _queryCts = new();
+
+    [ObservableProperty]
+    private string? _rateLimitMessage;
+
+    [ObservableProperty]
+    private Visibility _rateLimitVisibility = Visibility.Collapsed;
+
+    private Task _waitTimeTask = Task.CompletedTask;
 
     public class MatchedItemVM
     {
@@ -507,6 +516,29 @@ public partial class MainWindowViewModel : ObservableObject
         }
     }
 
+    private async Task WaitWithCountdown(int waitTimeMs, CancellationToken ct)
+    {
+        if (waitTimeMs <= 0 || _waitTimeTask != Task.CompletedTask)
+        {
+            return;
+        }
+
+        _waitTimeTask = Task.Run(async () =>
+        {
+            RateLimitVisibility = Visibility.Visible;
+            var seconds = (int)Math.Ceiling(waitTimeMs / 1000.0);
+            for (var i = seconds; i > 0; i--)
+            {
+                RateLimitMessage = $"請求過於頻繁，需等待 {i} 秒...";
+                await Task.Delay(1000, CancellationToken.None);
+            }
+
+            RateLimitVisibility = Visibility.Collapsed;
+        }, CancellationToken.None);
+
+        await Task.Delay(waitTimeMs, ct);
+    }
+
     private async Task<MatchedItemVM> AnalysisPriceAsync(object queryObj, string league)
     {
         var json = JsonSerializer.Serialize(queryObj);
@@ -515,7 +547,8 @@ public partial class MainWindowViewModel : ObservableObject
         var matchItem = new MatchedItemVM();
         try
         {
-            _queryCts = new();
+            _queryCts = new CancellationTokenSource();
+            await _waitTimeTask;
             var fetched = await _poeApiService.GetTradeSearchResultAsync(league, json);
             Debug.WriteLine(JsonSerializer.Serialize(fetched));
             if (!fetched.ContainsKey("id") || !fetched.ContainsKey("result"))
@@ -526,14 +559,14 @@ public partial class MainWindowViewModel : ObservableObject
             var needWaitTime = _rateLimitParser.GetWaitTimeForRateLimit(fetched["rate-limit"].Deserialize<string?>(),
                 fetched["rate-limit-state"].Deserialize<string?>());
 
-            await Task.Delay(needWaitTime, _queryCts.Token);
+            await WaitWithCountdown(needWaitTime, _queryCts.Token);
 
             var queryId = fetched["id"]!.ToString();
             var results = fetched["result"].Deserialize<List<string>>()!;
             var total = fetched["total"]!.GetValue<int>();
             matchItem.Count = total;
             matchItem.QueryId = queryId;
-            // todo analyze x-rate-limit-ip-state to limit request rate
+
             List<JsonNode> nodes = [];
             for (var i = 0; i < 4; i++)
             {
@@ -549,7 +582,7 @@ public partial class MainWindowViewModel : ObservableObject
                     fetched["rate-limit"].Deserialize<string?>(),
                     fetched["rate-limit-state"].Deserialize<string?>());
 
-                await Task.Delay(needWaitTime, _queryCts.Token);
+                await WaitWithCountdown(needWaitTime, _queryCts.Token);
                 if (!fetchItems.ContainsKey("result"))
                 {
                     throw new ArgumentException("fetch result not contain 'result' field");

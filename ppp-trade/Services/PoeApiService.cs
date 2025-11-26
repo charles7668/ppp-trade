@@ -23,13 +23,8 @@ public class PoeApiService
         var content = await response.Content.ReadAsStringAsync();
 
         var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-        var result = JsonSerializer.Deserialize<JsonObject>(content, options) ??
-                     throw new InvalidOperationException("Empty response");
-        var rateLimit = response.Headers.GetValues("x-rate-limit-ip").FirstOrDefault();
-        var rateLimitState = response.Headers.GetValues("x-rate-limit-ip-state").FirstOrDefault();
-        result.Add("rate-limit", rateLimit);
-        result.Add("rate-limit-state", rateLimitState);
-        return result;
+        return JsonSerializer.Deserialize<JsonObject>(content, options) ??
+               throw new InvalidOperationException("Empty response");
     }
 
     public async Task<List<LeagueInfo>> GetLeaguesAsync()
@@ -79,13 +74,8 @@ public class PoeApiService
         var content = await response.Content.ReadAsStringAsync();
 
         var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-        var result = JsonSerializer.Deserialize<JsonObject>(content, options) ??
-                     throw new InvalidOperationException("Empty response");
-        var rateLimit = response.Headers.GetValues("x-rate-limit-ip").FirstOrDefault();
-        var rateLimitState = response.Headers.GetValues("x-rate-limit-ip-state").FirstOrDefault();
-        result.Add("rate-limit", rateLimit);
-        result.Add("rate-limit-state", rateLimitState);
-        return result;
+        return JsonSerializer.Deserialize<JsonObject>(content, options) ??
+               throw new InvalidOperationException("Empty response");
     }
 
     public void SwitchDomain(string domain)
