@@ -2208,3 +2208,14 @@ Tattoo of the Valako Shaman
 Tattoo of the Valako Shieldbearer
 Tattoo of the Valako Stormrider
 Tattoo of the Valako Warrior
+
+### Scouting Report
+Singular Scouting Report
+Otherworldly Scouting Report
+Comprehensive Scouting Report
+Vaal Scouting Report
+Delirious Scouting Report
+Operative's Scouting Report
+Blighted Scouting Report
+Influenced Scouting Report
+Explorer's Scouting Report
