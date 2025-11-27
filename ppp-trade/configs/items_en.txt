@@ -547,3 +547,222 @@ Summon Lightning Golem of Hordes
 Void Sphere
 Void Sphere of Rending
 Arcanist Brand
+
+### Support gem Red
+Chance to Bleed Support
+Empower Support
+Ruthless Support
+Ancestral Call Support
+Added Fire Damage Support
+Ballista Totem Support
+Earthbreaker Support
+Flamewood Support
+Knockback Support
+Life Gain on Hit Support
+Lifetap Support
+Maim Support
+Melee Splash Support
+Spell Totem Support
+Stun Support
+Bloodlust Support
+Cold to Fire Support
+Cruelty Support
+Damage on Full Life Support
+Elemental Damage with Attacks Support
+Endurance Charge on Melee Stun Support
+Iron Grip Support
+Iron Will Support
+Melee Physical Damage Support
+Rage Support
+Shockwave Support
+Volatility Support
+Arrogance Support
+Bloodthirst Support
+Burning Damage Support
+Controlled Blaze Support
+Corrupting Cry Support
+Divine Blessing Support
+Expert Retaliation Support
+Fire Penetration Support
+Fortify Support
+Generosity Support
+Guardian's Blessing Support
+Inspiration Support
+Less Duration Support
+Life Leech Support
+More Duration Support
+Pulverise Support
+Urgent Orders Support
+Behead Support
+Brutality Support
+Cast when Damage Taken Support
+Cast on Melee Kill Support
+Eternal Blessing Support
+Fist of War Support
+Multiple Totems Support
+Multistrike Support
+Overexertion Support
+Trauma Support
+Awakened Added Fire Damage Support
+Awakened Ancestral Call Support
+Awakened Brutality Support
+Awakened Burning Damage Support
+Awakened Elemental Damage with Attacks Support
+Awakened Empower Support
+Awakened Fire Penetration Support
+Awakened Generosity Support
+Awakened Melee Physical Damage Support
+Awakened Melee Splash Support
+Awakened Multistrike Support
+
+### Support gem green
+Chance to Poison Support
+Enhance Support
+Momentum Support
+Mirage Archer Support
+Pierce Support
+Swift Assembly Support
+Volley Support
+Added Cold Damage Support
+Additional Accuracy Support
+Arrow Nova Support
+Blind Support
+Chance to Flee Support
+Faster Attacks Support
+Lesser Multiple Projectiles Support
+Locus Mine Support
+Manaforged Arrows Support
+Multiple Traps Support
+Trap Support
+Void Manipulation Support
+Block Chance Reduction Support
+Close Combat Support
+Culling Strike Support
+Deadly Ailments Support
+Nightblade Support
+Point Blank Support
+Sadism Support
+Trap and Mine Damage Support
+Vicious Projectiles Support
+Advanced Traps Support
+Charged Traps Support
+Cold Penetration Support
+Critical Strike Affliction Support
+Faster Projectiles Support
+Focused Ballista Support
+Fork Support
+Hypothermia Support
+Ice Bite Support
+Impale Support
+Mana Leech Support
+Second Wind Support
+Slower Projectiles Support
+Swift Affliction Support
+Windburst Support
+Barrage Support
+Cast On Critical Strike Support
+Cast on Death Support
+Chain Support
+Cluster Traps Support
+Greater Multiple Projectiles Support
+Greater Volley Support
+Mark On Hit Support
+Returning Projectiles Support
+Rupture Support
+Vile Toxins Support
+Withering Touch Support
+Awakened Added Cold Damage Support
+Awakened Arrow Nova Support
+Awakened Cast On Critical Strike Support
+Awakened Chain Support
+Awakened Cold Penetration Support
+Awakened Deadly Ailments Support
+Awakened Enhance Support
+Awakened Fork Support
+Awakened Greater Multiple Projectiles Support
+Awakened Swift Affliction Support
+Awakened Vicious Projectiles Support
+Awakened Void Manipulation Support
+
+### Support gem blue
+Arcane Surge Support
+Elemental Proliferation Support
+Enlighten Support
+Prismatic Burst Support
+Infused Channelling Support
+Spell Cascade Support
+Summon Phantasm Support
+Added Lightning Damage Support
+Blastchain Mine Support
+Combustion Support
+Devour Support
+Efficacy Support
+Increased Critical Strikes Support
+Infernal Legion Support
+Minion Damage Support
+Unbound Ailments Support
+Concentrated Effect Support
+Controlled Destruction Support
+Elemental Focus Support
+Faster Casting Support
+Fresh Meat Support
+Increased Critical Damage Support
+Kinetic Instability Support
+Living Lightning Support
+Minion Life Support
+Minion Speed Support
+Overcharge Support
+Physical to Lightning Support
+Power Charge On Critical Support
+Predator Support
+Sacred Wisps Support
+Trinity Support
+Added Chaos Damage Support
+Archmage Support
+Blasphemy Support
+Charged Mines Support
+Cursed Ground Support
+Elemental Army Support
+Elemental Penetration Support
+Energy Leech Support
+Feeding Frenzy Support
+Focused Channelling Support
+High-Impact Mine Support
+Impending Doom Support
+Innervate Support
+Intensify Support
+Item Rarity Support
+Lightning Penetration Support
+Meat Shield Support
+Pinpoint Support
+Sacrifice Support
+Swiftbrand Support
+Bonechill Support
+Cast when Stunned Support
+Cast while Channelling Support
+Decay Support
+Frigid Bond Support
+Hex Bloom Support
+Hextouch Support
+Ignite Proliferation Support
+Immolate Support
+Increased Area of Effect Support
+Minefield Support
+Spell Echo Support
+Spellblade Support
+Unleash Support
+Awakened Added Chaos Damage Support
+Awakened Added Lightning Damage Support
+Awakened Blasphemy Support
+Awakened Cast While Channelling Support
+Awakened Controlled Destruction Support
+Awakened Elemental Focus Support
+Awakened Enlighten Support
+Awakened Hextouch Support
+Awakened Increased Area of Effect Support
+Awakened Lightning Penetration Support
+Awakened Minion Damage Support
+Awakened Spell Cascade Support
+Awakened Spell Echo Support
+Awakened Unbound Ailments Support
+Awakened Unleash Support
