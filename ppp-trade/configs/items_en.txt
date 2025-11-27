@@ -1118,3 +1118,30 @@ Fleshripper
 Prime Cleaver
 Honed Cleaver
 Apex Cleaver
+
+### Weapon Two Hand Mace
+Driftwood Maul
+Tribal Maul
+Mallet
+Sledgehammer
+Jagged Maul
+Brass Maul
+Fright Maul
+Morning Star
+Totemic Maul
+Great Mallet
+Steelhead
+Spiny Maul
+Plated Maul
+Dread Maul
+Solar Maul
+Karui Maul
+Colossus Mallet
+Piledriver
+Meatgrinder
+Imperial Maul
+Terror Maul
+Coronal Maul
+Blunt Force Condenser
+Crushing Force Magnifier
+Impact Force Propagator
