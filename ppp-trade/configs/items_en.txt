@@ -2972,3 +2972,9 @@ Unrelenting Timeless Maraketh Emblem
 Unrelenting Timeless Eternal Emblem
 Unrelenting Timeless Templar Emblem
 Unrelenting Timeless Vaal Emblem
+
+### Lure
+Farric Lure
+Saqawine Lure
+Fenumal Lure
+Craicic Lure
