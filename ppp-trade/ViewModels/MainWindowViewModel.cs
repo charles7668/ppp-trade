@@ -215,6 +215,9 @@ public partial class MainWindowViewModel : ObservableObject
                     fetchIds.Add(results[j]);
                 }
 
+                if (fetchIds.Count == 0)
+                    continue;
+
                 var fetchItems = await _poeApiService.FetchItems(fetchIds, queryId);
                 needWaitTime = _rateLimitParser.GetWaitTimeForRateLimit(
                     fetched["rate-limit"].Deserialize<string?>(),
