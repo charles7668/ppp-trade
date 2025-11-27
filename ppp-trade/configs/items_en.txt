@@ -843,3 +843,36 @@ Calling Wand
 Convening Wand
 Convoking Wand
 Driftwood Wand
+
+### Weapon One Hand Sword
+Charan's Sword
+Golden Blade
+Rusted Sword
+Copper Sword
+Sabre
+Broad Sword
+War Sword
+Ancient Sword
+Elegant Sword
+Dusk Blade
+Hook Sword
+Variscite Blade
+Cutlass
+Baselard
+Battle Sword
+Elder Sword
+Graceful Sword
+Twilight Blade
+Grappler
+Gemstone Sword
+Corsair Sword
+Gladius
+Legion Sword
+Vaal Blade
+Eternal Sword
+Midnight Blade
+Tiger Hook
+Fickle Spiritblade
+Capricious Spiritblade
+Anarchic Spiritblade
+Energy Blade
