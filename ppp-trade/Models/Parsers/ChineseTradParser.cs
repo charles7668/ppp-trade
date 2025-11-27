@@ -121,7 +121,8 @@ public class ChineseTradParser(CacheService cacheService) : IParser
                         }
                     }
 
-                    parsedItem.Stats = ResolveStats(statTexts, statTw!);
+                    List<ItemStat> stats = ResolveStats(statTexts, statTw!);
+                    parsedItem.Stats = TryMapLocalAndGlobal(parsedItem.ItemType, stats, statTw!);
                     parsingState = ParsingState.PARSING_UNKNOW;
                     break;
                 case ParsingState.PARSING_LINK:
@@ -317,7 +318,7 @@ public class ChineseTradParser(CacheService cacheService) : IParser
         foreach (var stat in itemStats)
         {
             var statId = stat.Stat.Id;
-            if (!mapping.TryGetValue(statId, out var value))
+            if (!mapping.TryGetValue(statId, out List<string>? value))
             {
                 continue;
             }
@@ -355,6 +356,98 @@ public class ChineseTradParser(CacheService cacheService) : IParser
         };
 
         return result;
+    }
+
+    private static IEnumerable<ItemStat> TryMapLocalAndGlobal(ItemType itemType, IEnumerable<ItemStat> stats,
+        List<StatGroup> statGroups)
+    {
+        var genre = GetGenre(itemType);
+        if (genre == null)
+        {
+            return stats;
+        }
+
+        var map = new Dictionary<string, Dictionary<string, string>>
+        {
+            {
+                "weapon", new Dictionary<string, string>
+                {
+                    { "stat_681332047", "stat_210067635" }, // #% increased Attack Speed (Local)
+                    { "stat_960081730", "stat_1940865751" }, // Adds # to # Physical Damage (Local)
+                    { "stat_321077055", "stat_709508406" }, // Adds # to # Fire Damage (Local)
+                    { "stat_1334060246", "stat_3336890334" }, // Adds # to # Lightning Damage (Local)
+                    { "stat_2387423236", "stat_1037193709" }, // Adds # to # Cold Damage (Local) 
+                    { "stat_3531280422", "stat_2223678961" }, // Adds # to # Chaos Damage (Local)
+                    { "stat_3593843976", "stat_55876295" }, // #% of Physical Attack Damage Leeched as Life (Local)
+                    { "stat_3237948413", "stat_669069897" } // #% of Physical Attack Damage Leeched as Mana (Local)
+                }
+            },
+            {
+                "armour", new Dictionary<string, string>
+                {
+                    { "stat_2144192055", "stat_53045048" }, // +# to Evasion Rating (Local)
+                    { "stat_2106365538", "stat_124859000" }, // #% increased Evasion Rating (Local)
+                    { "stat_809229260", "stat_3484657501" }, // +# to Armour (Local)
+                    { "stat_2866361420", "stat_1062208444" }, // #% increased Armour (Local)
+                    { "stat_3489782002", "stat_4052037485" } // +# to maximum Energy Shield (Local)
+                }
+            }
+        };
+        var result = new List<ItemStat>();
+        foreach (var stat in stats)
+        {
+            if (map.ContainsKey(genre))
+            {
+                var split = stat.Stat.Id.Split('.');
+                var statType = split[0];
+                var statId = split[1];
+                if (map[genre].TryGetValue(statId, out var value))
+                {
+                    var targetStatId = statType + "." + value;
+                    var targetGroup = statGroups.FirstOrDefault(x => x.Id == statType);
+                    var targetStat = targetGroup?.Entries.FirstOrDefault(x => x.Id == targetStatId);
+                    if (targetStat != null)
+                    {
+                        result.Add(new ItemStat
+                        {
+                            Value = stat.Value,
+                            Stat = targetStat
+                        });
+                        continue;
+                    }
+                }
+            }
+
+            result.Add(stat);
+        }
+
+        return result;
+
+        string? GetGenre(ItemType type)
+        {
+            return type switch
+            {
+                ItemType.CLAW => "weapon",
+                ItemType.DAGGER => "weapon",
+                ItemType.WAND => "weapon",
+                ItemType.ONE_HAND_SWORD => "weapon",
+                ItemType.ONE_HAND_AXE => "weapon",
+                ItemType.ONE_HAND_MACE => "weapon",
+                ItemType.SCEPTRE => "weapon",
+                ItemType.RUNE_DAGGER => "weapon",
+                ItemType.BOW => "weapon",
+                ItemType.STAFF => "weapon",
+                ItemType.TWO_HAND_SWORD => "weapon",
+                ItemType.TWO_HAND_AXE => "weapon",
+                ItemType.TWO_HAND_MACE => "weapon",
+                ItemType.FISHING_ROD => "weapon",
+                ItemType.HELMET => "armour",
+                ItemType.BODY_ARMOUR => "armour",
+                ItemType.GLOVES => "armour",
+                ItemType.BOOTS => "armour",
+                _ => null
+            };
+        }
     }
 
     private static List<ItemStat> ResolveStats(IEnumerable<string> statTexts, List<StatGroup> stats)
@@ -404,7 +497,7 @@ public class ChineseTradParser(CacheService cacheService) : IParser
             }
         }
 
-        var pseudoStats = ResolvePseudoStats(result, stats.First(s => s.Id == "pseudo"));
+        List<ItemStat> pseudoStats = ResolvePseudoStats(result, stats.First(s => s.Id == "pseudo"));
 
         result.InsertRange(0, pseudoStats);
 
@@ -417,8 +510,8 @@ public class ChineseTradParser(CacheService cacheService) : IParser
                 // todo Add (local) stat match
                 var regex = @"\(.*?\)";
                 var realItemStat = Regex.Replace(stat, regex, "").Trim();
-                regex = entry.Text.Replace("(","\\(");
-                regex = regex.Replace(")","\\)");
+                regex = entry.Text.Replace("(", "\\(");
+                regex = regex.Replace(")", "\\)");
                 regex = regex.Replace("+#", "([+-]\\d+)");
                 regex = regex.Replace("#", "(\\d+)");
                 regex = $"^{regex}$";
