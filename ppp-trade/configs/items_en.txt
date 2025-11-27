@@ -2420,3 +2420,170 @@ Omen of Return
 Omen of Revenge
 Omen of the Jeweller
 Omen of the Soul Devourer
+
+### Map
+Lookout Map
+Beach Map
+Graveyard Map
+Dungeon Map
+Foundry Map
+Alleyways Map
+Pen Map
+Desert Map
+Arid Lake Map
+Flooded Mine Map
+Marshes Map
+Iceberg Map
+Cage Map
+Fungal Hollow Map
+Excavation Map
+Leyline Map
+Peninsula Map
+Port Map
+Burial Chambers Map
+Cells Map
+Arcade Map
+City Square Map
+Relic Chambers Map
+Courthouse Map
+Strand Map
+Chateau Map
+Grotto Map
+Glacier Map
+Volcano Map
+Lighthouse Map
+Canyon Map
+Frozen Cabins Map
+Grave Trough Map
+Crimson Township Map
+Forking River Map
+Cold River Map
+Forbidden Woods Map
+Conservatory Map
+Sulphur Vents Map
+Haunted Mansion Map
+Maze Map
+Channel Map
+Toxic Sewer Map
+Ancient City Map
+Ivory Temple Map
+Spider Lair Map
+Barrows Map
+Mausoleum Map
+Fields Map
+Jungle Valley Map
+Phantasmagoria Map
+Academy Map
+Thicket Map
+Wharf Map
+Ashen Wood Map
+Atoll Map
+Cemetery Map
+Underground Sea Map
+Crater Map
+Coral Ruins Map
+Lava Chamber Map
+Residence Map
+Ramparts Map
+Dunes Map
+Bone Crypt Map
+Underground River Map
+Gardens Map
+Arachnid Nest Map
+Bazaar Map
+Laboratory Map
+Infested Valley Map
+Overgrown Ruin Map
+Vaal Pyramid Map
+Geode Map
+Armoury Map
+Courtyard Map
+Mud Geyser Map
+Shore Map
+Tropical Island Map
+Mineral Pools Map
+Moon Temple Map
+Sepulchre Map
+Tower Map
+Waste Pool Map
+Plateau Map
+Estuary Map
+Vault Map
+Temple Map
+Arena Map
+Museum Map
+Scriptorium Map
+Siege Map
+Synthesised Map
+Shipyard Map
+Belfry Map
+Arachnid Tomb Map
+Wasteland Map
+Precinct Map
+Bog Map
+Pier Map
+Cursed Crypt Map
+Orchard Map
+Promenade Map
+Lair Map
+Colonnade Map
+Primordial Pool Map
+Spider Forest Map
+Coves Map
+Waterways Map
+Factory Map
+Mesa Map
+Pit Map
+Dry Sea Map
+Defiled Cathedral Map
+Summit Map
+Overgrown Shrine Map
+Castle Ruins Map
+Crystal Ore Map
+Villa Map
+Primordial Blocks Map
+Necropolis Map
+Racecourse Map
+Caldera Map
+Ghetto Map
+Park Map
+Malformation Map
+Terrace Map
+Shrine Map
+Arsenal Map
+Desert Spring Map
+Core Map
+Colosseum Map
+Acid Caverns Map
+Dark Forest Map
+Crimson Temple Map
+Plaza Map
+Dig Map
+Palace Map
+Lava Lake Map
+Basilica Map
+Sunken City Map
+Reef Map
+Carcass Map
+Stagnation Map
+Bramble Valley Map
+Silo Map
+Pit of the Chimera Map
+Lair of the Hydra Map
+Maze of the Minotaur Map
+Forge of the Phoenix Map
+The Shaper's Realm
+Vaal Temple Map
+Harbinger Map
+Harbinger Map
+Harbinger Map
+Harbinger Map
+Engraved Ultimatum
+Sanctuary Map
+Citadel Map
+Fortress Map
+Abomination Map
+Ziggurat Map
+Courtyard of Wasting Map
+Chambers of Impurity Map
+Theatre of Lies Map
