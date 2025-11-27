@@ -812,3 +812,34 @@ Hollowpoint Dagger
 Pressurised Dagger
 Pneumatic Dagger
 Ethereal Blade
+
+### Weapon Wand
+Driftwood Wand
+Goat's Horn
+Carved Wand
+Quartz Wand
+Spiraled Wand
+Sage Wand
+Pagan Wand
+Faun's Horn
+Engraved Wand
+Crystal Wand
+Coiled Wand
+Omen Wand
+Heathen Wand
+Demon's Horn
+Imbued Wand
+Opal Wand
+Tornado Wand
+Prophecy Wand
+Profane Wand
+Assembler Wand
+Congregator Wand
+Accumulator Wand
+Somatic Wand
+Blasting Wand
+Kinetic Wand
+Calling Wand
+Convening Wand
+Convoking Wand
+Driftwood Wand
