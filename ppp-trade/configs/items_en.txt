@@ -3271,3 +3271,464 @@ Allflame Ember of Syndicate Researchers
 Allflame Ember of Synthetic Fury
 Flaring Allflame Ember of the Vaal
 Flaring Allflame Ember of Breachlords
+
+### Divination Card
+Three Faces in the Dark
+The Doctor
+The Hermit
+Lantador's Lost Love
+The Metalsmith's Gift
+The Battle Born
+The Gladiator
+The Scholar
+The Brittle Emperor
+The Poet
+The Carrion Crow
+Hope
+The Fiend
+Birth of the Three
+Vinia's Token
+The Summoner
+The Cataclysm
+The Hunger
+The Hoarder
+The Drunken Aristocrat
+The Sun
+The Warden
+The Scarred Meadow
+The Dark Mage
+The Gemcutter
+The Gambler
+The Lover
+Chaotic Disposition
+The Road to Power
+The Avenger
+Emperor's Luck
+Time-Lost Relic
+Lucky Connections
+The Feast
+Rain of Chaos
+The Watcher
+The Incantation
+Coveted Possession
+The King's Heart
+Abandoned Wealth
+The Wind
+The Pact
+Gemcutter's Promise
+The Celestial Justicar
+The Chains that Bind
+The Artist
+The Inventor
+The Pack Leader
+Jack in the Box
+The Union
+The Queen
+Humility
+The Explorer
+The Spoiled Prince
+The Betrayal
+The Flora's Gift
+The Siren
+The One With All
+The Last One Standing
+Doedre's Madness
+The Encroaching Darkness
+The Wrath
+The King's Blade
+The Trial
+The Gentleman
+House of Mirrors
+Wealth and Power
+The Catalyst
+The Vast
+Gift of the Gemling Queen
+The Dragon's Heart
+The Fox
+The Doppelganger
+The Survivalist
+Death
+Grave Knowledge
+The Jester
+The Mercenary
+The Inoculated
+Loyalty
+Pride Before the Fall
+Audacity
+Assassin's Favour
+Hunter's Resolve
+Scholar of the Seas
+The Conduit
+The Tower
+The Twins
+Anarchy's Price
+The Lich
+The Thaumaturgist
+The Aesthete
+The Enlightened
+Hunter's Reward
+The Fletcher
+The Surveyor
+Bowyer's Dream
+The Surgeon
+Volatile Power
+Last Hope
+Hubris
+Blind Venture
+Merciless Armament
+The Cartographer
+The Warlord
+The Demoness
+The Traitor
+The Offering
+Lost Worlds
+The Lord in Black
+A Mother's Parting Gift
+The Body
+Turn the Other Cheek
+Glimmer of Hope
+The Ethereal
+Prosperity
+The Sigil
+The Dapper Prodigy
+The Rabid Rhoa
+The Soul
+The Lion
+The Dragon
+Rats
+The Risk
+Tranquillity
+Her Mask
+Treasure Hunter
+Earth Drinker
+The Wolf's Shadow
+The Arena Champion
+The Sephirot
+The Visionary
+Thunderous Skies
+Dying Anguish
+The Immortal
+The Throne
+Boundless Realms
+The Devastator
+Destined to Crumble
+Shard of Fate
+Heterochromia
+Rain Tempter
+The Void
+The Tyrant
+The Web
+The Harvester
+The Lunaris Priestess
+Emperor of Purity
+The Cursed King
+The Stormcaller
+Lysah's Respite
+Cartographer's Delight
+Lucky Deck
+Light and Truth
+Luck of the Vaal
+The Endurance
+The Penitent
+The Wolf
+Dialla's Subjugation
+The Calling
+The Valkyrie
+The Formless Sea
+The Oath
+The Scavenger
+Mawr Blaidd
+The Porcupine
+The Coming Storm
+The Polymath
+The Wolverine
+Mitts
+The Wretched
+The Wolven King's Bite
+The Standoff
+The Forsaken
+The Garish Power
+Lingering Remnants
+The Spark and the Flame
+The Saint's Treasure
+Call to the First Ones
+The Valley of Steel Boxes
+Might is Right
+The Opulent
+Struck by Lightning
+Atziri's Arsenal
+The Ruthless Ceinture
+No Traces
+The Realm
+The Eye of the Dragon
+The Blazing Fire
+Left to Fate
+Rebirth
+The Insatiable
+The Obscured
+The Rusted Bard
+Forbidden Power
+The Breach
+The Dreamer
+The World Eater
+The Deceiver
+Blessing of God
+The Puzzle
+The Witch
+Immortal Resolve
+The Jeweller's Boon
+The Darkest Dream
+The Master
+The Fathomless Depths
+The Undaunted
+The Admirer
+The Sword King's Salute
+The Army of Blood
+The Celestial Stone
+Perfection
+The Dreamland
+Harmony of Souls
+The Samurai's Eye
+The Hale Heart
+The Mayor
+The Undisputed
+The Rite of Elements
+Three Voices
+The Professor
+The Beast
+The Innocent
+The Wilted Rose
+The Endless Darkness
+Beauty Through Death
+The Price of Protection
+Boon of the First Ones
+The Twilight Moon
+The Cacophony
+The Sacrifice
+A Dab of Ink
+The Nurse
+The Master Artisan
+The Life Thief
+The Seeker
+The Messenger
+The Mad King
+Boon of Justice
+The Journey
+Arrogance of the Vaal
+The Landing
+The Mountain
+Seven Years Bad Luck
+The Golden Era
+Monochrome
+Dark Temptation
+Alone in the Darkness
+Sambodhi's Vow
+The Lord of Celebration
+Vanity
+Imperial Legacy
+Burning Blood
+The Primordial
+Echoes of Love
+Thirst for Knowledge
+Alluring Bounty
+The Fool
+Pride of the First Ones
+The Deep Ones
+The Archmage's Right Hand
+Dark Dreams
+Buried Treasure
+Demigod's Wager
+The Old Man
+Nook's Crown
+The Side Quest
+The Price of Loyalty
+The Heroic Shot
+Remembrance
+More is Never Enough
+Vile Power
+The Bargain
+Azyran's Reward
+The Skeleton
+The Eye of Terror
+The Demon
+Akil's Prophecy
+The Damned
+Void of the Elements
+The Deal
+The Wolf's Legacy
+Baited Expectations
+Succor of the Sinless
+Underground Forest
+The Escape
+Deathly Designs
+The Chosen
+Cameria's Cut
+Divine Justice
+The Fishmonger
+The Bones
+Friendship
+The Craving
+Etched in Blood
+Squandered Prosperity
+The Strategist
+The Cheater
+The Tinkerer's Table
+The Easy Stroll
+The Progeny of Lunaris
+The Eldritch Decay
+Council of Cats
+The Tumbleweed
+The Hive of Knowledge
+Gift of Asenath
+A Note in the Wind
+The Greatest Intentions
+The White Knight
+Prometheus' Armoury
+The Sustenance
+Peaceful Moments
+The Awakened
+A Familiar Call
+The Long Con
+The Gulf
+The Bitter Blossom
+Triskaidekaphobia
+Unrequited Love
+The Cache
+The Academic
+Desecrated Virtue
+Brother's Stash
+Unchained
+The Unexpected Prize
+Cursed Words
+The Journalist
+Haunting Shadows
+Acclimatisation
+The Whiteout
+Society's Remorse
+Dying Light
+Fateful Meeting
+The Astromancer
+Keeper's Corruption
+Reckless Ambition
+Love Through Ice
+Draped in Dreams
+The Patient
+The Long Watch
+The Bear Woman
+Brotherhood in Exile
+Winter's Embrace
+Sambodhi's Wisdom
+The Enthusiasts
+Broken Promises
+Brush, Paint and Palette
+Deadly Joy
+The Adventuring Spirit
+The Eternal War
+Prejudice
+The Shortcut
+The Card Sharp
+A Modest Request
+Luminous Trove
+The Hook
+The Last Supper
+The Emptiness
+A Sea of Blue
+The Offspring
+The Price of Prescience
+The Mind's Eyes
+Terrible Secret of Space
+The Blessing of Moosh
+Costly Curio
+Lachrymal Necrosis
+Dementophobia
+Ambitious Obsession
+Desperate Crusade
+A Stone Perfected
+Treasures of the Vaal
+The Rabbit's Foot
+Chasing Risk
+The Prince of Darkness
+The Catch
+Eternal Bonds
+Disdain
+The Scout
+Guardian's Challenge
+The Forgotten Treasure
+The Fox in the Brambles
+The Aspirant
+Judging Voices
+Bijoux
+Silence and Frost
+Misery in Darkness
+The Tireless Extractor
+Justified Ambition
+Parasitic Passengers
+Duality
+The One That Got Away
+The Transformation
+Magnum Opus
+Imperfect Memories
+The Magma Crab
+Altered Perception
+Further Invention
+The Brawny Battle Mage
+A Fate Worse Than Death
+The Destination
+Rebirth and Renewal
+The Forward Gaze
+The Apothecary
+Home
+The Dungeon Master
+From Bone to Ashes
+Darker Half
+Broken Truce
+Doryani's Epiphany
+Endless Night
+The Shieldbearer
+Choking Guilt
+The Enforcer
+The Shepherd's Sandals
+Azure Rage
+The Leviathan
+The Price of Devotion
+Astral Protection
+Gemcutter's Mercy
+Checkmate
+Lethean Temptation
+Something Dark
+Man With Bear
+Alivia's Grace
+Auspicious Ambitions
+Divine Beauty
+The Wedding Gift
+The Insane Cat
+Ever-Changing
+A Dusty Memory
+The Return of the Rat
+The Finishing Touch
+Brother's Gift
+Soul Quenched
+Poisoned Faith
+A Chilling Wind
+Matryoshka
+The Fortunate
+Fire Of Unknown Origin
+Father's Love
+Who Asked
+Eldritch Perfection
+Assassin's Gift
+I See Brothers
+Avian Pursuit
+Temperance
+Lonely Warrior
+Toxic Tidings
+Runic Luck
+Last Stand
+Damnation
+When Currents Blaze
+History
+The Last Laugh
+The Lake
+One Last Score
+Bound by Flame
+Outfoxed
