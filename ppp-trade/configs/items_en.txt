@@ -3027,3 +3027,31 @@ Urn Relic
 Coffer Relic
 Tome Relic
 Papyrus Relic
+
+### Piece
+Archon Kite Shield Piece
+Archon Kite Shield Piece
+Archon Kite Shield Piece
+Archon Kite Shield Piece
+Legion Sword Piece
+Legion Sword Piece
+Legion Sword Piece
+Imperial Staff Piece
+Imperial Staff Piece
+Imperial Staff Piece
+Cloth Belt Piece
+Cloth Belt Piece
+Blunt Arrow Quiver Piece
+Blunt Arrow Quiver Piece
+Blunt Arrow Quiver Piece
+Callous Mask Piece
+Callous Mask Piece
+Callous Mask Piece
+Vaal Aspect
+Vaal Aspect
+Vaal Aspect
+Vaal Aspect
+Primordial Fragment
+Primordial Fragment
+Primordial Fragment
+Primordial Fragment
