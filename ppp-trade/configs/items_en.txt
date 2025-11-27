@@ -766,3 +766,33 @@ Awakened Spell Cascade Support
 Awakened Spell Echo Support
 Awakened Unbound Ailments Support
 Awakened Unleash Support
+
+### Weapon Claw
+Nailed Fist
+Sharktooth Claw
+Awl
+Cat's Paw
+Blinder
+Timeworn Claw
+Sparkling Claw
+Fright Claw
+Double Claw
+Thresher Claw
+Gouger
+Tiger's Paw
+Gut Ripper
+Prehistoric Claw
+Noble Claw
+Eagle Claw
+Twin Claw
+Great White Claw
+Throat Stabber
+Hellion's Paw
+Eye Gouger
+Vaal Claw
+Imperial Claw
+Terror Claw
+Gemini Claw
+Shadow Fangs
+Malign Fangs
+Void Fangs
