@@ -3018,3 +3018,12 @@ Sanctum Archives Research
 Sanctum Vaults Research
 Sanctum Cathedral Research
 Sanctum Necropolis Research
+
+### Relics
+Censer Relic
+Processional Relic
+Candlestick Relic
+Urn Relic
+Coffer Relic
+Tome Relic
+Papyrus Relic
