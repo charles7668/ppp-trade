@@ -1091,3 +1091,30 @@ Rebuking Blade
 Blasting Blade
 Banishing Blade
 Energy Blade
+
+### Weapon Two Hand Axe 
+Stone Axe
+Jade Chopper
+Woodsplitter
+Poleaxe
+Double Axe
+Gilded Axe
+Shadow Axe
+Dagger Axe
+Jasper Chopper
+Timber Axe
+Headsman Axe
+Labrys
+Noble Axe
+Abyssal Axe
+Talon Axe
+Karui Chopper
+Sundering Axe
+Ezomyte Axe
+Vaal Axe
+Despot Axe
+Void Axe
+Fleshripper
+Prime Cleaver
+Honed Cleaver
+Apex Cleaver
