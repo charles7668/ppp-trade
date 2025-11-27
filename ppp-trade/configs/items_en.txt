@@ -2820,3 +2820,6 @@ Screaming Invitation
 Polaric Invitation
 Incandescent Invitation
 Mirrored Tablet
+
+### Expedition Logbook
+Expedition Logbook
