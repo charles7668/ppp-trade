@@ -1045,3 +1045,21 @@ Foundry Bow
 Solarine Bow
 Crude Bow
 Ethereal Bow
+
+### Weapon Staff
+Gnarled Branch
+Primitive Staff
+Long Staff
+Royal Staff
+Crescent Staff
+Woodful Staff
+Quarterstaff
+Highborn Staff
+Moon Staff
+Primordial Staff
+Lathi
+Imperial Staff
+Eclipse Staff
+Transformer Staff
+Reciprocation Staff
+Battery Staff
