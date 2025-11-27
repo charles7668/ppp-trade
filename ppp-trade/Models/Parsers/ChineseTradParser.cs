@@ -19,6 +19,7 @@ public class ChineseTradParser(CacheService cacheService) : IParser
     private const string CRAFTED_KEYWORD = "(crafted)";
     private const string STAT_TW_CACHE_KEY = "parser:stat_zh_tw";
     private const string FOUL_BORN_KEYWORD = "穢生 ";
+    private const string LOCAL_KEYWORD = "(部分)";
 
     public bool IsMatch(string text)
     {
@@ -416,7 +417,9 @@ public class ChineseTradParser(CacheService cacheService) : IParser
                 // todo Add (local) stat match
                 var regex = @"\(.*?\)";
                 var realItemStat = Regex.Replace(stat, regex, "").Trim();
-                regex = entry.Text.Replace("+#", "([+-]\\d+)");
+                regex = entry.Text.Replace("(","\\(");
+                regex = regex.Replace(")","\\)");
+                regex = regex.Replace("+#", "([+-]\\d+)");
                 regex = regex.Replace("#", "(\\d+)");
                 regex = $"^{regex}$";
                 try
@@ -424,7 +427,12 @@ public class ChineseTradParser(CacheService cacheService) : IParser
                     var match = Regex.Match(realItemStat, regex);
                     if (!match.Success)
                     {
-                        continue;
+                        // try match local version
+                        match = Regex.Match(realItemStat + $" {LOCAL_KEYWORD}", regex);
+                        if (!match.Success)
+                        {
+                            continue;
+                        }
                     }
 
                     int? value = match.Groups.Count switch
