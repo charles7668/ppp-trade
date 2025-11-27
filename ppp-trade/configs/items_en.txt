@@ -3194,3 +3194,80 @@ Perfect Shadow Construct
 Imperfect Forest Warrior
 Forest Warrior
 Perfect Forest Warrior
+
+### Charm
+Ursine Charm
+Lupine Charm
+Corvine Charm
+
+### Embers of the Allflame
+Allflame Ember of Frogs
+Allflame Ember of Rats
+Allflame Ember of Xoph
+Allflame Ember of Tul
+Allflame Ember of Esh
+Allflame Ember of Uul-Netol
+Allflame Ember of Chayula
+Allflame Ember of Sulphite
+Allflame Ember of Valako
+Allflame Ember of Tukohama
+Allflame Ember of Tawhoa
+Allflame Ember of Tasalio
+Allflame Ember of Rongokurai
+Allflame Ember of Ramako
+Allflame Ember of Ngamahu
+Allflame Ember of Kitava
+Allflame Ember of Hinekora
+Allflame Ember of Arohongui
+Allflame Ember of Abyss
+Allflame Ember of Beidat
+Allflame Ember of Ghorr
+Allflame Ember of K'tash
+Allflame Ember of Brawling Gemlings
+Allflame Ember of Berserking Gemlings
+Allflame Ember of Frostmage Gemlings
+Allflame Ember of Artillery Gemlings
+Allflame Ember of Corpsemage Gemlings
+Allflame Ember of The Broken Circle
+Allflame Ember of The Order of the Chalice
+Allflame Ember of The Black Scythe
+Allflame Ember of The Knights of the Sun
+Allflame Ember of Meatsacks
+Allflame Ember of Untainted Beasts
+Allflame Ember of Untainted Apes
+Allflame Ember of Untainted Rhoas
+Allflame Ember of Untainted Spitters
+Allflame Ember of Untainted Maws
+Allflame Ember of Untainted Chimerals
+Allflame Ember of Untainted Devourers
+Allflame Ember of Wildwood Cultists
+Allflame Ember of Wildwood Treants
+Allflame Ember of Wildwood Beasts
+Allflame Ember of The Karui Legion
+Allflame Ember of The Eternal Legion
+Allflame Ember of The Maraketh Legion
+Allflame Ember of The Templar Legion
+Allflame Ember of The Vaal Legion
+Flaring Allflame Ember of Scientists
+Allflame Ember of The Shaper
+Allflame Ember of The Elder
+Allflame Ember of The Warlord
+Allflame Ember of The Redeemer
+Allflame Ember of The Crusader
+Allflame Ember of The Hunter
+Flaring Allflame Ember of Wildwood Cultists
+Flaring Allflame Ember of Kalguurans
+Flaring Allflame Ember of Abyss
+Flaring Allflame Ember of The First Ones
+Allflame Ember of Trial Cores
+Allflame Ember of Trial Guards
+Allflame Ember of Manifested Wealth
+Allflame Ember of the False God
+Allflame Ember of Anarchy
+Allflame Ember of Syndicate Guards
+Allflame Ember of Syndicate Escorts
+Allflame Ember of Syndicate Assassins
+Allflame Ember of Syndicate Researchers
+Allflame Ember of Synthetic Fury
+Flaring Allflame Ember of the Vaal
+Flaring Allflame Ember of Breachlords
