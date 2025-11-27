@@ -2329,3 +2329,18 @@ Blessing of Esh
 Blessing of Tul
 Blessing of Uul-Netol
 Blessing of Xoph
+
+### Splinter
+Splinter of Xoph
+Splinter of Tul
+Splinter of Esh
+Splinter of Uul-Netol
+Splinter of Chayula
+Timeless Karui Splinter
+Timeless Maraketh Splinter
+Timeless Eternal Empire Splinter
+Timeless Templar Splinter
+Timeless Vaal Splinter
+Simulacrum Splinter
+Ritual Splinter
+Crescent Splinter
