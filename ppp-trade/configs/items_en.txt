@@ -2960,3 +2960,15 @@ Horned Scarab of Awakening
 Horned Scarab of Tradition
 Horned Scarab of Glittering
 Horned Scarab of Pandemonium
+
+### Emblem
+Timeless Karui Emblem
+Timeless Maraketh Emblem
+Timeless Eternal Emblem
+Timeless Templar Emblem
+Timeless Vaal Emblem
+Unrelenting Timeless Karui Emblem
+Unrelenting Timeless Maraketh Emblem
+Unrelenting Timeless Eternal Emblem
+Unrelenting Timeless Templar Emblem
+Unrelenting Timeless Vaal Emblem
