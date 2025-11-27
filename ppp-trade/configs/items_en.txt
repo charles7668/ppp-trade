@@ -1847,3 +1847,196 @@ Bismuth Flask
 Gold Flask
 Corundum Flask
 Iron Flask
+
+### Stackable Currency
+Blacksmith's Whetstone
+Scroll of Wisdom
+Chaos Orb
+Veiled Exalted Orb
+Veiled Chaos Orb
+Armourer's Scrap
+Mirror of Kalandra
+Orb of Alchemy
+Orb of Chance
+Orb of Regret
+Orb of Unmaking
+Orb of Transmutation
+Orb of Alteration
+Orb of Scouring
+Exalted Orb
+Regal Orb
+Orb of Augmentation
+Portal Scroll
+Glassblower's Bauble
+Gemcutter's Prism
+Chromatic Orb
+Orb of Fusing
+Jeweller's Orb
+Divine Orb
+Blessed Orb
+Sacred Orb
+Cartographer's Chisel
+Maven's Chisel of Procurement
+Maven's Chisel of Proliferation
+Maven's Chisel of Divination
+Maven's Chisel of Scarabs
+Maven's Chisel of Avarice
+Scroll Fragment
+Transmutation Shard
+Alteration Shard
+Alchemy Shard
+Albino Rhoa Feather
+Eternal Orb
+Imprint
+Vaal Orb
+Enchant
+Tainted Blessing
+Corrupt
+Corrupt
+Corrupt
+Perandus Coin
+Prophecy
+Bestiary Orb
+Imprinted Bestiary Orb
+Empty Coffin
+Filled Coffin
+Shaper's Exalted Orb
+Elder's Exalted Orb
+Orb of Remembrance
+Orb of Unravelling
+Orb of Intention
+Surveyor's Compass
+Prime Regrading Lens
+Secondary Regrading Lens
+Tempering Orb
+Tailoring Orb
+Augmentation Implant
+Regal Implant
+Exalted Implant
+Unstable Implant
+Foulborn Orb of Augmentation
+Foulborn Regal Orb
+Foulborn Exalted Orb
+Veiled Scarab
+Apprentice Cartographer's Seal
+Journeyman Cartographer's Seal
+Master Cartographer's Seal
+Unshaping Orb
+Orb of Annulment
+Orb of Binding
+Orb of Horizons
+Harbinger's Orb
+Engineer's Orb
+Infused Engineer's Orb
+Ancient Orb
+Fracturing Orb
+Annulment Shard
+Binding Shard
+Horizon Shard
+Harbinger's Shard
+Engineer's Shard
+Ancient Shard
+Chaos Shard
+Mirror Shard
+Exalted Shard
+Regal Shard
+Fracturing Shard
+Time-light Scroll
+Fragmentation Scroll
+Deregulation Scroll
+Electroshock Scroll
+Haemocombustion Scroll
+Specularity Scroll
+Facetor's Lens
+Magmatic Ore
+Ritual Vessel
+Lesser Eldritch Ember
+Greater Eldritch Ember
+Grand Eldritch Ember
+Exceptional Eldritch Ember
+Lesser Eldritch Ichor
+Greater Eldritch Ichor
+Grand Eldritch Ichor
+Exceptional Eldritch Ichor
+Orb of Conflict
+Uncarved Gemstone
+Valdo's Puzzle Box
+Stacked Deck
+Crusader's Exalted Orb
+Redeemer's Exalted Orb
+Hunter's Exalted Orb
+Warlord's Exalted Orb
+Awakener's Orb
+Rogue's Marker
+Orb of Dominance
+Enkindling Orb
+Instilling Orb
+Exotic Coinage
+Scrap Metal
+Astragali
+Burial Medallion
+Lesser Broken Circle Artifact
+Greater Broken Circle Artifact
+Grand Broken Circle Artifact
+Exceptional Broken Circle Artifact
+Lesser Black Scythe Artifact
+Greater Black Scythe Artifact
+Grand Black Scythe Artifact
+Exceptional Black Scythe Artifact
+Lesser Order Artifact
+Greater Order Artifact
+Grand Order Artifact
+Exceptional Order Artifact
+Lesser Sun Artifact
+Greater Sun Artifact
+Grand Sun Artifact
+Exceptional Sun Artifact
+Tainted Chromatic Orb
+Tainted Orb of Fusing
+Tainted Jeweller's Orb
+Tainted Chaos Orb
+Tainted Exalted Orb
+Tainted Mythic Orb
+Tainted Armourer's Scrap
+Tainted Blacksmith's Whetstone
+Tainted Divine Teardrop
+Eldritch Chaos Orb
+Eldritch Exalted Orb
+Eldritch Orb of Annulment
+Oil Extractor
+Power Core
+Transforming Power Core
+Amplifying Power Core
+Augmenting Power Core
+Armour Recombinator
+Weapon Recombinator
+Jewellery Recombinator
+Wild Crystallised Lifeforce
+Vivid Crystallised Lifeforce
+Primal Crystallised Lifeforce
+Sacred Crystallised Lifeforce
+Igneous Geode
+Crystalline Geode
+Silver Coin
+Hinekora's Lock
+Vivid Wisps
+Wild Wisps
+Primal Wisps
+Sun Rune
+Bound Rune
+Life Rune
+War Rune
+River Rune
+Bounty Rune
+Journey Rune
+Mountain Rune
+Time Rune
+Power Rune
+Reflecting Mist
+[DNT - UNUSED] Test Runegraft
+[DNT - UNUSED] Arcane Orders Runegraft
+[DNT - UNUSED] Martial Orders Runegraft
+[DNT - UNUSED] Limiting Runegraft
+Djinn-Touched Vaal Orb
+Fading Reflecting Mist
+Gemcutters Lens
