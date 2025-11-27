@@ -175,9 +175,9 @@ public partial class MainWindowViewModel : ObservableObject
 
     private async Task<MatchedItemVM> AnalysisPriceAsync(object queryObj, string league)
     {
-        JsonSerializerOptions serializerOptions = new JsonSerializerOptions()
+        var serializerOptions = new JsonSerializerOptions
         {
-            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
         };
         var json = JsonSerializer.Serialize(queryObj, serializerOptions);
         Debug.WriteLine(json);
@@ -216,7 +216,9 @@ public partial class MainWindowViewModel : ObservableObject
                 }
 
                 if (fetchIds.Count == 0)
+                {
                     continue;
+                }
 
                 var fetchItems = await _poeApiService.FetchItems(fetchIds, queryId);
                 needWaitTime = _rateLimitParser.GetWaitTimeForRateLimit(
@@ -250,7 +252,7 @@ public partial class MainWindowViewModel : ObservableObject
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
             foreach (var group in groups)
             {
-                var currency = JudgeCurrency(group.Key.currency);
+                Currency? currency = JudgeCurrency(group.Key.currency);
                 analysis.Add(new PriceAnalysisVM
                 {
                     Count = group.Count(),
@@ -280,7 +282,8 @@ public partial class MainWindowViewModel : ObservableObject
         return matchItem;
     }
 
-    private async Task<(string? uniqueName, string? uniqueBase)> MapUniqueNameAsync(string legendName, string legendBase)
+    private async Task<(string? uniqueName, string? uniqueBase)> MapUniqueNameAsync(string legendName,
+        string legendBase)
     {
         var nameMapCacheKey = "unique:tw2en:name";
         var baseMapCacheKey = "unique:tw2en:base";
@@ -382,13 +385,13 @@ public partial class MainWindowViewModel : ObservableObject
                 throw new FileNotFoundException("缺失傳奇道具文字相關檔案");
             }
         }
-        else if(ParsedItemVM.FilterItemBase)
+        else if (ParsedItemVM.FilterItemBase)
         {
             // todo create item base mapping
             baseName = queryItem.ItemBase;
         }
 
-        var statsParam = GetStatsQueryParam().ToList();
+        List<object> statsParam = GetStatsQueryParam().ToList();
 
         return new
         {
@@ -501,7 +504,7 @@ public partial class MainWindowViewModel : ObservableObject
     {
         try
         {
-            var leagues = await _poeApiService.GetLeaguesAsync();
+            List<LeagueInfo> leagues = await _poeApiService.GetLeaguesAsync();
             LeagueList = leagues.Where(l => l.Realm == "pc").Select(l => l.Text).ToList();
             if (LeagueList.Any())
             {
