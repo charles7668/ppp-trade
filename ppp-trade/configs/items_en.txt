@@ -1,0 +1,549 @@
+### Gem Red
+Cleave
+Cleave of Rage
+Glacial Hammer
+Glacial Hammer of Shattering
+Tender Embrace
+Return to Dust
+Seize the Flesh
+The Grey Wind Howls
+Heart of Flame
+Call the Pyre
+His Burning Message
+Ground Slam
+Ground Slam of Earthshaking
+Heavy Strike
+Heavy Strike of Trarthus
+Molten Strike
+Molten Strike of the Zenith
+Perforate
+Perforate of Duality
+Perforate of Bloodshed
+Shield Crush
+Shield Crush of the Chieftain
+Smite
+Smite of Divine Judgement
+Vaal Cleave
+Vaal Glacial Hammer
+Vaal Ground Slam
+Vaal Molten Strike
+Vaal Smite
+Ancestral Protector
+Blood and Sand
+Crushing Fist
+Decoy Totem
+Devouring Totem
+Holy Flame Totem
+Holy Flame Totem of Ire
+Steelskin
+Rejuvenation Totem
+Shield Charge
+Vaal Rejuvenation Totem
+Vigilant Strike
+War Banner
+Enduring Cry
+Intimidating Cry
+Leap Slam
+Leap Slam of Groundbreaking
+Vitality
+Absolution
+Absolution of Inspiring
+Chain Hook
+Chain Hook of Trarthus
+Earthshatter
+Earthshatter of Fragility
+Earthshatter of Prominence
+Exsanguinate
+Exsanguinate of Transmission
+Infernal Blow
+Infernal Blow of Immolation
+Searing Bond
+Static Strike
+Sunder
+Sunder of Earthbreaking
+Sunder of Trarthus
+Sweep
+Vaal Absolution
+Vaal Volcanic Fissure
+Volcanic Fissure
+Volcanic Fissure of Snaking
+Ancestral Cry
+Corrupting Fever
+Defiance Banner
+Eviscerate
+Flesh and Stone
+Herald of Ash
+Herald of Purity
+Molten Shell
+Seismic Cry
+Swordstorm
+Vaal Molten Shell
+Warlord's Mark
+Anger
+Autoexertion
+Battlemage's Cry
+Determination
+Dread Banner
+General's Cry
+Infernal Cry
+Petrified Blood
+Pride
+Punishment
+Purity of Fire
+Rallying Cry
+Vaal Impurity of Fire
+Vengeful Cry
+Vulnerability
+Ancestral Warchief
+Animate Guardian
+Animate Guardian of Smiting
+Bladestorm
+Bladestorm of Uncertainty
+Boneshatter
+Boneshatter of Complex Trauma
+Boneshatter of Carnage
+Consecrated Path
+Consecrated Path of Endurance
+Dominating Blow
+Dominating Blow of Inspiring
+Earthquake
+Earthquake of Amplification
+Ice Crash
+Ice Crash of Cadence
+Rage Vortex
+Rage Vortex of Berserking
+Reap
+Shockwave Totem
+Tectonic Slam
+Tectonic Slam of Cataclysm
+Vaal Ancestral Warchief
+Vaal Domination
+Vaal Earthquake
+Vaal Reap
+Berserk
+Flame Link
+Frozen Legion
+Frozen Legion of Rallying
+Immortal Call
+Protective Link
+Summon Flame Golem
+Summon Flame Golem of Hordes
+Summon Flame Golem of the Meteor
+Summon Stone Golem
+Summon Stone Golem of Hordes
+Summon Stone Golem of Safeguarding
+Vaal Immortal Call
+
+### Gem green
+Burning Arrow
+Burning Arrow of Vigour
+Caustic Arrow
+Caustic Arrow of Poison
+Cobra Lash
+Double Strike
+Double Strike of Impaling
+Double Strike of Momentum
+Dual Strike
+Dual Strike of Ambidexterity
+Ethereal Knives
+Ethereal Knives of Lingering Blades
+Ethereal Knives of the Massacre
+Explosive Trap
+Explosive Trap of Shrapnel
+Explosive Trap of Magnitude
+Frost Blades
+Frost Blades of Katabasis
+Galvanic Arrow
+Galvanic Arrow of Energy
+Galvanic Arrow of Surging
+Dance in the White
+Falling Crystals
+Ice Shot
+Ice Shot of Penetration
+Spectral Throw
+Spectral Throw of Materialising
+Spectral Throw of Trarthus
+Split Arrow
+Split Arrow of Splitting
+Splitting Steel
+Splitting Steel of Ammunition
+Vaal Burning Arrow
+Vaal Caustic Arrow
+Vaal Double Strike
+Vaal Ice Shot
+Vaal Spectral Throw
+Viper Strike
+Viper Strike of the Mamba
+Animate Weapon
+Animate Weapon of Self Reflection
+Animate Weapon of Ranged Arms
+Bear Trap
+Bear Trap of Skewers
+Dash
+Detonate Dead
+Detonate Dead of Scavenging
+Detonate Dead of Chain Reaction
+Puncture
+Puncture of Shanking
+Shrapnel Ballista
+Shrapnel Ballista of Steel
+Sniper's Mark
+Vaal Animate Weapon
+Vaal Detonate Dead
+Blink Arrow
+Blink Arrow of Bombarding Clones
+Blink Arrow of Prismatic Clones
+Flicker Strike
+Flicker Strike of Power
+Mirror Arrow
+Mirror Arrow of Bombarding Clones
+Mirror Arrow of Prismatic Clones
+Precision
+Smoke Mine
+Unearth
+Vaal Flicker Strike
+Whirling Blades
+Withering Step
+Barrage
+Barrage of Volley Fire
+Blade Trap
+Blade Trap of Greatswords
+Blade Trap of Laceration
+Blade Vortex
+Blade Vortex of the Scythe
+Elemental Hit
+Elemental Hit of the Spectrum
+Fire Trap
+Fire Trap of Blasting
+Lacerate
+Lacerate of Butchering
+Lacerate of Haemorrhage
+Lightning Arrow
+Lightning Arrow of Electrocution
+Lightning Strike
+Lightning Strike of Arcing
+Poisonous Concoction
+Poisonous Concoction of Bouncing
+Rain of Arrows
+Rain of Arrows of Artillery
+Rain of Arrows of Saturation
+Reave
+Reave of Refraction
+Shattering Steel
+Shattering Steel of Ammunition
+Siege Ballista
+Siege Ballista of Splintering
+Siege Ballista of Trarthus
+Spectral Helix
+Spectral Helix of Trarthus
+Toxic Rain
+Toxic Rain of Sporeburst
+Toxic Rain of Withering
+Vaal Blade Vortex
+Vaal Lightning Arrow
+Vaal Lightning Strike
+Vaal Rain of Arrows
+Vaal Reave
+Vaal Venom Gyre
+Venom Gyre
+Volatile Dead
+Volatile Dead of Confinement
+Volatile Dead of Seething
+Arctic Armour
+Blade Blast
+Blade Blast of Unloading
+Blade Blast of Dagger Detonation
+Blood Rage
+Desecrate
+Ensnaring Arrow
+Frenzy
+Frenzy of Onslaught
+Glacial Shield Swipe
+Herald of Agony
+Herald of Ice
+Poacher's Mark
+Vaal Arctic Armour
+Alchemist's Mark
+Grace
+Haste
+Hatred
+Plague Bearer
+Purity of Ice
+Temporal Chains
+Vaal Grace
+Vaal Haste
+Vaal Impurity of Ice
+Artillery Ballista
+Artillery Ballista of Cross Strafe
+Artillery Ballista of Focus Fire
+Blade Flurry
+Blade Flurry of Incision
+Bladefall
+Bladefall of Volleys
+Bladefall of Impaling
+Bladefall of Trarthus
+Blast Rain
+Blast Rain of Trarthus
+Charged Dash
+Conflagration
+Cremation
+Cremation of Exhuming
+Cremation of the Volcano
+Cyclone
+Cyclone of Tumult
+Explosive Arrow
+Explosive Concoction
+Explosive Concoction of Destruction
+Flamethrower Trap
+Ice Trap
+Ice Trap of Hollowness
+Lancing Steel
+Lancing Steel of Spraying
+Pestilent Strike
+Scourge Arrow
+Scourge Arrow of Menace
+Seismic Trap
+Seismic Trap of Swells
+Spectral Shield Throw
+Spectral Shield Throw of Shattering
+Spectral Shield Throw of Trarthus
+Storm Rain
+Storm Rain of the Conduit
+Storm Rain of the Fence
+Thunderstorm
+Tornado Shot
+Tornado Shot of Cloudburst
+Vaal Blade Flurry
+Vaal Cyclone
+Wild Strike
+Wild Strike of Extremes
+Ambush
+Intuitive Link
+Phase Run
+Snipe
+Summon Ice Golem
+Summon Ice Golem of Hordes
+Summon Ice Golem of Shattering
+Temporal Rift
+Tornado
+Tornado of Elemental Turbulence
+Vampiric Link
+
+### Gem blue
+Blight
+Blight of Contagion
+Blight of Atrophy
+Fireball
+Freezing Pulse
+Frostbolt
+Wreathed in Light
+Enervating Grasp
+The Great Avalanche
+Kinetic Bolt
+Kinetic Bolt of Fragmentation
+Lightning Tendrils
+Lightning Tendrils of Eccentricity
+Lightning Tendrils of Escalation
+Purifying Flame
+Purifying Flame of Revelations
+Raise Zombie
+Raise Zombie of Slamming
+Raise Zombie of Falling
+Rolling Magma
+Spark
+Spark of the Nova
+Spark of Unpredictability
+Stormblast Mine
+Vaal Blight
+Vaal Fireball
+Vaal Spark
+Contagion
+Contagion of Subsiding
+Contagion of Transference
+Conversion Trap
+Flame Wall
+Frost Bomb
+Frost Bomb of Instability
+Frost Bomb of Forthcoming
+Frost Wall
+Frostblink
+Frostblink of Wintry Blast
+Orb of Storms
+Summon Holy Relic
+Summon Holy Relic of Conviction
+Summon Raging Spirit
+Summon Raging Spirit of Enormity
+Bodyswap
+Bodyswap of Sacrifice
+Clarity
+Flame Dash
+Flame Dash of Return
+Lightning Warp
+Siphoning Trap
+Summon Skeletons
+Summon Skeletons of Archers
+Summon Skeletons of Mages
+Vaal Clarity
+Vaal Lightning Warp
+Vaal Summon Skeletons
+Wither
+Arc
+Arc of Surging
+Arc of Oscillating
+Blazing Salvo
+Bone Offering
+Creeping Frost
+Essence Drain
+Essence Drain of Desperation
+Essence Drain of Wickedness
+Flame Surge
+Flame Surge of Combusting
+Flesh Offering
+Ice Nova
+Ice Nova of Frostbolts
+Ice Nova of Deep Freeze
+Ice Spear
+Ice Spear of Splitting
+Icicle Mine
+Icicle Mine of Fanning
+Icicle Mine of Sabotage
+Incinerate
+Incinerate of Expanse
+Incinerate of Venting
+Kinetic Fusillade
+Lightning Trap
+Lightning Trap of Sparking
+Manabond
+Power Siphon
+Power Siphon of the Archmage
+Scorching Ray
+Scorching Ray of Immolation
+Spirit Offering
+Storm Brand
+Storm Brand of Indecision
+Storm Burst
+Storm Call
+Storm Call of Trarthus
+Vaal Arc
+Vaal Ice Nova
+Vaal Lightning Trap
+Vaal Power Siphon
+Vaal Storm Call
+Voltaxic Burst
+Wintertide Brand
+Arcane Cloak
+Assassin's Mark
+Brand Recall
+Cold Snap
+Cold Snap of Power
+Divine Retribution
+Forbidden Rite
+Forbidden Rite of Soul Sacrifice
+Galvanic Field
+Galvanic Field of Intensity
+Herald of Thunder
+Righteous Fire
+Righteous Fire of Arcane Devotion
+Summon Skitterbots
+Tempest Shield
+Vaal Cold Snap
+Vaal Righteous Fire
+Wall of Force
+Wave of Conviction
+Wave of Conviction of Trarthus
+Automation
+Bane
+Bane of Condemnation
+Conductivity
+Despair
+Discipline
+Elemental Weakness
+Energy Blade
+Enfeeble
+Flammability
+Frostbite
+Malevolence
+Purity of Elements
+Purity of Lightning
+Spellslinger
+Vaal Discipline
+Vaal Impurity of Lightning
+Wrath
+Zealotry
+Armageddon Brand
+Armageddon Brand of Volatility
+Armageddon Brand of Recall
+Ball Lightning
+Ball Lightning of Orbiting
+Ball Lightning of Static
+Crackling Lance
+Crackling Lance of Branching
+Crackling Lance of Disintegration
+Dark Pact
+Dark Pact of Trarthus
+Discharge
+Discharge of Misery
+Divine Ire
+Divine Ire of Holy Lightning
+Divine Ire of Disintegration
+Eye of Winter
+Eye of Winter of Finality
+Eye of Winter of Transience
+Firestorm
+Firestorm of Meteors
+Firestorm of Pelting
+Flameblast
+Flameblast of Celerity
+Flameblast of Contraction
+Glacial Cascade
+Glacial Cascade of the Fissure
+Hexblast
+Hexblast of Contradiction
+Hexblast of Havoc
+Kinetic Blast
+Kinetic Blast of Clustering
+Kinetic Rain
+Kinetic Rain of Impact
+Lightning Conduit
+Lightning Conduit of the Heavens
+Lightning Spire Trap
+Lightning Spire Trap of Zapping
+Lightning Spire Trap of Overloading
+Penance Brand
+Penance Brand of Dissipation
+Penance Brand of Conduction
+Pyroclast Mine
+Pyroclast Mine of Sabotage
+Raise Spectre
+Raise Spectre of Transience
+Shock Nova
+Somatic Shell
+Soulrend
+Soulrend of Reaping
+Soulrend of the Spiral
+Stormbind
+Stormbind of Teleportation
+Summon Reaper
+Summon Reaper of Revenants
+Summon Reaper of Eviscerating
+Vaal Firestorm
+Vaal Flameblast
+Vortex
+Vortex of Projection
+Winter Orb
+Destructive Link
+Frost Shield
+Hydrosphere
+Sigil of Power
+Soul Link
+Summon Carrion Golem
+Summon Carrion Golem of Hordes
+Summon Carrion Golem of Scavenging
+Summon Chaos Golem
+Summon Chaos Golem of Hordes
+Summon Chaos Golem of the Maelström
+Summon Lightning Golem
+Summon Lightning Golem of Hordes
+Void Sphere
+Void Sphere of Rending
+Arcanist Brand
