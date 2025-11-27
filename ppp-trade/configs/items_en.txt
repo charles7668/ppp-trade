@@ -2587,3 +2587,211 @@ Ziggurat Map
 Courtyard of Wasting Map
 Chambers of Impurity Map
 Theatre of Lies Map
+
+### Map Fragment
+Sacrifice at Midnight
+Sacrifice at Dawn
+Sacrifice at Noon
+Sacrifice at Dusk
+Sacrifice Set
+Mortal Rage
+Mortal Hope
+Mortal Ignorance
+Mortal Grief
+Mortal Set
+Eber's Key
+Yriel's Key
+Inya's Key
+Volkuur's Key
+Pale Court Set
+Fragment of the Phoenix
+Fragment of the Minotaur
+Fragment of the Chimera
+Fragment of the Hydra
+Key to the Crucible
+Fragment of Enslavement
+Fragment of Eradication
+Fragment of Constriction
+Fragment of Purification
+Key to Decay
+Fragment of Terror
+Fragment of Emptiness
+Fragment of Shape
+Fragment of Knowledge
+Maddening Object
+Al-Hezmin's Crest
+Baran's Crest
+Drox's Crest
+Veritania's Crest
+Crest of the Elderslayers
+Divine Vessel
+Timeless Karui Emblem
+Timeless Maraketh Emblem
+Timeless Eternal Emblem
+Timeless Templar Emblem
+Timeless Vaal Emblem
+Unrelenting Timeless Karui Emblem
+Unrelenting Timeless Maraketh Emblem
+Unrelenting Timeless Eternal Emblem
+Unrelenting Timeless Templar Emblem
+Unrelenting Timeless Vaal Emblem
+Simulacrum
+Offering to the Goddess
+Tribute to the Goddess
+Gift to the Goddess
+Dedication to the Goddess
+Blood-filled Vessel
+Breach Scarab
+Breach Scarab of the Dreamer
+Breach Scarab of Lordship
+Breach Scarab of Splintering
+Breach Scarab of Snares
+Breach Scarab of Resonant Cascade
+Cartography Scarab of Escalation
+Cartography Scarab of Risk
+Cartography Scarab of Singularity
+Cartography Scarab of Corruption
+Cartography Scarab of the Multitude
+Titanic Scarab
+Titanic Scarab of Treasures
+Titanic Scarab of Legend
+Farric Lure
+Saqawine Lure
+Fenumal Lure
+Craicic Lure
+Bestiary Scarab
+Bestiary Scarab of the Herd
+Bestiary Scarab of Duplicating
+Bestiary Scarab of the Shadowed Crow
+Influencing Scarab of the Shaper
+Influencing Scarab of the Elder
+Influencing Scarab of Hordes
+Influencing Scarab of Conversion
+Sulphite Scarab
+Sulphite Scarab of Greed
+Sulphite Scarab of Fumes
+Divination Scarab of The Cloister
+Divination Scarab of Plenty
+Divination Scarab of Pilfering
+Torment Scarab
+Torment Scarab of Peculiarity
+Torment Scarab of Release
+Torment Scarab of Possession
+Ambush Scarab
+Ambush Scarab of Hidden Compartments
+Ambush Scarab of Potency
+Ambush Scarab of Containment
+Ambush Scarab of Discernment
+Harbinger Scarab
+Harbinger Scarab of Obelisks
+Harbinger Scarab of Regency
+Harbinger Scarab of Warhoards
+Expedition Scarab
+Expedition Scarab of Runefinding
+Expedition Scarab of Verisium Powder
+Expedition Scarab of the Skald
+Expedition Scarab of Archaeology
+Legion Scarab
+Legion Scarab of Officers
+Legion Scarab of Command
+Legion Scarab of The Sekhema
+Legion Scarab of Eternal Conflict
+Abyss Scarab
+Abyss Scarab of Multitudes
+Abyss Scarab of Edifice
+Abyss Scarab of Emptiness
+Abyss Scarab of Profound Depth
+Anarchy Scarab
+Anarchy Scarab of Gigantification
+Anarchy Scarab of Partnership
+Essence Scarab
+Essence Scarab of Ascent
+Essence Scarab of Stability
+Essence Scarab of Calcification
+Essence Scarab of Adaptation
+Domination Scarab
+Domination Scarab of Apparitions
+Domination Scarab of Evolution
+Domination Scarab of Terrors
+Ritual Scarab of Selectiveness
+Ritual Scarab of Wisps
+Ritual Scarab of Abundance
+Harvest Scarab
+Harvest Scarab of Doubling
+Harvest Scarab of Cornucopia
+Incursion Scarab
+Incursion Scarab of Invasion
+Incursion Scarab of Champions
+Incursion Scarab of Timelines
+Betrayal Scarab
+Betrayal Scarab of the Allflame
+Betrayal Scarab of Reinforcements
+Betrayal Scarab of Perpetuation
+Beyond Scarab
+Beyond Scarab of Corruption
+Beyond Scarab of Haemophilia
+Beyond Scarab of Resurgence
+Beyond Scarab of the Invasion
+Ultimatum Scarab
+Ultimatum Scarab of Bribing
+Ultimatum Scarab of Dueling
+Ultimatum Scarab of Catalysing
+Ultimatum Scarab of Inscription
+Delirium Scarab
+Delirium Scarab of Mania
+Delirium Scarab of Paranoia
+Delirium Scarab of Neuroses
+Delirium Scarab of Delusions
+Blight Scarab
+Blight Scarab of Bounty
+Blight Scarab of the Blightheart
+Blight Scarab of Blooming
+Blight Scarab of Invigoration
+Kalguuran Scarab
+Kalguuran Scarab of Guarded Riches
+Kalguuran Scarab of Refinement
+Scarab of Monstrous Lineage
+Scarab of Adversaries
+Scarab of Divinity
+Scarab of Hunted Traitors
+Scarab of Stability
+Scarab of the Commander
+Scarab of Evolution
+Scarab of Wisps
+Scarab of Bisection
+Scarab of Unity
+Scarab of Radiant Storms
+Horned Scarab of Bloodlines
+Horned Scarab of Nemeses
+Horned Scarab of Preservation
+Horned Scarab of Awakening
+Horned Scarab of Tradition
+Horned Scarab of Glittering
+Horned Scarab of Pandemonium
+The Maven's Writ
+Cosmic Fragment
+Decaying Fragment
+Awakening Fragment
+Synthesising Fragment
+Reality Fragment
+Devouring Fragment
+Blazing Fragment
+Sacred Blossom
+Hivebrain Gland
+Echo of Trauma
+Echo of Reverence
+Echo of Loneliness
+An Audience With The King
+Syndicate Medallion
+[DNT - UNUSED] Allflame Ember of Rats
+Allflame Ember of Kulemak
+Allflame Ember of Resplendence
+Allflame Ember of Propagation
+Allflame Ember of Flesh
+Allflame Ember of the Wildwood
+Allflame Ember of the Ethereal
+Allflame Ember of the Gilded
+Allflame Ember of Toads
+Traumatic Fragment
+Reverent Fragment
+Lonely Fragment
