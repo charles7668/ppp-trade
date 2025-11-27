@@ -1162,3 +1162,21 @@ Eventuality Rod
 
 ### Weapon Fishing Rod
 Fishing Rod
+
+### Weapon Quiver
+Ornate Quiver
+Serrated Arrow Quiver
+Fire Arrow Quiver
+Sharktooth Arrow Quiver
+Feathered Arrow Quiver
+Penetrating Arrow Quiver
+Blunt Arrow Quiver
+Two-Point Arrow Quiver
+Spike-Point Arrow Quiver
+Blazing Arrow Quiver
+Broadhead Arrow Quiver
+Vile Arrow Quiver
+Heavy Arrow Quiver
+Primal Arrow Quiver
+Serrated Arrow Quiver
+Artillery Quiver
