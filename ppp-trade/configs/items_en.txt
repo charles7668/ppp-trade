@@ -2286,3 +2286,28 @@ Runegraft of the Warp
 Runegraft of the Witchmark
 Runegraft of Time
 Runegraft of Treachery
+
+### Delirium Orb
+Fine Delirium Orb
+Singular Delirium Orb
+Thaumaturge's Delirium Orb
+Blacksmith's Delirium Orb
+Armoursmith's Delirium Orb
+Cartographer's Delirium Orb
+Jeweller's Delirium Orb
+Abyssal Delirium Orb
+Kalguuran Delirium Orb
+Foreboding Delirium Orb
+Obscured Delirium Orb
+Whispering Delirium Orb
+Fragmented Delirium Orb
+Skittering Delirium Orb
+Fossilised Delirium Orb
+Diviner's Delirium Orb
+Delirium Orb
+Primal Delirium Orb
+Imperial Delirium Orb
+Timeless Delirium Orb
+Blighted Delirium Orb
+Challenging Delirium Orb
+Delirium Orb
