@@ -2978,3 +2978,13 @@ Farric Lure
 Saqawine Lure
 Fenumal Lure
 Craicic Lure
+
+### Jewels
+Crimson Jewel
+Viridian Jewel
+Cobalt Jewel
+Prismatic Jewel
+Timeless Jewel
+Large Cluster Jewel
+Medium Cluster Jewel
+Small Cluster Jewel
