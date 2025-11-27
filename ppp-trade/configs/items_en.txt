@@ -2311,3 +2311,14 @@ Timeless Delirium Orb
 Blighted Delirium Orb
 Challenging Delirium Orb
 Delirium Orb
+
+### Vial
+Vial of Awakening
+Vial of Consequence
+Vial of Dominance
+Vial of Fate
+Vial of Sacrifice
+Vial of Summoning
+Vial of the Ghost
+Vial of the Ritual
+Vial of Transcendence
