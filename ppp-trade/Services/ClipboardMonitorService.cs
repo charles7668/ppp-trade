@@ -23,8 +23,15 @@ public class ClipboardMonitorService
 
             Application.Current.Dispatcher.Invoke(() =>
             {
-                if (Clipboard.ContainsText())
-                    currentText = Clipboard.GetText();
+                try
+                {
+                    if (Clipboard.ContainsText())
+                        currentText = Clipboard.GetText();
+                }
+                catch
+                {
+                    // ignore
+                }
             });
 
             if (!string.IsNullOrEmpty(currentText) && currentText != _lastClipboardText)
