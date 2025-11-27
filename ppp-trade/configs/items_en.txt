@@ -2389,3 +2389,16 @@ Glyphic Fossil
 Tangled Fossil
 Sanctified Fossil
 Gilded Fossil
+
+### Catalyst
+Turbulent Catalyst
+Imbued Catalyst
+Abrasive Catalyst
+Tempering Catalyst
+Fertile Catalyst
+Prismatic Catalyst
+Intrinsic Catalyst
+Noxious Catalyst
+Accelerating Catalyst
+Unstable Catalyst
+Tainted Catalyst
