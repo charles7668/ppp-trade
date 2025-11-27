@@ -1671,3 +1671,60 @@ Bone Helmet
 Runic Helm
 Runic Crest
 Runic Crown
+
+### Armour Amulet
+Paua Amulet
+Coral Amulet
+Amber Amulet
+Jade Amulet
+Lapis Amulet
+Gold Amulet
+Onyx Amulet
+Turquoise Amulet
+Agate Amulet
+Citrine Amulet
+Ruby Amulet
+Unset Amulet
+Astrolabe Amulet
+Simplex Amulet
+Focused Amulet
+Jet Amulet
+Blue Pearl Amulet
+Marble Amulet
+Seaglass Amulet
+Onyx Amulet
+Black Maw Talisman
+Bonespire Talisman
+Ashscale Talisman
+Lone Antler Talisman
+Deep One Talisman
+Breakrib Talisman
+Deadhand Talisman
+Undying Flesh Talisman
+Rot Head Talisman
+Mandible Talisman
+Chrysalis Talisman
+Writhing Talisman
+Hexclaw Talisman
+Primal Skull Talisman
+Wereclaw Talisman
+Splitnewt Talisman
+Clutching Talisman
+Avian Twins Talisman
+Avian Twins Talisman
+Avian Twins Talisman
+Avian Twins Talisman
+Avian Twins Talisman
+Avian Twins Talisman
+Fangjaw Talisman
+Horned Talisman
+Spinefuse Talisman
+Three Rat Talisman
+Monkey Twins Talisman
+Longtooth Talisman
+Rotfeather Talisman
+Monkey Paw Talisman
+Monkey Paw Talisman
+Monkey Paw Talisman
+Three Hands Talisman
+Greatwolf Talisman
