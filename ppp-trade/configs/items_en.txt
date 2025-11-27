@@ -936,3 +936,33 @@ Behemoth Mace
 Flare Mace
 Crack Mace
 Boom Mace
+
+### Weapon Spectre
+Driftwood Sceptre
+Darkwood Sceptre
+Bronze Sceptre
+Quartz Sceptre
+Iron Sceptre
+Ochre Sceptre
+Ritual Sceptre
+Shadow Sceptre
+Horned Sceptre
+Grinning Fetish
+Sekhem
+Crystal Sceptre
+Lead Sceptre
+Blood Sceptre
+Royal Sceptre
+Abyssal Sceptre
+Stag Sceptre
+Karui Sceptre
+Tyrant's Sekhem
+Opal Sceptre
+Platinum Sceptre
+Vaal Sceptre
+Carnal Sceptre
+Void Sceptre
+Sambar Sceptre
+Oscillating Sceptre
+Stabilising Sceptre
+Alternating Sceptre
