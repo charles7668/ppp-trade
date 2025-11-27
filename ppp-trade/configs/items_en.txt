@@ -2322,3 +2322,10 @@ Vial of Summoning
 Vial of the Ghost
 Vial of the Ritual
 Vial of Transcendence
+
+### Blessing
+Blessing of Chayula
+Blessing of Esh
+Blessing of Tul
+Blessing of Uul-Netol
+Blessing of Xoph
