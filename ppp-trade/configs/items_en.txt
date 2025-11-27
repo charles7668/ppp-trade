@@ -796,3 +796,19 @@ Gemini Claw
 Shadow Fangs
 Malign Fangs
 Void Fangs
+
+### Weapon Dagger
+Glass Shank
+Skinning Knife
+Stiletto
+Prong Dagger
+Flaying Knife
+Poignard
+Trisula
+Gutting Knife
+Ambusher
+Sai
+Hollowpoint Dagger
+Pressurised Dagger
+Pneumatic Dagger
+Ethereal Blade
