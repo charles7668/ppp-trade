@@ -2262,3 +2262,27 @@ Lycia's Invocation of Versatile Combatant
 Lycia's Invocation of Wicked Ward
 Lycia's Invocation of Wind Dancer
 Lycia's Invocation of Zealot's Oath
+
+### Runegraft Item
+Runegraft of Bellows
+Runegraft of Blasphemy
+Runegraft of Gemcraft
+Runegraft of Loyalty
+Runegraft of Quaffing
+Runegraft of Refraction
+Runegraft of Restitching
+Runegraft of Stability
+Runegraft of the Angler
+Runegraft of the Bound
+Runegraft of the Combatant
+Runegraft of the Fortress
+Runegraft of the Gauche
+Runegraft of the Jeweller
+Runegraft of the Novamark
+Runegraft of the River
+Runegraft of the Sinistral
+Runegraft of the Soulwick
+Runegraft of the Warp
+Runegraft of the Witchmark
+Runegraft of Time
+Runegraft of Treachery
