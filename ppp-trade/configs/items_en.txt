@@ -1728,3 +1728,54 @@ Monkey Paw Talisman
 Monkey Paw Talisman
 Three Hands Talisman
 Greatwolf Talisman
+
+## Armour Ring
+Golden Hoop
+Iron Ring
+Coral Ring
+Paua Ring
+Gold Ring
+Topaz Ring
+Sapphire Ring
+Ruby Ring
+Prismatic Ring
+Moonstone Ring
+Amethyst Ring
+Diamond Ring
+Two-Stone Ring
+Two-Stone Ring
+Two-Stone Ring
+Unset Ring
+Bone Ring
+Cryonic Ring
+Enthalpic Ring
+Synaptic Ring
+Organic Ring
+Fugitive Ring
+Formless Ring
+Cogwork Ring
+Geodesic Ring
+Composite Ring
+Manifold Ring
+Ratcheting Ring
+Helical Ring
+Dusk Ring
+Penumbra Ring
+Gloam Ring
+Tenebrous Ring
+Shadowed Ring
+Shadowed Ring
+Shadowed Ring
+Nameless Ring
+Jet Ring
+Steel Ring
+Opal Ring
+Vermillion Ring
+Cerulean Ring
+Iolite Ring
+Ring
+Breach Ring
+Opal Ring
+Prismatic Ring
+Diamond Ring
+Paua Ring
