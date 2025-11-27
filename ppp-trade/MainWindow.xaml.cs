@@ -19,6 +19,20 @@ public partial class MainWindow
 
     private readonly MainWindowViewModel _viewModel = new();
 
+    private void DataGrid_OnPreviewMouseWheel(object sender, MouseWheelEventArgs e)
+    {
+        e.Handled = true;
+
+        var eventArg = new MouseWheelEventArgs(e.MouseDevice, e.Timestamp, e.Delta)
+        {
+            RoutedEvent = MouseWheelEvent,
+            Source = sender
+        };
+
+        var parent = ((DataGrid)sender).Parent as UIElement;
+        parent?.RaiseEvent(eventArg);
+    }
+
     private void DataGrid_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
         var dep = (DependencyObject)e.OriginalSource;

@@ -97,6 +97,7 @@
                         <DataGrid ItemsSource="{Binding ParsedItemVM.StatVMs , FallbackValue=''}"
                                   AutoGenerateColumns="False"
                                   Width="500px"
+                                  PreviewMouseWheel="DataGrid_OnPreviewMouseWheel"
                                   HeadersVisibility="All" RowHeaderWidth="0" CanUserAddRows="False"
                                   BorderThickness="0" Background="Transparent"
                                   PreviewMouseLeftButtonDown="DataGrid_PreviewMouseLeftButtonDown">
