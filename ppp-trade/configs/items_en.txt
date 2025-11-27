@@ -1159,3 +1159,6 @@ Judgement Staff
 Capacity Rod
 Potentiality Rod
 Eventuality Rod
+
+### Weapon Fishing Rod
+Fishing Rod
