@@ -18,6 +18,7 @@ public class ChineseTradParser(CacheService cacheService) : IParser
     private const string IMPLICIT_KEYWORD = "(implicit)";
     private const string CRAFTED_KEYWORD = "(crafted)";
     private const string STAT_TW_CACHE_KEY = "parser:stat_zh_tw";
+    private const string FOUL_BORN_KEYWORD = "穢生 ";
 
     public bool IsMatch(string text)
     {
@@ -55,7 +56,7 @@ public class ChineseTradParser(CacheService cacheService) : IParser
                     parsingState = ParsingState.PARSING_ITEM_NAME;
                     break;
                 case ParsingState.PARSING_ITEM_NAME:
-                    parsedItem.ItemName = line;
+                    parsedItem.ItemName = line.Replace(FOUL_BORN_KEYWORD, "");
                     parsingState = parsedItem.Rarity == Rarity.CURRENCY
                         ? ParsingState.PARSING_UNKNOW
                         : ParsingState.PARSING_ITEM_BASE;

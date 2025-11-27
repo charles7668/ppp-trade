@@ -54,6 +54,15 @@
                                          IsChecked="{Binding SelectedCorruptedState, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static enums:CorruptedState.NO}}" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center">
+                            <Label>穢生</Label>
+                            <RadioButton Content="Any" GroupName="FoulBorn" Margin="5"
+                                         IsChecked="{Binding SelectedFoulBornState, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static enums:YesNoAnyOption.ANY}}" />
+                            <RadioButton Content="Yes" GroupName="FoulBorn" Margin="5"
+                                         IsChecked="{Binding SelectedFoulBornState, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static enums:YesNoAnyOption.YES}}" />
+                            <RadioButton Content="No" GroupName="FoulBorn" Margin="5"
+                                         IsChecked="{Binding SelectedFoulBornState, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static enums:YesNoAnyOption.NO}}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center">
                             <Label>依帳號折疊</Label>
                             <RadioButton Content="Yes" GroupName="CollapseByAccount" Margin="5"
                                          IsChecked="{Binding SelectedCollapseState, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static enums:CollapseByAccount.YES}}" />
@@ -211,10 +220,10 @@
                 <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10">
                     <StackPanel.Style>
                         <Style TargetType="StackPanel">
-                            <Setter Property="Visibility" Value="Collapsed"></Setter>
+                            <Setter Property="Visibility" Value="Collapsed" />
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding CanQuery}" Value="False">
-                                    <Setter Property="Visibility" Value="Visible"></Setter>
+                                    <Setter Property="Visibility" Value="Visible" />
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>

@@ -157,6 +157,9 @@ public partial class MainWindowViewModel : ObservableObject
     private CorruptedState _selectedCorruptedState = CorruptedState.ANY;
 
     [ObservableProperty]
+    private YesNoAnyOption _selectedFoulBornState = YesNoAnyOption.ANY;
+
+    [ObservableProperty]
     private string? _selectedLeague;
 
     [ObservableProperty]
@@ -429,7 +432,13 @@ public partial class MainWindowViewModel : ObservableObject
                             CorruptedState.ANY => null,
                             CorruptedState.YES => "yes",
                             _ => "no"
-                        }
+                        },
+                        foulborn_item = SelectedFoulBornState == YesNoAnyOption.ANY
+                            ? null
+                            : new
+                            {
+                                option = SelectedFoulBornState == YesNoAnyOption.YES ? "true" : "false"
+                            }
                     }
                 },
                 trade_filters = new
