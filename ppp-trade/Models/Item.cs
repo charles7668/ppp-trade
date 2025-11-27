@@ -19,4 +19,6 @@ public struct Item
     public int ItemLevel { get; set; }
 
     public int Link { get; set; }
+
+    public bool IsFoulBorn { get; set; }
 }

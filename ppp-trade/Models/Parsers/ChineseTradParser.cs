@@ -56,6 +56,11 @@ public class ChineseTradParser(CacheService cacheService) : IParser
                     parsingState = ParsingState.PARSING_ITEM_NAME;
                     break;
                 case ParsingState.PARSING_ITEM_NAME:
+                    if (line.StartsWith(FOUL_BORN_KEYWORD))
+                    {
+                        parsedItem.IsFoulBorn = true;
+                    }
+
                     parsedItem.ItemName = line.Replace(FOUL_BORN_KEYWORD, "");
                     parsingState = parsedItem.Rarity == Rarity.CURRENCY
                         ? ParsingState.PARSING_UNKNOW
