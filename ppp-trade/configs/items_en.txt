@@ -2795,3 +2795,28 @@ Allflame Ember of Toads
 Traumatic Fragment
 Reverent Fragment
 Lonely Fragment
+
+### Other
+Primeval Remnant
+Primordial Remnant
+Maven's Invitation: The Formed
+Maven's Invitation: The Twisted
+Maven's Invitation: The Forgotten
+Maven's Invitation: The Hidden
+Maven's Invitation: The Feared
+Maven's Invitation: The Elderslayers
+Maven's Invitation: The Formed
+Maven's Invitation: The Twisted
+Maven's Invitation: The Forgotten
+Maven's Invitation: The Remembered
+Maven's Invitation: The Feared
+Maven's Invitation: The Elderslayers
+Maven's Invitation: The Atlas
+Maven's Invitation: The Atlas
+Chronicle of Atzoatl
+Inscribed Ultimatum
+Writhing Invitation
+Screaming Invitation
+Polaric Invitation
+Incandescent Invitation
+Mirrored Tablet
