@@ -2988,3 +2988,9 @@ Timeless Jewel
 Large Cluster Jewel
 Medium Cluster Jewel
 Small Cluster Jewel
+
+### Abyss Jewel
+Murderous Eye Jewel
+Searching Eye Jewel
+Hypnotic Eye Jewel
+Ghastly Eye Jewel
