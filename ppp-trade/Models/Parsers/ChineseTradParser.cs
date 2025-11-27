@@ -413,12 +413,15 @@ public class ChineseTradParser(CacheService cacheService) : IParser
         {
             foreach (var entry in group.Entries)
             {
-                var regex = entry.Text.Replace("+#", "([+-]\\d+)");
+                // todo Add (local) stat match
+                var regex = @"\(.*?\)";
+                var realItemStat = Regex.Replace(stat, regex, "").Trim();
+                regex = entry.Text.Replace("+#", "([+-]\\d+)");
                 regex = regex.Replace("#", "(\\d+)");
-                regex = $"^{regex}";
+                regex = $"^{regex}$";
                 try
                 {
-                    var match = Regex.Match(stat, regex);
+                    var match = Regex.Match(realItemStat, regex);
                     if (!match.Success)
                     {
                         continue;
