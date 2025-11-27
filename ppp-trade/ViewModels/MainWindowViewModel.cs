@@ -285,6 +285,44 @@ public partial class MainWindowViewModel : ObservableObject
         return matchItem;
     }
 
+    private async Task<string?> MapBaseItemNameAsync(string name)
+    {
+        var baseMapCacheKey = "white_item:tw2en:base";
+        if (!_cacheService.TryGet(baseMapCacheKey, out Dictionary<string, string>? baseMap))
+        {
+            var enBaseFile = Path.Combine("configs", "items_en.txt");
+            var twBaseFile = Path.Combine("configs", "items_tw.txt");
+            if (!File.Exists(enBaseFile) ||
+                !File.Exists(twBaseFile))
+            {
+                return null;
+            }
+
+            var content = await File.ReadAllTextAsync(twBaseFile);
+            List<string> twBaseList = content.Replace("\r", "").Split('\n')
+                .Where(x => !x.StartsWith("###") && !string.IsNullOrWhiteSpace(x))
+                .ToList();
+            content = await File.ReadAllTextAsync(enBaseFile);
+            List<string> enBaseList = content.Replace("\r", "").Split('\n')
+                .Where(x => !x.StartsWith("###") && !string.IsNullOrWhiteSpace(x))
+                .ToList();
+            baseMap = new Dictionary<string, string>();
+            if (twBaseList.Count != enBaseList.Count)
+            {
+                return null;
+            }
+
+            for (var i = 0; i < enBaseList.Count; i++)
+            {
+                baseMap.TryAdd(twBaseList[i], enBaseList[i]);
+            }
+
+            _cacheService.Set(baseMapCacheKey, baseMap);
+        }
+
+        return baseMap![name];
+    }
+
     private async Task<(string? uniqueName, string? uniqueBase)> MapUniqueNameAsync(string legendName,
         string legendBase)
     {
@@ -390,8 +428,7 @@ public partial class MainWindowViewModel : ObservableObject
         }
         else if (ParsedItemVM.FilterItemBase)
         {
-            // todo create item base mapping
-            baseName = queryItem.ItemBase;
+            baseName = await MapBaseItemNameAsync(queryItem.ItemBase);
         }
 
         List<object> statsParam = GetStatsQueryParam().ToList();
