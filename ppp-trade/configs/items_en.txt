@@ -3011,3 +3011,10 @@ Reverent Reliquary Key
 Traumatic Reliquary Key
 Voidborn Reliquary Key
 Voidborn Reliquary Key
+
+### Sanctum Research
+Forbidden Tome
+Sanctum Archives Research
+Sanctum Vaults Research
+Sanctum Cathedral Research
+Sanctum Necropolis Research
