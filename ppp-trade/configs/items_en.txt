@@ -1779,3 +1779,21 @@ Opal Ring
 Prismatic Ring
 Diamond Ring
 Paua Ring
+
+### Armour Belt
+Rustic Sash
+Chain Belt
+Leather Belt
+Heavy Belt
+Cloth Belt
+Studded Belt
+Micro-Distillery Belt
+Mechalarm Belt
+Mechanical Belt
+Vanguard Belt
+Crystal Belt
+Golden Obi
+Stygian Vise
+Leather Belt
+Heavy Belt
+Cloth Belt
