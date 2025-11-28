@@ -178,11 +178,11 @@ public class RequestBodyBuilder(CacheService cacheService)
         {
             if (searchRequest.ServerOption == ServerOption.INTERNATIONAL_SERVER)
             {
-                (itemName, baseName) = await MapUniqueNameAsync(item.ItemName, item.ItemBase);
+                (itemName, baseName) = await MapUniqueNameAsync(item.ItemName, item.ItemBaseName);
             }
             else
             {
-                (itemName, baseName) = (item.ItemName, item.ItemBase);
+                (itemName, baseName) = (item.ItemName, item.ItemBaseName);
             }
 
             if (itemName == null)
@@ -194,11 +194,11 @@ public class RequestBodyBuilder(CacheService cacheService)
         {
             if (searchRequest.ServerOption == ServerOption.INTERNATIONAL_SERVER)
             {
-                baseName = await MapBaseItemNameAsync(item.ItemBase);
+                baseName = await MapBaseItemNameAsync(item.ItemBaseName);
             }
             else
             {
-                baseName = item.ItemBase;
+                baseName = item.ItemBaseName;
             }
         }
 

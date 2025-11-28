@@ -68,7 +68,7 @@ public class ChineseTradParser(CacheService cacheService) : IParser
                         : ParsingState.PARSING_ITEM_BASE;
                     break;
                 case ParsingState.PARSING_ITEM_BASE:
-                    parsedItem.ItemBase = line;
+                    parsedItem.ItemBaseName = line;
                     parsingState = ParsingState.PARSING_UNKNOW;
                     break;
                 case ParsingState.PARSING_ITEM_TYPE:

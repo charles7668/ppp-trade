@@ -19,7 +19,7 @@ public class MappingProfile : Profile
                 opt => opt.MapFrom(src => src.ItemLevel == 0 ? null : (int?)src.ItemLevel))
             .ForMember(dest => dest.LinkCountMin,
                 opt => opt.MapFrom(src => src.Link == 0 ? null : (int?)src.Link))
-            .ForMember(dest => dest.ItemName, opt => opt.MapFrom(src => src.ItemName + " " + src.ItemBase))
+            .ForMember(dest => dest.ItemName, opt => opt.MapFrom(src => src.ItemName + " " + src.ItemBaseName))
             .ForMember(dest => dest.StatVMs, opt => opt.MapFrom(src => src.Stats));
 
         CreateMap<MainWindowViewModel.ItemVM, SearchRequest>()

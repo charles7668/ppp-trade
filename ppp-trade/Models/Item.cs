@@ -8,7 +8,7 @@ public struct Item
 
     public string ItemName { get; set; }
 
-    public string ItemBase { get; set; }
+    public string ItemBaseName { get; set; }
 
     public ItemType ItemType { get; set; }
 
