@@ -4,6 +4,8 @@ namespace ppp_trade.Models;
 
 public class SearchRequest
 {
+    public ServerOption ServerOption { get; set; }
+
     public CorruptedState CorruptedState { get; set; }
 
     public CollapseByAccount CollapseByAccount { get; set; }

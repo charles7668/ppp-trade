@@ -377,7 +377,7 @@ public partial class MainWindowViewModel : ObservableObject
 
     partial void OnSelectedServerChanged(string? value)
     {
-        var domain = value == "台服" ? "https://www.pathofexile.tw/" : "https://www.pathofexile.com/";
+        var domain = value == "台服" ? "https://pathofexile.tw/" : "https://www.pathofexile.com/";
         _poeApiService.SwitchDomain(domain);
         LoadLeagues().ConfigureAwait(false);
     }
@@ -428,6 +428,9 @@ public partial class MainWindowViewModel : ObservableObject
             {
                 opt.AfterMap((_, dest) =>
                 {
+                    dest.ServerOption = SelectedServer == "台服"
+                        ? ServerOption.TAIWAN_SERVER
+                        : ServerOption.INTERNATIONAL_SERVER;
                     dest.TradeType = tradeType;
                     dest.CorruptedState = SelectedCorruptedState;
                     dest.CollapseByAccount = SelectedCollapseState;

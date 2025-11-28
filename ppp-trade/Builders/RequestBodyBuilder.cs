@@ -175,7 +175,15 @@ public class RequestBodyBuilder(CacheService cacheService)
         var item = searchRequest.Item!.Value;
         if (item.Rarity == Rarity.UNIQUE)
         {
-            (itemName, baseName) = await MapUniqueNameAsync(item.ItemName, item.ItemBase);
+            if (searchRequest.ServerOption == ServerOption.INTERNATIONAL_SERVER)
+            {
+                (itemName, baseName) = await MapUniqueNameAsync(item.ItemName, item.ItemBase);
+            }
+            else
+            {
+                (itemName, baseName) = (item.ItemName, item.ItemBase);
+            }
+
             if (itemName == null)
             {
                 throw new FileNotFoundException("缺失傳奇道具文字相關檔案");
@@ -183,7 +191,14 @@ public class RequestBodyBuilder(CacheService cacheService)
         }
         else if (searchRequest.FilterItemBase)
         {
-            baseName = await MapBaseItemNameAsync(item.ItemBase);
+            if (searchRequest.ServerOption == ServerOption.INTERNATIONAL_SERVER)
+            {
+                baseName = await MapBaseItemNameAsync(item.ItemBase);
+            }
+            else
+            {
+                baseName = item.ItemBase;
+            }
         }
 
         List<object> statsParam = GetStatsQueryParam(searchRequest).ToList();

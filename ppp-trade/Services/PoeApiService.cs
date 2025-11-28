@@ -2,6 +2,7 @@ using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using System.Web;
 using ppp_trade.Models;
 
 namespace ppp_trade.Services;
@@ -65,6 +66,7 @@ public class PoeApiService
         client.DefaultRequestHeaders.Add("Accept", "*/*");
         var normalizeDomain = _domain.TrimEnd('/') + "/";
         var reqContent = new StringContent(query, Encoding.UTF8, "application/json");
+        league = Uri.EscapeDataString(league);
         var request = new HttpRequestMessage(HttpMethod.Post, $"{normalizeDomain}api/trade/search/{league}")
         {
             Content = reqContent
