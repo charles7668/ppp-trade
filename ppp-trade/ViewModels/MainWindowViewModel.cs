@@ -131,7 +131,7 @@ public partial class MainWindowViewModel : ObservableObject
     [ObservableProperty]
     private Visibility _matchedItemVisibility = Visibility.Hidden;
 
-    private Item? _parsedItem;
+    private ItemBase? _parsedItem;
 
     [ObservableProperty]
     private ItemVM? _parsedItemVM;
@@ -318,7 +318,7 @@ public partial class MainWindowViewModel : ObservableObject
         }
     }
 
-    private ItemVM MapItemToView(Item item)
+    private ItemVM MapPOE1ItemToView(Item item)
     {
         return _mapper.Map<ItemVM>(item, opt =>
         {
@@ -371,7 +371,7 @@ public partial class MainWindowViewModel : ObservableObject
             return;
         }
 
-        ParsedItemVM = MapItemToView(_parsedItem);
+        ParsedItemVM = MapPOE1ItemToView((Item)_parsedItem);
         ItemInfoVisibility = Visibility.Visible;
     }
 

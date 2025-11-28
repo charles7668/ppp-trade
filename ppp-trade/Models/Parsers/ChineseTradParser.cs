@@ -26,7 +26,7 @@ public class ChineseTradParser(CacheService cacheService) : IParser
         return text.Contains(RARITY_KEYWORD);
     }
 
-    public Item? Parse(string text)
+    public ItemBase Parse(string text)
     {
         #region Get stat data
 

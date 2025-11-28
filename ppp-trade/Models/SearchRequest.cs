@@ -12,7 +12,7 @@ public class SearchRequest
 
     public string? TradeType { get; set; }
 
-    public Item? Item { get; set; }
+    public ItemBase? Item { get; set; }
 
     public string? ItemName { get; set; }
 
