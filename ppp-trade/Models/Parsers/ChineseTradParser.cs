@@ -248,6 +248,7 @@ public class ChineseTradParser(CacheService cacheService) : IParser
 
             { "箭袋", ItemType.Quiver },
             { "盾牌", ItemType.SHIELD },
+            { "盾", ItemType.SHIELD },
 
             { "頭部", ItemType.HELMET },
             { "胸甲", ItemType.BODY_ARMOUR },
