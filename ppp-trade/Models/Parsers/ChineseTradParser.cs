@@ -45,7 +45,7 @@ public class ChineseTradParser(CacheService cacheService) : IParser
             return null;
         }
 
-        var parsedItem = new Item();
+        var parsedItem = new Poe1Item();
         var parsingState = ParsingState.PARSING_UNKNOW;
         for (var i = 0; i < lines.Length; ++i)
         {

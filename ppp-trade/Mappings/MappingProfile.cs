@@ -14,7 +14,7 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Stat.Type))
             .ForMember(dest => dest.MinValue, opt => opt.MapFrom(src => src.Value));
 
-        CreateMap<Item, MainWindowViewModel.ItemVM>()
+        CreateMap<Poe1Item, MainWindowViewModel.ItemVM>()
             .ForMember(dest => dest.ItemLevelMin,
                 opt => opt.MapFrom(src => src.ItemLevel == 0 ? null : (int?)src.ItemLevel))
             .ForMember(dest => dest.LinkCountMin,
