@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
+using ppp_trade.Builders;
 using ppp_trade.Mappings;
 using ppp_trade.Models.Parsers;
 using ppp_trade.Services;
@@ -22,6 +23,7 @@ public partial class App
         services.AddSingleton<GameStringService>();
         services.AddSingleton<RateLimitParser>();
         services.AddSingleton<IconService>();
+        services.AddTransient<RequestBodyBuilder>();
         services.AddScoped<IParser, EngParser>();
         services.AddScoped<IParser, ChineseTradParser>();
         services.AddSingleton<ParserFactory>();
