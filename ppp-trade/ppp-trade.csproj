@@ -20,28 +20,28 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="configs\items_en.txt">
+    <None Update="datas\poe\items_en.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="configs\items_tw.txt">
+    <None Update="datas\poe\items_tw.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="configs\stats_eng.json">
+    <None Update="datas\poe\stats_eng.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="configs\stats_zh_tw.json">
+    <None Update="datas\poe\stats_zh_tw.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="configs\unique_item_bases_eng.json">
+    <None Update="datas\poe\unique_item_bases_eng.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="configs\unique_item_bases_tw.json">
+    <None Update="datas\poe\unique_item_bases_tw.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="configs\unique_item_names_eng.json">
+    <None Update="datas\poe\unique_item_names_eng.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="configs\unique_item_names_tw.json">
+    <None Update="datas\poe\unique_item_names_tw.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

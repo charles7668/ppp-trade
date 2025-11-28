@@ -165,7 +165,7 @@ public class ChineseTradParser(CacheService cacheService) : IParser
 
     private List<StatGroup> LoadStats(string fileName)
     {
-        var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "configs", fileName);
+        var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "datas\\poe", fileName);
         if (!File.Exists(path))
         {
             return [];

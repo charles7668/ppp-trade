@@ -49,10 +49,10 @@ public class RequestBodyBuilder(CacheService cacheService)
         cacheService.TryGet(baseMapCacheKey, out Dictionary<string, string>? baseMap);
         if (!cacheService.TryGet(nameMapCacheKey, out Dictionary<string, string>? nameMap))
         {
-            var enNameFile = Path.Combine("configs", "unique_item_names_eng.json");
-            var twNameFile = Path.Combine("configs", "unique_item_names_tw.json");
-            var enBaseFile = Path.Combine("configs", "unique_item_bases_eng.json");
-            var twBaseFile = Path.Combine("configs", "unique_item_bases_tw.json");
+            var enNameFile = Path.Combine("datas\\poe", "unique_item_names_eng.json");
+            var twNameFile = Path.Combine("datas\\poe", "unique_item_names_tw.json");
+            var enBaseFile = Path.Combine("datas\\poe", "unique_item_bases_eng.json");
+            var twBaseFile = Path.Combine("datas\\poe", "unique_item_bases_tw.json");
             if (!File.Exists(enNameFile) ||
                 !File.Exists(twNameFile) ||
                 !File.Exists(enBaseFile) ||
@@ -106,8 +106,8 @@ public class RequestBodyBuilder(CacheService cacheService)
         var baseMapCacheKey = "white_item:tw2en:base";
         if (!cacheService.TryGet(baseMapCacheKey, out Dictionary<string, string>? baseMap))
         {
-            var enBaseFile = Path.Combine("configs", "items_en.txt");
-            var twBaseFile = Path.Combine("configs", "items_tw.txt");
+            var enBaseFile = Path.Combine("datas\\poe", "items_en.txt");
+            var twBaseFile = Path.Combine("datas\\poe", "items_tw.txt");
             if (!File.Exists(enBaseFile) ||
                 !File.Exists(twBaseFile))
             {
