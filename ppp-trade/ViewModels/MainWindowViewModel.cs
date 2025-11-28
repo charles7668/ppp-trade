@@ -371,7 +371,7 @@ public partial class MainWindowViewModel : ObservableObject
             return;
         }
 
-        ParsedItemVM = MapItemToView(_parsedItem.Value);
+        ParsedItemVM = MapItemToView(_parsedItem);
         ItemInfoVisibility = Visibility.Visible;
     }
 

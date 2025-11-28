@@ -173,7 +173,7 @@ public class RequestBodyBuilder(CacheService cacheService)
     {
         string? itemName = null;
         string? baseName = null;
-        var item = searchRequest.Item!.Value;
+        var item = searchRequest.Item!;
         if (item.Rarity == Rarity.UNIQUE)
         {
             if (searchRequest.ServerOption == ServerOption.INTERNATIONAL_SERVER)
