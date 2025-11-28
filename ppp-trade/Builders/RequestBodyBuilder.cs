@@ -35,6 +35,7 @@ public class RequestBodyBuilder(CacheService cacheService)
             ItemType.AMULET => "accessory.amulet",
             ItemType.BELT => "accessory.belt",
             ItemType.RING => "accessory.ring",
+            ItemType.JEWEL => "jewel.base",
             _ => null
         };
     }
