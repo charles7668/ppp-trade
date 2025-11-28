@@ -342,15 +342,6 @@ public partial class MainWindowViewModel : ObservableObject
         var parser = _parserFactory.GetParser(clipboardText);
         if (parser == null)
         {
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                Growl.Warning(new GrowlInfo
-                {
-                    Message = "無法識別的物品格式",
-                    Token = "LogMsg",
-                    WaitTime = 2
-                });
-            });
             return;
         }
 
