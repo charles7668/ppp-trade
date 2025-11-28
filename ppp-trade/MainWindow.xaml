@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModels="clr-namespace:ppp_trade.ViewModels"
         xmlns:hc="https://handyorg.github.io/handycontrol"
+        xmlns:system="clr-namespace:System;assembly=mscorlib"
         xmlns:converters="clr-namespace:ppp_trade.Converters"
         xmlns:enums="clr-namespace:ppp_trade.Enums"
         xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
@@ -21,6 +22,12 @@
     </b:Interaction.Triggers>
     <Window.Resources>
         <converters:EnumToBooleanConverter x:Key="EnumToBooleanConverter" />
+        <ObjectDataProvider x:Key="YesNoAnyOptionEnumKey" MethodName="GetValues"
+                            ObjectType="{x:Type system:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="enums:YesNoAnyOption" />
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
     </Window.Resources>
     <Grid>
         <ScrollViewer>
@@ -54,15 +61,6 @@
                                          IsChecked="{Binding SelectedCorruptedState, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static enums:CorruptedState.NO}}" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center">
-                            <Label>穢生</Label>
-                            <RadioButton Content="Any" GroupName="FoulBorn" Margin="5"
-                                         IsChecked="{Binding SelectedFoulBornState, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static enums:YesNoAnyOption.ANY}}" />
-                            <RadioButton Content="Yes" GroupName="FoulBorn" Margin="5"
-                                         IsChecked="{Binding SelectedFoulBornState, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static enums:YesNoAnyOption.YES}}" />
-                            <RadioButton Content="No" GroupName="FoulBorn" Margin="5"
-                                         IsChecked="{Binding SelectedFoulBornState, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static enums:YesNoAnyOption.NO}}" />
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center">
                             <Label>依帳號折疊</Label>
                             <RadioButton Content="Yes" GroupName="CollapseByAccount" Margin="5"
                                          IsChecked="{Binding SelectedCollapseState, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static enums:CollapseByAccount.YES}}" />
@@ -78,30 +76,46 @@
                                    HorizontalAlignment="Center" />
                         <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="5" Padding="10" Margin="10"
                                 VerticalAlignment="Top" HorizontalAlignment="Center">
-                            <StackPanel>
-                                <hc:SimpleStackPanel Orientation="Horizontal">
+                            <WrapPanel Orientation="Horizontal" Width="400">
+                                <hc:SimpleStackPanel Orientation="Horizontal" Width="200">
                                     <CheckBox
                                         IsChecked="{Binding ParsedItemVM.FilterItemLevel,Mode=TwoWay}">
                                         物品等級
                                     </CheckBox>
-                                    <TextBox Margin="2" Width="80"
+                                    <TextBox Margin="2" Width="50"
                                              Text="{Binding ParsedItemVM.ItemLevelMin,FallbackValue=''}" />
-                                    <TextBox Margin="2" Width="80"
+                                    <TextBox Margin="2" Width="50"
                                              Text="{Binding ParsedItemVM.ItemLevelMax, FallbackValue=''}" />
+                                </hc:SimpleStackPanel>
+                                <hc:SimpleStackPanel Orientation="Horizontal" Width="200">
                                     <CheckBox IsChecked="{Binding ParsedItemVM.FilterRarity,Mode=TwoWay}">稀有度</CheckBox>
                                     <ComboBox Margin="2" Width="80"
                                               ItemsSource="{Binding SelectableRarity}"
                                               SelectedItem="{Binding ParsedItemVM.Rarity}" />
                                 </hc:SimpleStackPanel>
-                                <hc:SimpleStackPanel Orientation="Horizontal">
+                                <hc:SimpleStackPanel Orientation="Horizontal" Width="200">
                                     <CheckBox IsChecked="{Binding ParsedItemVM.FilterLink,Mode=TwoWay}">連線數量</CheckBox>
-                                    <TextBox Margin="2" Width="80" Text="{Binding ParsedItemVM.LinkCountMin}" />
-                                    <TextBox Margin="2" Width="80" Text="{Binding ParsedItemVM.LinkCountMax}" />
+                                    <TextBox Margin="2" Width="50" Text="{Binding ParsedItemVM.LinkCountMin}" />
+                                    <TextBox Margin="2" Width="50" Text="{Binding ParsedItemVM.LinkCountMax}" />
+                                </hc:SimpleStackPanel>
+                                <hc:SimpleStackPanel Orientation="Horizontal" Width="200">
                                     <CheckBox IsChecked="{Binding ParsedItemVM.FilterItemBase , Mode= TwoWay}">物品分類</CheckBox>
                                     <TextBox Margin="2" Width="80" IsEnabled="False"
                                              Text="{Binding ParsedItemVM.ItemBase}" />
                                 </hc:SimpleStackPanel>
-                            </StackPanel>
+                                <hc:SimpleStackPanel Orientation="Horizontal" Width="200">
+                                    <TextBlock FontSize="12">穢生</TextBlock>
+                                    <hc:ComboBox Margin="2" Width="80"
+                                                 ItemsSource="{Binding Source={StaticResource YesNoAnyOptionEnumKey}}"
+                                                 SelectedItem="{Binding ParsedItemVM.FoulBorn}">
+                                        <hc:ComboBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding}" FontSize="10" />
+                                            </DataTemplate>
+                                        </hc:ComboBox.ItemTemplate>
+                                    </hc:ComboBox>
+                                </hc:SimpleStackPanel>
+                            </WrapPanel>
                         </Border>
                         <DataGrid ItemsSource="{Binding ParsedItemVM.StatVMs , FallbackValue=''}"
                                   AutoGenerateColumns="False"

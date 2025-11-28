@@ -151,13 +151,13 @@ public partial class MainWindowViewModel : ObservableObject
     private IList<string> _selectableRarity = null!;
 
     [ObservableProperty]
+    private IList<YesNoAnyOption> _selectableYesNoAny = [YesNoAnyOption.ANY, YesNoAnyOption.YES, YesNoAnyOption.NO];
+
+    [ObservableProperty]
     private CollapseByAccount _selectedCollapseState = CollapseByAccount.NO;
 
     [ObservableProperty]
     private CorruptedState _selectedCorruptedState = CorruptedState.ANY;
-
-    [ObservableProperty]
-    private YesNoAnyOption _selectedFoulBornState = YesNoAnyOption.ANY;
 
     [ObservableProperty]
     private string? _selectedLeague;
@@ -470,12 +470,9 @@ public partial class MainWindowViewModel : ObservableObject
                             CorruptedState.YES => "yes",
                             _ => "no"
                         },
-                        foulborn_item = SelectedFoulBornState == YesNoAnyOption.ANY
+                        foulborn_item = (ParsedItemVM.FoulBorn == YesNoAnyOption.ANY
                             ? null
-                            : new
-                            {
-                                option = SelectedFoulBornState == YesNoAnyOption.YES ? "true" : "false"
-                            }
+                            : new { option = ParsedItemVM.FoulBorn == YesNoAnyOption.YES ? "true" : "false" })
                     }
                 },
                 trade_filters = new
@@ -576,6 +573,7 @@ public partial class MainWindowViewModel : ObservableObject
                     Rarity.UNIQUE => _gameStringService.Get(GameString.UNIQUE)!,
                     _ => _gameStringService.Get(GameString.NORMAL)!
                 };
+                dest.FoulBorn = item.IsFoulBorn ? YesNoAnyOption.YES : YesNoAnyOption.NO;
             });
         });
     }
@@ -797,6 +795,8 @@ public partial class MainWindowViewModel : ObservableObject
         public int? LinkCountMax { get; set; }
 
         public string? ItemBase { get; set; }
+
+        public YesNoAnyOption FoulBorn { get; set; } = YesNoAnyOption.ANY;
 
         public List<ItemStatVM> StatVMs { get; set; } = [];
     }
