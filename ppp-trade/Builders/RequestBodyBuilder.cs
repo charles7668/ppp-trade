@@ -31,7 +31,7 @@ public class RequestBodyBuilder(CacheService cacheService)
             ItemType.BOOTS => "armour.boots",
             ItemType.GLOVES => "armour.gloves",
             ItemType.SHIELD => "armour.shield",
-            ItemType.Quiver => "armour.quiver",
+            ItemType.QUIVER => "armour.quiver",
             ItemType.AMULET => "accessory.amulet",
             ItemType.BELT => "accessory.belt",
             ItemType.RING => "accessory.ring",
