@@ -440,6 +440,12 @@ public partial class MainWindowViewModel : ObservableObject
     {
         _poeApiService.SwitchGame(value ?? "POE1");
         LoadLeagues().ConfigureAwait(false);
+        _clipboardMonitorService.ClearClipboard();
+        Poe1ItemInfoVisibility = Visibility.Collapsed;
+        Poe2ItemInfoVisibility = Visibility.Collapsed;
+        ParsedPoe1ItemVM = null;
+        ParsedPoe2ItemVM = null;
+        _parsedItem = null;
     }
 
     [RelayCommand]

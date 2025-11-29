@@ -9,9 +9,9 @@ public class ClipboardMonitorService
 
     public event EventHandler<string>? ClipboardChanged;
 
-    private async Task MonitorClipboard(CancellationToken token)
+    public Task ClearClipboard()
     {
-        Application.Current.Dispatcher.Invoke(() =>
+        Application.Current.Dispatcher.InvokeAsync(() =>
         {
             try
             {
@@ -22,6 +22,11 @@ public class ClipboardMonitorService
                 // ignore
             }
         });
+        return Task.CompletedTask;
+    }
+
+    private async Task MonitorClipboard(CancellationToken token)
+    {
         while (!token.IsCancellationRequested)
         {
             var currentText = string.Empty;
@@ -31,7 +36,9 @@ public class ClipboardMonitorService
                 try
                 {
                     if (Clipboard.ContainsText())
+                    {
                         currentText = Clipboard.GetText();
+                    }
                 }
                 catch
                 {
@@ -52,7 +59,9 @@ public class ClipboardMonitorService
     public void StartMonitoring()
     {
         if (_cts != null)
+        {
             return;
+        }
 
         _cts = new CancellationTokenSource();
         Task.Factory.StartNew(() => MonitorClipboard(_cts.Token), _cts.Token, TaskCreationOptions.LongRunning,
