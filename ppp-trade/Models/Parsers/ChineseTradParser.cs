@@ -266,7 +266,10 @@ public class ChineseTradParser(CacheService cacheService) : IParser
             { "命運卡", ItemType.DIVINATION_CARD },
             { "珠寶", ItemType.JEWEL },
             { "大型珠寶", ItemType.ABYSS_JEWEL },
-            { "護身符", ItemType.TALISMAN }
+            { "護身符", ItemType.TALISMAN },
+
+            { "功能藥劑", ItemType.FLASK },
+            { "生命藥劑", ItemType.FLASK }
         };
 
         return typeMap.GetValueOrDefault(substr, ItemType.OTHER);

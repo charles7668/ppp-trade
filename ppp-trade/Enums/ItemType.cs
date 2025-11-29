@@ -7,6 +7,7 @@ public enum ItemType
     BLUEPRINT,
     STACKABLE_CURRENCY,
     DIVINATION_CARD,
+    FLASK,
 
     #region Equipment
 
