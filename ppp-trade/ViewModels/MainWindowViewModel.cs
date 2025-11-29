@@ -540,7 +540,7 @@ public partial class MainWindowViewModel : ObservableObject
 
         public int? LinkCountMax { get; set; }
 
-        public string? ItemBase { get; set; }
+        public string? ItemBaseName { get; set; }
 
         public YesNoAnyOption FoulBorn { get; set; } = YesNoAnyOption.ANY;
 

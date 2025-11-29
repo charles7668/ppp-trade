@@ -101,7 +101,7 @@
                                 <hc:SimpleStackPanel Orientation="Horizontal" Width="200">
                                     <CheckBox IsChecked="{Binding ParsedItemVM.FilterItemBase , Mode= TwoWay}">物品分類</CheckBox>
                                     <TextBox Margin="2" Width="80" IsEnabled="False"
-                                             Text="{Binding ParsedItemVM.ItemBase}" />
+                                             Text="{Binding ParsedItemVM.ItemBaseName}" />
                                 </hc:SimpleStackPanel>
                                 <hc:SimpleStackPanel Orientation="Horizontal" Width="200">
                                     <TextBlock FontSize="12">穢生</TextBlock>
