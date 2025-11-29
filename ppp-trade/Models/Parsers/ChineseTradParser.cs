@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.IO;
 using System.Text.Json;
 using System.Text.RegularExpressions;
@@ -40,7 +39,7 @@ public class ChineseTradParser(CacheService cacheService) : IParser
 
         #endregion
 
-        var lines = text.Split("\r\n");
+        var lines = text.Replace("\r", "").Split("\n");
         var indexOfRarity = Array.FindIndex(lines, l => l.StartsWith(RARITY_KEYWORD));
         if (indexOfRarity == -1)
         {
@@ -534,47 +533,63 @@ public class ChineseTradParser(CacheService cacheService) : IParser
 
         (Stat?, int?) FindState(StatGroup group, string stat)
         {
-            foreach (var entry in group.Entries)
+            (Stat?, int?) matchResult = TryMatch();
+            if (matchResult is (null, null))
             {
-                foreach (var splitEntry in entry.Text.Split('\n'))
-                {
-                    var regex = @"\(.*?\)";
-                    var realItemStat = Regex.Replace(stat, regex, "").Trim();
-                    regex = splitEntry.Replace("(", "\\(");
-                    regex = regex.Replace(")", "\\)");
-                    regex = regex.Replace("+#", "([+-]\\d+)");
-                    regex = regex.Replace("#", "(\\d+)");
-                    regex = $"^{regex}$";
-                    try
-                    {
-                        var match = Regex.Match(realItemStat, regex);
-                        if (!match.Success)
-                        {
-                            // try match local version
-                            match = Regex.Match(realItemStat + $" {LOCAL_KEYWORD}", regex);
-                            if (!match.Success)
-                            {
-                                continue;
-                            }
-                        }
-
-                        int? value = match.Groups.Count switch
-                        {
-                            3 => int.Parse(match.Groups[2].Value) + int.Parse(match.Groups[1].Value),
-                            > 1 => int.Parse(match.Groups[1].Value),
-                            _ => null
-                        };
-
-                        return (entry, value);
-                    }
-                    catch (Exception e)
-                    {
-                        Debug.WriteLine(e.Message);
-                    }
-                }
+                stat = $"{stat} {LOCAL_KEYWORD}";
+                matchResult = TryMatch(true);
             }
 
-            return (null, null);
+            return matchResult;
+
+            (Stat?, int?) TryMatch(bool matchLocal = false)
+            {
+                foreach (var entry in group.Entries)
+                {
+                    foreach (var splitEntry in entry.Text.Split('\n'))
+                    {
+                        string regex;
+                        var realItemStat = stat;
+                        if (!matchLocal)
+                        {
+                            regex = @"\(.*?\)";
+                            realItemStat = Regex.Replace(stat, regex, "").Trim();
+                        }
+
+                        regex = splitEntry.Replace("(", "\\(");
+                        regex = regex.Replace(")", "\\)");
+                        regex = regex.Replace("+#", "([+-]\\d+)");
+                        regex = regex.Replace("#", "(\\d+)");
+                        regex = $"^{regex}$";
+                        try
+                        {
+                            var match = Regex.Match(realItemStat, regex);
+                            if (!match.Success)
+                            {
+                                if (!match.Success)
+                                {
+                                    continue;
+                                }
+                            }
+
+                            int? value = match.Groups.Count switch
+                            {
+                                3 => (int.Parse(match.Groups[2].Value) + int.Parse(match.Groups[1].Value)) / 2,
+                                > 1 => int.Parse(match.Groups[1].Value),
+                                _ => null
+                            };
+
+                            return (entry, value);
+                        }
+                        catch (Exception e)
+                        {
+                            Debug.WriteLine(e.Message);
+                        }
+                    }
+                }
+
+                return (null, null);
+            }
         }
     }
 
