@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Text.Json;
 using System.Text.RegularExpressions;
@@ -20,6 +21,7 @@ public class ChineseTradParser(CacheService cacheService) : IParser
     private const string STAT_TW_CACHE_KEY = "parser:stat_zh_tw";
     private const string FOUL_BORN_KEYWORD = "穢生 ";
     private const string LOCAL_KEYWORD = "(部分)";
+    private readonly string[] _flaskSplitKeywords = ["之", "的"];
 
     public bool IsMatch(string text)
     {
@@ -60,6 +62,27 @@ public class ChineseTradParser(CacheService cacheService) : IParser
                     if (line.StartsWith(FOUL_BORN_KEYWORD))
                     {
                         parsedItem.IsFoulBorn = true;
+                    }
+
+                    if (parsedItem.ItemType == ItemType.FLASK &&
+                        (parsedItem.Rarity != Rarity.NORMAL || parsedItem.Rarity != Rarity.UNIQUE))
+                    {
+                        foreach (var flaskSplitKeyword in _flaskSplitKeywords)
+                        {
+                            var replace = line.Replace(FOUL_BORN_KEYWORD, "");
+                            var split = replace.Split(flaskSplitKeyword);
+                            if (split.Length != 2)
+                            {
+                                continue;
+                            }
+
+                            parsedItem.ItemName = split[0] + flaskSplitKeyword;
+                            parsedItem.ItemBaseName = split[1];
+                            break;
+                        }
+
+                        parsingState = ParsingState.PARSING_UNKNOW;
+                        break;
                     }
 
                     parsedItem.ItemName = line.Replace(FOUL_BORN_KEYWORD, "");
