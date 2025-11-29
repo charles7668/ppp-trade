@@ -453,24 +453,11 @@ public class Poe2TWParser(CacheService cacheService) : IParser
             {
                 "weapon", new Dictionary<string, string>
                 {
-                    { "stat_681332047", "stat_210067635" }, // #% increased Attack Speed (Local)
-                    { "stat_960081730", "stat_1940865751" }, // Adds # to # Physical Damage (Local)
-                    { "stat_321077055", "stat_709508406" }, // Adds # to # Fire Damage (Local)
-                    { "stat_1334060246", "stat_3336890334" }, // Adds # to # Lightning Damage (Local)
-                    { "stat_2387423236", "stat_1037193709" }, // Adds # to # Cold Damage (Local) 
-                    { "stat_3531280422", "stat_2223678961" }, // Adds # to # Chaos Damage (Local)
-                    { "stat_3593843976", "stat_55876295" }, // #% of Physical Attack Damage Leeched as Life (Local)
-                    { "stat_3237948413", "stat_669069897" } // #% of Physical Attack Damage Leeched as Mana (Local)
                 }
             },
             {
                 "armour", new Dictionary<string, string>
                 {
-                    { "stat_2144192055", "stat_53045048" }, // +# to Evasion Rating (Local)
-                    { "stat_2106365538", "stat_124859000" }, // #% increased Evasion Rating (Local)
-                    { "stat_809229260", "stat_3484657501" }, // +# to Armour (Local)
-                    { "stat_2866361420", "stat_1062208444" }, // #% increased Armour (Local)
-                    { "stat_3489782002", "stat_4052037485" } // +# to maximum Energy Shield (Local)
                 }
             }
         };
