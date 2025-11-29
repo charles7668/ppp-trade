@@ -22,7 +22,17 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.ItemName, opt => opt.MapFrom(src => src.ItemName + " " + src.ItemBaseName))
             .ForMember(dest => dest.StatVMs, opt => opt.MapFrom(src => src.Stats));
 
-        CreateMap<MainWindowViewModel.ItemVM, SearchRequest>()
+        CreateMap<Poe2Item, MainWindowViewModel.Poe2ItemVM>()
+            .ForMember(dest => dest.ItemLevelMin,
+                opt => opt.MapFrom(src => src.ItemLevel == 0 ? null : (int?)src.ItemLevel))
+            .ForMember(dest => dest.RunSocketsMin,
+                opt => opt.MapFrom(src => src.RuneSockets == 0 ? null : (int?)src.RuneSockets))
+            .ForMember(dest => dest.ItemName, opt => opt.MapFrom(src => src.ItemName + " " + src.ItemBaseName))
+            .ForMember(dest => dest.StatVMs, opt => opt.MapFrom(src => src.Stats));
+
+        CreateMap<MainWindowViewModel.ItemVM, Poe1SearchRequest>()
+            .ForMember(dest => dest.Stats, opt => opt.MapFrom(src => src.StatVMs));
+        CreateMap<MainWindowViewModel.Poe2ItemVM, Poe2SearchRequest>()
             .ForMember(dest => dest.Stats, opt => opt.MapFrom(src => src.StatVMs));
         CreateMap<MainWindowViewModel.ItemStatVM, StatFilter>()
             .ForMember(dest => dest.Disabled, opt =>

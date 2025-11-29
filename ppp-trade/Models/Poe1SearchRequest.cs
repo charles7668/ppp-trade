@@ -2,8 +2,10 @@
 
 namespace ppp_trade.Models;
 
-public class SearchRequest
+public class SearchRequestBase
 {
+    public ItemBase? Item { get; set; }
+
     public ServerOption ServerOption { get; set; }
 
     public CorruptedState CorruptedState { get; set; }
@@ -11,8 +13,6 @@ public class SearchRequest
     public CollapseByAccount CollapseByAccount { get; set; }
 
     public string? TradeType { get; set; }
-
-    public ItemBase? Item { get; set; }
 
     public string? ItemName { get; set; }
 
@@ -24,30 +24,29 @@ public class SearchRequest
 
     public bool FilterRarity { get; set; } = true;
 
-    public bool FilterLink { get; set; } = true;
+    public string? Rarity { get; set; }
 
     public bool FilterItemBase { get; set; }
 
-    public string? Rarity { get; set; }
+    public string? ItemBase { get; set; }
+
+    public List<StatFilter> Stats { get; set; } = [];
+}
+
+public class Poe1SearchRequest : SearchRequestBase
+{
+    public bool FilterLink { get; set; } = true;
+
 
     public int? LinkCountMin { get; set; }
 
     public int? LinkCountMax { get; set; }
 
-    public string? ItemBase { get; set; }
 
     public YesNoAnyOption FoulBorn { get; set; } = YesNoAnyOption.ANY;
-
-    public List<StatFilter> Stats { get; set; } = [];
 }
 
-public class StatFilter
+public class Poe2SearchRequest : SearchRequestBase
 {
-    public bool Disabled { get; set; }
-
-    public int? MinValue { get; set; }
-
-    public int? MaxValue { get; set; }
-
-    public string? StatId { get; set; }
+    public int? RuneSockets { get; set; }
 }

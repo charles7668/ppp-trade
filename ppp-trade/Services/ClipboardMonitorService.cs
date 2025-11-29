@@ -13,10 +13,15 @@ public class ClipboardMonitorService
     {
         Application.Current.Dispatcher.Invoke(() =>
         {
-            if (Clipboard.ContainsText())
-                _lastClipboardText = Clipboard.GetText();
+            try
+            {
+                Clipboard.SetText("");
+            }
+            catch
+            {
+                // ignore
+            }
         });
-
         while (!token.IsCancellationRequested)
         {
             var currentText = string.Empty;
@@ -46,7 +51,8 @@ public class ClipboardMonitorService
 
     public void StartMonitoring()
     {
-        if (_cts != null) return;
+        if (_cts != null)
+            return;
 
         _cts = new CancellationTokenSource();
         Task.Factory.StartNew(() => MonitorClipboard(_cts.Token), _cts.Token, TaskCreationOptions.LongRunning,

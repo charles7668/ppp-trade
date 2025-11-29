@@ -6,5 +6,5 @@ public class Poe2Item : ItemBase
 
     public int Spirit { get; set; }
 
-    public string? Skill { get; set; }
+    public string? GrantsSkill { get; set; }
 }

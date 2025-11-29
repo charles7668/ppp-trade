@@ -37,23 +37,23 @@ public class RequestBodyBuilder(CacheService cacheService)
             ItemType.RING => "accessory.ring",
             ItemType.JEWEL => "jewel.base",
             ItemType.FLASK => "flask",
+            ItemType.WAY_STONE => "map.waystone",
             _ => null
         };
     }
 
 
-    private async Task<(string? uniqueName, string? uniqueBase)> MapUniqueNameAsync(string legendName,
-        string legendBase)
+    private async Task<(string? uniqueName, string? uniqueBase)> MapUniqueNameAsync(string uniqueName,
+        string uniqueBase, string forGame)
     {
-        var nameMapCacheKey = "unique:tw2en:name";
-        var baseMapCacheKey = "unique:tw2en:base";
-        cacheService.TryGet(baseMapCacheKey, out Dictionary<string, string>? baseMap);
-        if (!cacheService.TryGet(nameMapCacheKey, out Dictionary<string, string>? nameMap))
+        var dataFolder = forGame == "POE2" ? "datas\\poe2" : "datas\\poe";
+        var fullNameMapCacheKey = forGame == "POE2" ? "unique:tw2en:full" : "unique:poe2:tw2en:full";
+        if (!cacheService.TryGet(fullNameMapCacheKey, out Dictionary<string, string>? fullMap))
         {
-            var enNameFile = Path.Combine("datas\\poe", "unique_item_names_eng.json");
-            var twNameFile = Path.Combine("datas\\poe", "unique_item_names_tw.json");
-            var enBaseFile = Path.Combine("datas\\poe", "unique_item_bases_eng.json");
-            var twBaseFile = Path.Combine("datas\\poe", "unique_item_bases_tw.json");
+            var enNameFile = Path.Combine(dataFolder, "unique_item_names_eng.json");
+            var twNameFile = Path.Combine(dataFolder, "unique_item_names_tw.json");
+            var enBaseFile = Path.Combine(dataFolder, "unique_item_bases_eng.json");
+            var twBaseFile = Path.Combine(dataFolder, "unique_item_bases_tw.json");
             if (!File.Exists(enNameFile) ||
                 !File.Exists(twNameFile) ||
                 !File.Exists(enBaseFile) ||
@@ -66,28 +66,36 @@ public class RequestBodyBuilder(CacheService cacheService)
             var enNameList = JsonSerializer.Deserialize<List<string>>(content)!;
             content = await File.ReadAllTextAsync(twNameFile);
             var twNameList = JsonSerializer.Deserialize<List<string>>(content)!;
-            nameMap = new Dictionary<string, string>();
-            for (var i = 0; i < twNameList.Count; i++)
-            {
-                nameMap.Add(twNameList[i], enNameList[i]);
-            }
-
-            cacheService.Set(nameMapCacheKey, nameMap);
-
             content = await File.ReadAllTextAsync(enBaseFile);
             var enBaseList = JsonSerializer.Deserialize<List<string>>(content)!;
             content = await File.ReadAllTextAsync(twBaseFile);
             var twBaseList = JsonSerializer.Deserialize<List<string>>(content)!;
-            baseMap = new Dictionary<string, string>();
-            for (var i = 0; i < twBaseList.Count; i++)
+            if (twNameList.Count != enNameList.Count ||
+                twBaseList.Count != enBaseList.Count ||
+                twNameList.Count != twBaseList.Count)
             {
-                baseMap.Add(twBaseList[i], enBaseList[i]);
+                return (null, null);
             }
 
-            cacheService.Set(baseMapCacheKey, baseMap);
+            var count = twNameList.Count;
+            fullMap = new Dictionary<string, string>();
+
+            for (var i = 0; i < count; i++)
+            {
+                fullMap.Add(twNameList[i] + ";" + twBaseList[i], enNameList[i] + ";" + enBaseList[i]);
+            }
+
+            cacheService.Set(fullNameMapCacheKey, fullMap);
         }
 
-        return (nameMap![legendName], baseMap![legendBase]);
+        var target = fullMap?[uniqueName + ";" + uniqueBase];
+        if (target == null)
+        {
+            return (null, null);
+        }
+
+        var split = target.Split(';');
+        return (split[0], split[1]);
     }
 
     private string? RarityToString(Rarity rarity)
@@ -102,13 +110,14 @@ public class RequestBodyBuilder(CacheService cacheService)
         };
     }
 
-    private async Task<string?> MapBaseItemNameAsync(string name)
+    private async Task<string?> MapBaseItemNameAsync(string name, string forGame)
     {
-        var baseMapCacheKey = "white_item:tw2en:base";
+        var dataFolder = forGame == "POE2" ? "datas\\poe2" : "datas\\poe";
+        var baseMapCacheKey = $"{forGame}:white_item:tw2en:base";
         if (!cacheService.TryGet(baseMapCacheKey, out Dictionary<string, string>? baseMap))
         {
-            var enBaseFile = Path.Combine("datas\\poe", "items_en.txt");
-            var twBaseFile = Path.Combine("datas\\poe", "items_tw.txt");
+            var enBaseFile = Path.Combine(dataFolder, "items_en.txt");
+            var twBaseFile = Path.Combine(dataFolder, "items_tw.txt");
             if (!File.Exists(enBaseFile) ||
                 !File.Exists(twBaseFile))
             {
@@ -140,7 +149,7 @@ public class RequestBodyBuilder(CacheService cacheService)
         return baseMap![name];
     }
 
-    private IEnumerable<object> GetStatsQueryParam(SearchRequest searchRequest)
+    private IEnumerable<object> GetStatsQueryParam(SearchRequestBase searchRequest)
     {
         var statList = new List<object>();
         foreach (var stat in searchRequest.Stats)
@@ -170,7 +179,7 @@ public class RequestBodyBuilder(CacheService cacheService)
         ];
     }
 
-    public async Task<object?> BuildSearchBodyAsync(SearchRequest searchRequest)
+    public async Task<object?> BuildSearchBodyAsync(SearchRequestBase searchRequest, string forGame)
     {
         string? itemName = null;
         string? baseName = null;
@@ -179,7 +188,7 @@ public class RequestBodyBuilder(CacheService cacheService)
         {
             if (searchRequest.ServerOption == ServerOption.INTERNATIONAL_SERVER)
             {
-                (itemName, baseName) = await MapUniqueNameAsync(item.ItemName, item.ItemBaseName);
+                (itemName, baseName) = await MapUniqueNameAsync(item.ItemName, item.ItemBaseName, forGame);
             }
             else
             {
@@ -195,7 +204,7 @@ public class RequestBodyBuilder(CacheService cacheService)
         {
             if (searchRequest.ServerOption == ServerOption.INTERNATIONAL_SERVER)
             {
-                baseName = await MapBaseItemNameAsync(item.ItemBaseName);
+                baseName = await MapBaseItemNameAsync(item.ItemBaseName, forGame);
             }
             else
             {
@@ -204,6 +213,27 @@ public class RequestBodyBuilder(CacheService cacheService)
         }
 
         List<object> statsParam = GetStatsQueryParam(searchRequest).ToList();
+        string? corruptedFilter = null;
+        object? foulBornFilter = null;
+        switch (forGame)
+        {
+            case "POE1":
+                var poe1Request = (Poe1SearchRequest)searchRequest;
+                corruptedFilter = poe1Request.CorruptedState switch
+                {
+                    CorruptedState.ANY => null,
+                    CorruptedState.YES => "yes",
+                    _ => "no"
+                };
+                foulBornFilter = poe1Request.FoulBorn == YesNoAnyOption.ANY
+                    ? null
+                    : new { option = poe1Request.FoulBorn == YesNoAnyOption.YES ? "true" : "false" };
+                break;
+            case "POE2":
+                break;
+            default:
+                throw new ArgumentException("invalid game name");
+        }
 
         var queryObj = new
         {
@@ -236,15 +266,8 @@ public class RequestBodyBuilder(CacheService cacheService)
                     disabled = false,
                     filters = new
                     {
-                        corrupted = searchRequest.CorruptedState switch
-                        {
-                            CorruptedState.ANY => null,
-                            CorruptedState.YES => "yes",
-                            _ => "no"
-                        },
-                        foulborn_item = searchRequest.FoulBorn == YesNoAnyOption.ANY
-                            ? null
-                            : new { option = searchRequest.FoulBorn == YesNoAnyOption.YES ? "true" : "false" }
+                        corrupted = corruptedFilter,
+                        foulborn_item = foulBornFilter
                     }
                 },
                 trade_filters = new

@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.IO;
 using System.Text.Json;
 using System.Text.RegularExpressions;
@@ -8,24 +7,31 @@ using ppp_trade.Services;
 
 namespace ppp_trade.Models.Parsers;
 
-public class ChineseTradParser(CacheService cacheService) : IParser
+public class Poe2TWParser(CacheService cacheService) : IParser
 {
-    private const string RARITY_KEYWORD = "稀有度: ";
+    private const string ITEM_RARITY_KEYWORD = "稀有度: ";
     private const string ITEM_TYPE_KEYWORD = "物品種類: ";
     private const string ITEM_REQUIREMENT_KEYWORD = "需求:";
     private const string ITEM_SOCKET_KEYWORD = "插槽: ";
     private const string ITEM_LEVEL_KEYWORD = "物品等級: ";
+    private const string ITEM_GRANTS_SKILL_KEYWORD = "賦予技能: ";
+    private const string ITEM_SPIRIT_KEYWORD = "精魂: ";
     private const string SPLIT_KEYWORD = "--------";
     private const string IMPLICIT_KEYWORD = "(implicit)";
-    private const string CRAFTED_KEYWORD = "(crafted)";
-    private const string STAT_TW_CACHE_KEY = "parser:stat_zh_tw";
-    private const string FOUL_BORN_KEYWORD = "穢生 ";
+    private const string RUNE_KEYWORD = "(rune)";
+    private const string DESECRATED_KEYWORD = "(desecrated)";
+    private const string AUGMENTED_KEYWORD = "(augmented)";
+    private const string STAT_TW_CACHE_KEY = "parser:poe2:stat_zh_tw";
     private const string LOCAL_KEYWORD = "(部分)";
+    private const string REQ_LEVEL_KEYWORD = "等級";
+    private const string REQ_INT_KEYWORD = "智慧";
+    private const string REQ_DEX_KEYWORD = "敏捷";
+    private const string REQ_STR_KEYWORD = "力量";
     private readonly string[] _flaskSplitKeywords = ["之", "的"];
 
     public bool IsMatch(string text, string game)
     {
-        return game == "POE1" && text.Contains(RARITY_KEYWORD);
+        return game == "POE2" && text.Contains(ITEM_RARITY_KEYWORD);
     }
 
     public ItemBase? Parse(string text)
@@ -34,20 +40,20 @@ public class ChineseTradParser(CacheService cacheService) : IParser
 
         if (!cacheService.TryGet(STAT_TW_CACHE_KEY, out List<StatGroup>? statTw))
         {
-            statTw = LoadStats("stats_zh_tw.json");
+            statTw = LoadStats("stats_tw.json");
             cacheService.Set(STAT_TW_CACHE_KEY, statTw);
         }
 
         #endregion
 
         var lines = text.Split("\r\n");
-        var indexOfRarity = Array.FindIndex(lines, l => l.StartsWith(RARITY_KEYWORD));
+        var indexOfRarity = Array.FindIndex(lines, l => l.StartsWith(ITEM_RARITY_KEYWORD));
         if (indexOfRarity == -1)
         {
             return null;
         }
 
-        var parsedItem = new Poe1Item();
+        var parsedItem = new Poe2Item();
         var parsingState = ParsingState.PARSING_UNKNOW;
         for (var i = 0; i < lines.Length; ++i)
         {
@@ -59,18 +65,12 @@ public class ChineseTradParser(CacheService cacheService) : IParser
                     parsingState = ParsingState.PARSING_ITEM_NAME;
                     break;
                 case ParsingState.PARSING_ITEM_NAME:
-                    if (line.StartsWith(FOUL_BORN_KEYWORD))
-                    {
-                        parsedItem.IsFoulBorn = true;
-                    }
-
                     if (parsedItem.ItemType == ItemType.FLASK &&
                         (parsedItem.Rarity != Rarity.NORMAL || parsedItem.Rarity != Rarity.UNIQUE))
                     {
                         foreach (var flaskSplitKeyword in _flaskSplitKeywords)
                         {
-                            var replace = line.Replace(FOUL_BORN_KEYWORD, "");
-                            var split = replace.Split(flaskSplitKeyword);
+                            var split = line.Split(flaskSplitKeyword);
                             if (split.Length != 2)
                             {
                                 continue;
@@ -85,7 +85,7 @@ public class ChineseTradParser(CacheService cacheService) : IParser
                         break;
                     }
 
-                    parsedItem.ItemName = line.Replace(FOUL_BORN_KEYWORD, "");
+                    parsedItem.ItemName = line;
                     parsingState = parsedItem.Rarity == Rarity.CURRENCY
                         ? ParsingState.PARSING_UNKNOW
                         : ParsingState.PARSING_ITEM_BASE;
@@ -99,21 +99,62 @@ public class ChineseTradParser(CacheService cacheService) : IParser
                     parsingState = ParsingState.PARSING_UNKNOW;
                     break;
                 case ParsingState.PARSING_REQUIREMENT:
-                    List<string> reqTexts = [];
-                    i++;
-                    while (i < lines.Length && lines[i] != SPLIT_KEYWORD)
-                    {
-                        reqTexts.Add(lines[i]);
-                        i++;
-                    }
-
-                    parsedItem.Requirements = ResolveItemRequirements(reqTexts);
+                    parsedItem.Requirements = ResolveItemRequirements(line);
                     parsingState = ParsingState.PARSING_UNKNOW;
                     break;
                 case ParsingState.PARSING_ITEM_LEVEL:
                     parsedItem.ItemLevel = int.Parse(line.Substring(ITEM_LEVEL_KEYWORD.Length,
                         line.Length - ITEM_LEVEL_KEYWORD.Length));
-                    parsingState = ParsingState.PARSING_STAT;
+                    parsingState = ParsingState.PARSING_RUNE_STAT;
+                    break;
+                case ParsingState.PARSING_RUNE_STAT:
+                    if (line == SPLIT_KEYWORD)
+                    {
+                        i++;
+                        if (i < lines.Length && !lines[i].Contains(RUNE_KEYWORD))
+                        {
+                            i -= 2;
+                        }
+                        else
+                        {
+                            while (i < lines.Length && lines[i] != SPLIT_KEYWORD)
+                                i++;
+
+                            i--;
+                        }
+
+                        parsingState = ParsingState.PARSING_GRANTS_SKILL;
+                    }
+                    else
+                    {
+                        parsingState = ParsingState.PARSING_UNKNOW;
+                    }
+
+                    break;
+                case ParsingState.PARSING_GRANTS_SKILL:
+                    if (line == SPLIT_KEYWORD)
+                    {
+                        i++;
+                        if (i < lines.Length && !lines[i].StartsWith(ITEM_GRANTS_SKILL_KEYWORD))
+                        {
+                            i -= 2;
+                        }
+                        else
+                        {
+                            parsedItem.GrantsSkill = lines[i].AsSpan(ITEM_GRANTS_SKILL_KEYWORD.Length).ToString();
+                            while (i < lines.Length && lines[i] != SPLIT_KEYWORD)
+                                i++;
+
+                            i--;
+                        }
+
+                        parsingState = ParsingState.PARSING_STAT;
+                    }
+                    else
+                    {
+                        parsingState = ParsingState.PARSING_UNKNOW;
+                    }
+
                     break;
                 case ParsingState.PARSING_STAT:
                     var hasImplicit = false;
@@ -125,6 +166,7 @@ public class ChineseTradParser(CacheService cacheService) : IParser
                         {
                             hasImplicit = true;
                         }
+
 
                         while (i < lines.Length && lines[i] != SPLIT_KEYWORD)
                         {
@@ -148,8 +190,15 @@ public class ChineseTradParser(CacheService cacheService) : IParser
                     parsedItem.Stats = TryMapLocalAndGlobal(parsedItem.ItemType, stats, statTw!);
                     parsingState = ParsingState.PARSING_UNKNOW;
                     break;
-                case ParsingState.PARSING_LINK:
-                    parsedItem.Link = ResolveLinkCount(line);
+                case ParsingState.PARSING_SPIRIT:
+                    parsedItem.Spirit =
+                        int.Parse(line.Replace(AUGMENTED_KEYWORD, "").AsSpan(ITEM_SPIRIT_KEYWORD.Length));
+                    parsingState = ParsingState.PARSING_UNKNOW;
+                    break;
+                case ParsingState.PARSING_SOCKETS:
+                    var count = ResolveRuneSockets(line);
+
+                    parsedItem.RuneSockets = count;
                     parsingState = ParsingState.PARSING_UNKNOW;
                     break;
                 case ParsingState.PARSING_UNKNOW:
@@ -173,10 +222,15 @@ public class ChineseTradParser(CacheService cacheService) : IParser
                         i--;
                         parsingState = ParsingState.PARSING_ITEM_LEVEL;
                     }
+                    else if (line.StartsWith(ITEM_SPIRIT_KEYWORD))
+                    {
+                        i--;
+                        parsingState = ParsingState.PARSING_SPIRIT;
+                    }
                     else if (line.StartsWith(ITEM_SOCKET_KEYWORD))
                     {
                         i--;
-                        parsingState = ParsingState.PARSING_LINK;
+                        parsingState = ParsingState.PARSING_SOCKETS;
                     }
 
                     break;
@@ -186,9 +240,24 @@ public class ChineseTradParser(CacheService cacheService) : IParser
         return parsedItem;
     }
 
+    private static int ResolveRuneSockets(string line)
+    {
+        ReadOnlySpan<char> span = line.AsSpan(ITEM_SOCKET_KEYWORD.Length);
+        var count = 0;
+        foreach (var s in span)
+        {
+            if (s == 'S')
+            {
+                count++;
+            }
+        }
+
+        return count;
+    }
+
     private List<StatGroup> LoadStats(string fileName)
     {
-        var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "datas\\poe", fileName);
+        var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "datas\\poe2", fileName);
         if (!File.Exists(path))
         {
             return [];
@@ -202,55 +271,46 @@ public class ChineseTradParser(CacheService cacheService) : IParser
         return JsonSerializer.Deserialize<List<StatGroup>>(json, options) ?? [];
     }
 
-    private static IEnumerable<ItemRequirement> ResolveItemRequirements(IEnumerable<string> reqTexts)
+    private static IEnumerable<ItemRequirement> ResolveItemRequirements(string line)
     {
-        const string reqLevelKeyword = "等級: ";
-        const string reqIntKeyword = "智慧: ";
-        const string reqStrKeyword = "力量: ";
-        const string reqDexKeyword = "敏捷: ";
-        Dictionary<string, ItemRequirementType> typeMap = new()
+        ReadOnlySpan<char> replaceAugmented =
+            line.Replace(AUGMENTED_KEYWORD, "").AsSpan(ITEM_REQUIREMENT_KEYWORD.Length);
+        Span<Range> reqList = stackalloc Range[6];
+        replaceAugmented.Split(reqList, ',');
+        List<ItemRequirement> itemRequirements = [];
+        foreach (var range in reqList)
         {
-            { reqLevelKeyword, ItemRequirementType.LEVEL },
-            { reqStrKeyword, ItemRequirementType.STR },
-            { reqDexKeyword, ItemRequirementType.DEX },
-            { reqIntKeyword, ItemRequirementType.INT }
-        };
-        List<ItemRequirement> results = [];
-        foreach (var reqText in reqTexts)
-        {
-            var key = reqLevelKeyword;
-            if (reqText.StartsWith(reqLevelKeyword))
+            var req = replaceAugmented.Slice(range.Start.Value, range.End.Value - range.Start.Value)
+                .ToString();
+            string[] keywords = [REQ_LEVEL_KEYWORD, REQ_INT_KEYWORD, REQ_DEX_KEYWORD, REQ_STR_KEYWORD];
+            foreach (var keyword in keywords)
             {
-                key = reqLevelKeyword;
+                if (req.Contains(keyword))
+                {
+                    var realReq = req.Replace(keyword, "").Trim();
+                    itemRequirements.Add(new ItemRequirement
+                    {
+                        ItemRequirementType = keyword switch
+                        {
+                            REQ_LEVEL_KEYWORD => ItemRequirementType.LEVEL,
+                            REQ_INT_KEYWORD => ItemRequirementType.INT,
+                            REQ_DEX_KEYWORD => ItemRequirementType.DEX,
+                            REQ_STR_KEYWORD => ItemRequirementType.STR,
+                            _ => throw new ArgumentOutOfRangeException()
+                        },
+                        Value = int.Parse(realReq)
+                    });
+                }
             }
-            else if (reqText.StartsWith(reqIntKeyword))
-            {
-                key = reqIntKeyword;
-            }
-            else if (reqText.StartsWith(reqStrKeyword))
-            {
-                key = reqStrKeyword;
-            }
-            else if (reqText.StartsWith(reqDexKeyword))
-            {
-                key = reqDexKeyword;
-            }
-
-            var value = int.Parse(reqText.Substring(reqLevelKeyword.Length,
-                reqText.Length - reqLevelKeyword.Length));
-            results.Add(new ItemRequirement
-            {
-                ItemRequirementType = typeMap[key],
-                Value = value
-            });
         }
 
-        return results;
+        return itemRequirements;
     }
 
     private static ItemType ResolveItemType(string lineText)
     {
-        var substr = lineText.Substring(ITEM_TYPE_KEYWORD.Length, lineText.Length - ITEM_TYPE_KEYWORD.Length).Trim();
+        var substr = lineText.Substring(ITEM_TYPE_KEYWORD.Length, lineText.Length - ITEM_TYPE_KEYWORD.Length)
+            .Trim();
         var typeMap = new Dictionary<string, ItemType>
         {
             { "爪", ItemType.CLAW },
@@ -292,19 +352,12 @@ public class ChineseTradParser(CacheService cacheService) : IParser
             { "護身符", ItemType.TALISMAN },
 
             { "功能藥劑", ItemType.FLASK },
-            { "生命藥劑", ItemType.FLASK }
+            { "生命藥劑", ItemType.FLASK },
+
+            { "換界石", ItemType.WAY_STONE }
         };
 
         return typeMap.GetValueOrDefault(substr, ItemType.OTHER);
-    }
-
-    private static int ResolveLinkCount(string line)
-    {
-        var socketInfoText = line.Substring(ITEM_SOCKET_KEYWORD.Length,
-            line.Length - ITEM_SOCKET_KEYWORD.Length);
-        socketInfoText = Regex.Replace(socketInfoText, "[A-Z]", "");
-        var split = socketInfoText.Split(' ');
-        return split.Select(linkText => linkText.Length).Prepend(0).Max() + 1;
     }
 
     private static List<ItemStat> ResolvePseudoStats(IEnumerable<ItemStat> itemStats, StatGroup pseudoStatGroup)
@@ -370,7 +423,8 @@ public class ChineseTradParser(CacheService cacheService) : IParser
 
     private static Rarity ResolveRarity(string lineText)
     {
-        var rarityStr = lineText.Substring(RARITY_KEYWORD.Length, lineText.Length - RARITY_KEYWORD.Length).Trim();
+        var rarityStr = lineText.Substring(ITEM_RARITY_KEYWORD.Length, lineText.Length - ITEM_RARITY_KEYWORD.Length)
+            .Trim();
         var result = rarityStr switch
         {
             "普通" => Rarity.NORMAL,
@@ -496,9 +550,9 @@ public class ChineseTradParser(CacheService cacheService) : IParser
                     });
                 }
             }
-            else if (statText.Trim().EndsWith(CRAFTED_KEYWORD))
+            else if (statText.Trim().EndsWith(DESECRATED_KEYWORD))
             {
-                var group = stats.First(s => s.Id == "crafted");
+                var group = stats.First(s => s.Id == "desecrated");
                 var (state, value) = FindState(group, statText);
                 if (state != null)
                 {
@@ -543,7 +597,7 @@ public class ChineseTradParser(CacheService cacheService) : IParser
                     regex = splitEntry.Replace("(", "\\(");
                     regex = regex.Replace(")", "\\)");
                     regex = regex.Replace("+#", "([+-]\\d+)");
-                    regex = regex.Replace("#", "(\\d+)");
+                    regex = regex.Replace("#", "\\+?(\\d+)");
                     regex = $"^{regex}$";
                     try
                     {
@@ -582,12 +636,15 @@ public class ChineseTradParser(CacheService cacheService) : IParser
     {
         PARSING_ITEM_TYPE,
         PARSING_RARITY,
-        PARSING_LINK,
+        PARSING_SPIRIT,
         PARSING_ITEM_NAME,
         PARSING_ITEM_BASE,
+        PARSING_SOCKETS,
         PARSING_REQUIREMENT,
         PARSING_ITEM_LEVEL,
         PARSING_STAT,
+        PARSING_RUNE_STAT,
+        PARSING_GRANTS_SKILL,
         PARSING_UNKNOW
     }
 }

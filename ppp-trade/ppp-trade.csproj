@@ -20,6 +20,30 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="datas\poe2\items_en.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="datas\poe2\items_tw.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="datas\poe2\stats_en.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="datas\poe2\stats_tw.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="datas\poe2\unique_item_bases_eng.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="datas\poe2\unique_item_bases_tw.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="datas\poe2\unique_item_names_eng.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="datas\poe2\unique_item_names_tw.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="datas\poe\items_en.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

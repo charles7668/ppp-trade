@@ -1,16 +1,9 @@
 namespace ppp_trade.Models.Parsers;
 
-public class ParserFactory
+public class ParserFactory(IEnumerable<IParser> parsers)
 {
-    public ParserFactory(IEnumerable<IParser> parsers)
+    public IParser? GetParser(string text, string game)
     {
-        _parsers = parsers;
-    }
-
-    private readonly IEnumerable<IParser> _parsers;
-
-    public IParser? GetParser(string text)
-    {
-        return _parsers.FirstOrDefault(x => x.IsMatch(text));
+        return parsers.FirstOrDefault(x => x.IsMatch(text, game));
     }
 }

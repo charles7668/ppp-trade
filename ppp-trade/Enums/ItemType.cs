@@ -40,5 +40,11 @@ public enum ItemType
 
     #endregion
 
+    #region poe2
+
+    WAY_STONE,
+
+    #endregion
+
     OTHER
 }

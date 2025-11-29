@@ -2,12 +2,12 @@
 
 internal class EngParser : IParser
 {
-    public bool IsMatch(string text)
+    public bool IsMatch(string text, string game)
     {
-        return text.Contains("Item Class: ");
+        return game == "POE1" && text.Contains("Item Class: ");
     }
 
-    public ItemBase Parse(string text)
+    public ItemBase? Parse(string text)
     {
         throw new NotImplementedException();
     }

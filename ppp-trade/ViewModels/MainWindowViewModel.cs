@@ -26,11 +26,24 @@ public partial class MainWindowViewModel : ObservableObject
         {
             _selectedServer = _serverList[1];
             _selectedTradeType = _tradeTypeList[1];
-            _itemInfoVisibility = Visibility.Visible;
+            _poe1ItemInfoVisibility = Visibility.Visible;
+            _poe2ItemInfoVisibility = Visibility.Visible;
             _matchedItemVisibility = Visibility.Visible;
-            _parsedItemVM = new ItemVM
+            _parsedPoe1ItemVM = new ItemVM
             {
                 ItemName = "Design Time Item Name",
+                StatVMs =
+                [
+                    new ItemStatVM
+                    {
+                        StatText = "測試1",
+                        Type = "隨機"
+                    }
+                ]
+            };
+            _parsedPoe2ItemVM = new Poe2ItemVM
+            {
+                ItemName = "Design Time Poe2 Item Name",
                 StatVMs =
                 [
                     new ItemStatVM
@@ -121,7 +134,7 @@ public partial class MainWindowViewModel : ObservableObject
     private bool _canQuery = true;
 
     [ObservableProperty]
-    private Visibility _itemInfoVisibility = Visibility.Hidden;
+    private IList<string> _gameList = ["POE1", "POE2"];
 
     [ObservableProperty]
     private IList<string> _leagueList = [];
@@ -135,7 +148,16 @@ public partial class MainWindowViewModel : ObservableObject
     private ItemBase? _parsedItem;
 
     [ObservableProperty]
-    private ItemVM? _parsedItemVM;
+    private ItemVM? _parsedPoe1ItemVM;
+
+    [ObservableProperty]
+    private Poe2ItemVM? _parsedPoe2ItemVM;
+
+    [ObservableProperty]
+    private Visibility _poe1ItemInfoVisibility = Visibility.Collapsed;
+
+    [ObservableProperty]
+    private Visibility _poe2ItemInfoVisibility = Visibility.Collapsed;
 
     private CancellationTokenSource _queryCts = new();
 
@@ -158,13 +180,13 @@ public partial class MainWindowViewModel : ObservableObject
     private CorruptedState _selectedCorruptedState = CorruptedState.ANY;
 
     [ObservableProperty]
+    private string? _selectedGame;
+
+    [ObservableProperty]
     private string? _selectedLeague;
 
     [ObservableProperty]
     private string? _selectedServer;
-
-    [ObservableProperty]
-    private string? _selectedGame;
 
     [ObservableProperty]
     private string? _selectedTradeType;
@@ -173,15 +195,13 @@ public partial class MainWindowViewModel : ObservableObject
     private IList<string> _serverList = ["台服", "國際服"];
 
     [ObservableProperty]
-    private IList<string> _gameList = ["POE1", "POE2"];
-
-    [ObservableProperty]
     private IList<string> _tradeTypeList = ["即刻購買以及面交", "僅限即刻購買", "僅限面交", "任何"];
 
     private Task _waitTimeTask = Task.CompletedTask;
 
     private async Task<MatchedItemVM> AnalysisPriceAsync(object queryObj, string league)
     {
+        Debug.Assert(SelectedGame != null);
         var serializerOptions = new JsonSerializerOptions
         {
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
@@ -313,7 +333,10 @@ public partial class MainWindowViewModel : ObservableObject
         try
         {
             List<LeagueInfo> leagues = await _poeApiService.GetLeaguesAsync();
-            LeagueList = leagues.Where(l => l.Realm == "pc").Select(l => l.Text).ToList();
+            LeagueList = SelectedGame == "POE1"
+                ? leagues.Where(l => l.Realm == "pc").Select(l => l.Text).ToList()
+                : leagues.Select(l => l.Text).ToList();
+
             if (LeagueList.Any())
             {
                 SelectedLeague = LeagueList[0];
@@ -323,6 +346,23 @@ public partial class MainWindowViewModel : ObservableObject
         {
             // todo show error message
         }
+    }
+
+    private Poe2ItemVM MapPoe2ItemToView(Poe2Item item)
+    {
+        return _mapper.Map<Poe2ItemVM>(item, opt =>
+        {
+            opt.AfterMap((_, dest) =>
+            {
+                dest.Rarity = item.Rarity switch
+                {
+                    Rarity.MAGIC => _gameStringService.Get(GameString.MAGIC)!,
+                    Rarity.RARE => _gameStringService.Get(GameString.RARE)!,
+                    Rarity.UNIQUE => _gameStringService.Get(GameString.UNIQUE)!,
+                    _ => _gameStringService.Get(GameString.NORMAL)!
+                };
+            });
+        });
     }
 
     private ItemVM MapPoe1ItemToView(Poe1Item item)
@@ -346,37 +386,59 @@ public partial class MainWindowViewModel : ObservableObject
     private void OnClipboardChanged(object? sender, string clipboardText)
     {
         Debug.WriteLine($"Clipboard content:\n {clipboardText}");
-        var parser = _parserFactory.GetParser(clipboardText);
+        Debug.Assert(SelectedGame != null);
+        var parser = _parserFactory.GetParser(clipboardText, SelectedGame);
         if (parser == null)
         {
             return;
         }
 
-        ItemInfoVisibility = Visibility.Hidden;
+        Poe1ItemInfoVisibility = Visibility.Collapsed;
+        Poe2ItemInfoVisibility = Visibility.Collapsed;
 
-        _parsedItem = parser.Parse(clipboardText);
-        if (_parsedItem == null)
+        try
         {
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                Growl.Warning(new GrowlInfo
-                {
-                    Message = "無法識別的物品格式",
-                    Token = "LogMsg",
-                    WaitTime = 2
-                });
-            });
-            return;
+            _parsedItem = parser.Parse(clipboardText);
+        }
+        catch
+        {
+            _parsedItem = null;
         }
 
-        ParsedItemVM = MapPoe1ItemToView((Poe1Item)_parsedItem);
-        ItemInfoVisibility = Visibility.Visible;
+        switch (_parsedItem)
+        {
+            case null:
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    Growl.Warning(new GrowlInfo
+                    {
+                        Message = "無法識別的物品格式",
+                        Token = "LogMsg",
+                        WaitTime = 2
+                    });
+                });
+                return;
+            case Poe1Item:
+                ParsedPoe1ItemVM = MapPoe1ItemToView((Poe1Item)_parsedItem);
+                Poe1ItemInfoVisibility = Visibility.Visible;
+                break;
+            default:
+                ParsedPoe2ItemVM = MapPoe2ItemToView((Poe2Item)_parsedItem);
+                Poe2ItemInfoVisibility = Visibility.Visible;
+                break;
+        }
     }
 
     partial void OnSelectedServerChanged(string? value)
     {
         var domain = value == "台服" ? "https://pathofexile.tw/" : "https://www.pathofexile.com/";
         _poeApiService.SwitchDomain(domain);
+        LoadLeagues().ConfigureAwait(false);
+    }
+
+    partial void OnSelectedGameChanged(string? value)
+    {
+        _poeApiService.SwitchGame(value ?? "POE1");
         LoadLeagues().ConfigureAwait(false);
     }
 
@@ -397,10 +459,7 @@ public partial class MainWindowViewModel : ObservableObject
         {
             MatchedItemVisibility = Visibility.Hidden;
             CanQuery = false;
-            if (ParsedItemVM == null || _parsedItem == null)
-            {
-                return;
-            }
+            Debug.Assert(SelectedGame != null);
 
             if (SelectedLeague == null)
             {
@@ -422,21 +481,42 @@ public partial class MainWindowViewModel : ObservableObject
                 2 => "online",
                 _ => "any"
             };
-            var searchRequest = _mapper.Map<SearchRequest>(ParsedItemVM, opt =>
+            SearchRequestBase searchRequest;
+            if (SelectedGame == "POE1")
             {
-                opt.AfterMap((_, dest) =>
+                searchRequest = _mapper.Map<Poe1SearchRequest>(ParsedPoe1ItemVM, opt =>
                 {
-                    dest.ServerOption = SelectedServer == "台服"
-                        ? ServerOption.TAIWAN_SERVER
-                        : ServerOption.INTERNATIONAL_SERVER;
-                    dest.TradeType = tradeType;
-                    dest.CorruptedState = SelectedCorruptedState;
-                    dest.CollapseByAccount = SelectedCollapseState;
-                    dest.Item = _parsedItem;
+                    opt.AfterMap((_, dest) =>
+                    {
+                        dest.ServerOption = SelectedServer == "台服"
+                            ? ServerOption.TAIWAN_SERVER
+                            : ServerOption.INTERNATIONAL_SERVER;
+                        dest.TradeType = tradeType;
+                        dest.CorruptedState = SelectedCorruptedState;
+                        dest.CollapseByAccount = SelectedCollapseState;
+                        dest.Item = _parsedItem;
+                    });
                 });
-            });
+            }
+            else
+            {
+                searchRequest = _mapper.Map<Poe2SearchRequest>(ParsedPoe2ItemVM, opt =>
+                {
+                    opt.AfterMap((_, dest) =>
+                    {
+                        dest.ServerOption = SelectedServer == "台服"
+                            ? ServerOption.TAIWAN_SERVER
+                            : ServerOption.INTERNATIONAL_SERVER;
+                        dest.TradeType = tradeType;
+                        dest.CorruptedState = SelectedCorruptedState;
+                        dest.CollapseByAccount = SelectedCollapseState;
+                        dest.Item = _parsedItem;
+                    });
+                });
+            }
+
             var builder = App.ServiceProvider.GetRequiredService<RequestBodyBuilder>();
-            var searchBody = await builder.BuildSearchBodyAsync(searchRequest);
+            var searchBody = await builder.BuildSearchBodyAsync(searchRequest, SelectedGame!);
             if (searchBody == null)
             {
                 Growl.Warning(new GrowlInfo
@@ -447,6 +527,7 @@ public partial class MainWindowViewModel : ObservableObject
                 });
                 return;
             }
+
             try
             {
                 MatchedItem = await AnalysisPriceAsync(searchBody, SelectedLeague!);
@@ -523,6 +604,33 @@ public partial class MainWindowViewModel : ObservableObject
         public string? CurrencyImageUrl { get; set; }
 
         public int Count { get; set; }
+    }
+
+    public class Poe2ItemVM
+    {
+        public string? ItemName { get; set; }
+
+        public int? ItemLevelMin { get; set; }
+
+        public int? ItemLevelMax { get; set; }
+
+        public bool FilterItemLevel { get; set; } = true;
+
+        public bool FilterRarity { get; set; } = true;
+
+        public bool FilterItemBase { get; set; }
+
+        public string? Rarity { get; set; }
+
+        public string? ItemBaseName { get; set; }
+
+        public bool FilterRunSockets { get; set; }
+
+        public int? RunSocketsMin { get; set; }
+
+        public int? RunSocketsMax { get; set; }
+
+        public List<ItemStatVM> StatVMs { get; set; } = [];
     }
 
     public class ItemVM

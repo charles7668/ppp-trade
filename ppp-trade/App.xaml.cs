@@ -26,6 +26,7 @@ public partial class App
         services.AddTransient<RequestBodyBuilder>();
         services.AddScoped<IParser, EngParser>();
         services.AddScoped<IParser, ChineseTradParser>();
+        services.AddScoped<IParser, Poe2TWParser>();
         services.AddSingleton<ParserFactory>();
         services.AddAutoMapper(_ => { }, typeof(MappingProfile));
         services.AddLogging();

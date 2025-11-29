@@ -2,7 +2,6 @@ using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
-using System.Web;
 using ppp_trade.Models;
 
 namespace ppp_trade.Services;
@@ -10,6 +9,7 @@ namespace ppp_trade.Services;
 public class PoeApiService
 {
     private string _domain = "http://localhost";
+    private string _game = "POE1";
 
     public async Task<JsonObject> FetchItems(IEnumerable<string> ids, string queryId)
     {
@@ -19,6 +19,11 @@ public class PoeApiService
         client.DefaultRequestHeaders.Add("Accept", "*/*");
         var normalizeDomain = _domain.TrimEnd('/') + "/";
         var requestUrl = $"{normalizeDomain}api/trade/fetch/{idStrings}?query={queryId}";
+        if (_game == "POE2")
+        {
+            requestUrl = $"{normalizeDomain}api/trade2/fetch/{idStrings}?query={queryId}";
+        }
+
         var response = await client.GetAsync(requestUrl);
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync();
@@ -33,7 +38,13 @@ public class PoeApiService
         using var client = new HttpClient();
         client.DefaultRequestHeaders.Add("User-Agent", "ppp-trade/1.0");
         var normalizeDomain = _domain.TrimEnd('/') + "/";
-        var response = await client.GetAsync($"{normalizeDomain}api/trade/data/leagues");
+        var requestUrl = $"{normalizeDomain}api/trade/data/leagues";
+        if (_game == "POE2")
+        {
+            requestUrl = $"{normalizeDomain}api/trade2/data/leagues";
+        }
+
+        var response = await client.GetAsync(requestUrl);
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync();
 
@@ -56,7 +67,13 @@ public class PoeApiService
     public string GetSearchWebsiteUrl(string queryId, string league)
     {
         var normalizeDomain = _domain.TrimEnd('/') + "/";
-        return $"{normalizeDomain}trade/search/{league}/{queryId}";
+        var url = $"{normalizeDomain}trade/search/{league}/{queryId}";
+        if (_game == "POE2")
+        {
+            url = $"{normalizeDomain}trade2/search/poe2/{league}/{queryId}";
+        }
+
+        return url;
     }
 
     public async Task<JsonObject> GetTradeSearchResultAsync(string league, string query)
@@ -67,7 +84,13 @@ public class PoeApiService
         var normalizeDomain = _domain.TrimEnd('/') + "/";
         var reqContent = new StringContent(query, Encoding.UTF8, "application/json");
         league = Uri.EscapeDataString(league);
-        var request = new HttpRequestMessage(HttpMethod.Post, $"{normalizeDomain}api/trade/search/{league}")
+        var requestUrl = $"{normalizeDomain}api/trade/search/{league}";
+        if (_game == "POE2")
+        {
+            requestUrl = $"{normalizeDomain}api/trade2/search/poe2/{league}";
+        }
+
+        var request = new HttpRequestMessage(HttpMethod.Post, requestUrl)
         {
             Content = reqContent
         };
@@ -78,6 +101,11 @@ public class PoeApiService
         var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
         return JsonSerializer.Deserialize<JsonObject>(content, options) ??
                throw new InvalidOperationException("Empty response");
+    }
+
+    public void SwitchGame(string game)
+    {
+        _game = game;
     }
 
     public void SwitchDomain(string domain)
