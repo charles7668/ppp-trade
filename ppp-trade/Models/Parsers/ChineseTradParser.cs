@@ -501,6 +501,8 @@ public class ChineseTradParser(CacheService cacheService) : IParser
             }
         }
 
+        result = result.DistinctBy(x => x.Stat.Id).ToList();
+
         List<ItemStat> pseudoStats = ResolvePseudoStats(result, stats.First(s => s.Id == "pseudo"));
 
         result.InsertRange(0, pseudoStats);
@@ -511,39 +513,41 @@ public class ChineseTradParser(CacheService cacheService) : IParser
         {
             foreach (var entry in group.Entries)
             {
-                // todo Add (local) stat match
-                var regex = @"\(.*?\)";
-                var realItemStat = Regex.Replace(stat, regex, "").Trim();
-                regex = entry.Text.Replace("(", "\\(");
-                regex = regex.Replace(")", "\\)");
-                regex = regex.Replace("+#", "([+-]\\d+)");
-                regex = regex.Replace("#", "(\\d+)");
-                regex = $"^{regex}$";
-                try
+                foreach (var splitEntry in entry.Text.Split('\n'))
                 {
-                    var match = Regex.Match(realItemStat, regex);
-                    if (!match.Success)
+                    var regex = @"\(.*?\)";
+                    var realItemStat = Regex.Replace(stat, regex, "").Trim();
+                    regex = splitEntry.Replace("(", "\\(");
+                    regex = regex.Replace(")", "\\)");
+                    regex = regex.Replace("+#", "([+-]\\d+)");
+                    regex = regex.Replace("#", "(\\d+)");
+                    regex = $"^{regex}$";
+                    try
                     {
-                        // try match local version
-                        match = Regex.Match(realItemStat + $" {LOCAL_KEYWORD}", regex);
+                        var match = Regex.Match(realItemStat, regex);
                         if (!match.Success)
                         {
-                            continue;
+                            // try match local version
+                            match = Regex.Match(realItemStat + $" {LOCAL_KEYWORD}", regex);
+                            if (!match.Success)
+                            {
+                                continue;
+                            }
                         }
+
+                        int? value = match.Groups.Count switch
+                        {
+                            3 => int.Parse(match.Groups[2].Value) + int.Parse(match.Groups[1].Value),
+                            > 1 => int.Parse(match.Groups[1].Value),
+                            _ => null
+                        };
+
+                        return (entry, value);
                     }
-
-                    int? value = match.Groups.Count switch
+                    catch (Exception e)
                     {
-                        3 => int.Parse(match.Groups[2].Value) + int.Parse(match.Groups[1].Value),
-                        > 1 => int.Parse(match.Groups[1].Value),
-                        _ => null
-                    };
-
-                    return (entry, value);
-                }
-                catch (Exception e)
-                {
-                    Debug.WriteLine(e.Message);
+                        Debug.WriteLine(e.Message);
+                    }
                 }
             }
 
