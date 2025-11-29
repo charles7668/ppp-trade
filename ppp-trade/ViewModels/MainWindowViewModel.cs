@@ -318,7 +318,7 @@ public partial class MainWindowViewModel : ObservableObject
         }
     }
 
-    private ItemVM MapPOE1ItemToView(Poe1Item item)
+    private ItemVM MapPoe1ItemToView(Poe1Item item)
     {
         return _mapper.Map<ItemVM>(item, opt =>
         {
@@ -362,7 +362,7 @@ public partial class MainWindowViewModel : ObservableObject
             return;
         }
 
-        ParsedItemVM = MapPOE1ItemToView((Poe1Item)_parsedItem);
+        ParsedItemVM = MapPoe1ItemToView((Poe1Item)_parsedItem);
         ItemInfoVisibility = Visibility.Visible;
     }
 
