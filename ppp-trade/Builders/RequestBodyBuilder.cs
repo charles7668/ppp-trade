@@ -213,18 +213,12 @@ public class RequestBodyBuilder(CacheService cacheService)
         }
 
         List<object> statsParam = GetStatsQueryParam(searchRequest).ToList();
-        string? corruptedFilter = null;
+        object? corruptedFilter = null;
         object? foulBornFilter = null;
         switch (forGame)
         {
             case "POE1":
                 var poe1Request = (Poe1SearchRequest)searchRequest;
-                corruptedFilter = poe1Request.CorruptedState switch
-                {
-                    CorruptedState.ANY => null,
-                    CorruptedState.YES => "yes",
-                    _ => "no"
-                };
                 foulBornFilter = poe1Request.FoulBorn == YesNoAnyOption.ANY
                     ? null
                     : new { option = poe1Request.FoulBorn == YesNoAnyOption.YES ? "true" : "false" };
@@ -266,7 +260,14 @@ public class RequestBodyBuilder(CacheService cacheService)
                     disabled = false,
                     filters = new
                     {
-                        corrupted = corruptedFilter,
+                        corrupted = searchRequest.CorruptedState switch
+                        {
+                            CorruptedState.ANY => null,
+                            _ => new
+                            {
+                                option = searchRequest.CorruptedState == CorruptedState.YES ? "yes" : "no"
+                            }
+                        },
                         foulborn_item = foulBornFilter
                     }
                 },
