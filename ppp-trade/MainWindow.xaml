@@ -83,9 +83,9 @@
                                         物品等級
                                     </CheckBox>
                                     <TextBox Margin="2" Width="50"
-                                             Text="{Binding ParsedItemVM.ItemLevelMin,FallbackValue=''}" />
+                                             Text="{Binding ParsedItemVM.ItemLevelMin,UpdateSourceTrigger=PropertyChanged}" />
                                     <TextBox Margin="2" Width="50"
-                                             Text="{Binding ParsedItemVM.ItemLevelMax, FallbackValue=''}" />
+                                             Text="{Binding ParsedItemVM.ItemLevelMax,UpdateSourceTrigger=PropertyChanged}" />
                                 </hc:SimpleStackPanel>
                                 <hc:SimpleStackPanel Orientation="Horizontal" Width="200">
                                     <CheckBox IsChecked="{Binding ParsedItemVM.FilterRarity,Mode=TwoWay}">稀有度</CheckBox>
@@ -95,8 +95,10 @@
                                 </hc:SimpleStackPanel>
                                 <hc:SimpleStackPanel Orientation="Horizontal" Width="200">
                                     <CheckBox IsChecked="{Binding ParsedItemVM.FilterLink,Mode=TwoWay}">連線數量</CheckBox>
-                                    <TextBox Margin="2" Width="50" Text="{Binding ParsedItemVM.LinkCountMin}" />
-                                    <TextBox Margin="2" Width="50" Text="{Binding ParsedItemVM.LinkCountMax}" />
+                                    <TextBox Margin="2" Width="50"
+                                             Text="{Binding ParsedItemVM.LinkCountMin,UpdateSourceTrigger=PropertyChanged}" />
+                                    <TextBox Margin="2" Width="50"
+                                             Text="{Binding ParsedItemVM.LinkCountMax,UpdateSourceTrigger=PropertyChanged}" />
                                 </hc:SimpleStackPanel>
                                 <hc:SimpleStackPanel Orientation="Horizontal" Width="200">
                                     <CheckBox IsChecked="{Binding ParsedItemVM.FilterItemBase , Mode= TwoWay}">物品分類</CheckBox>
@@ -200,14 +202,18 @@
                                 <DataGridTemplateColumn Header="最小值" Width="80">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
-                                            <TextBox Text="{Binding MinValue, Mode=TwoWay}" Margin="2" />
+                                            <TextBox
+                                                Text="{Binding MinValue, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"
+                                                Margin="2" />
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
                                 <DataGridTemplateColumn Header="最大值" Width="80">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
-                                            <TextBox Text="{Binding MaxValue,Mode=TwoWay}" Margin="2" />
+                                            <TextBox
+                                                Text="{Binding MaxValue,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                                Margin="2" />
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
