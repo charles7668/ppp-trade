@@ -91,6 +91,7 @@ public partial class MainWindowViewModel : ObservableObject
         _iconService = App.ServiceProvider.GetRequiredService<IconService>();
         _mapper = App.ServiceProvider.GetRequiredService<IMapper>();
         _selectedServer = _serverList[1];
+        _selectedGame = _gameList[0];
         _selectableRarity =
         [
             _gameStringService.Get(GameString.NORMAL)!,
@@ -163,10 +164,16 @@ public partial class MainWindowViewModel : ObservableObject
     private string? _selectedServer;
 
     [ObservableProperty]
+    private string? _selectedGame;
+
+    [ObservableProperty]
     private string? _selectedTradeType;
 
     [ObservableProperty]
     private IList<string> _serverList = ["台服", "國際服"];
+
+    [ObservableProperty]
+    private IList<string> _gameList = ["POE1", "POE2"];
 
     [ObservableProperty]
     private IList<string> _tradeTypeList = ["即刻購買以及面交", "僅限即刻購買", "僅限面交", "任何"];

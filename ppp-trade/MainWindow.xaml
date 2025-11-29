@@ -42,6 +42,9 @@
                     <StackPanel Orientation="Vertical">
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center">
                             <hc:ComboBox Width="120" Margin="5"
+                                         ItemsSource="{Binding GameList}"
+                                         SelectedItem="{Binding SelectedGame}" />
+                            <hc:ComboBox Width="120" Margin="5"
                                          ItemsSource="{Binding ServerList}"
                                          SelectedItem="{Binding SelectedServer}" />
                             <hc:ComboBox Width="120" Margin="5"
