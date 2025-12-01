@@ -100,7 +100,10 @@ internal class EnParser(CacheService cacheService) : ChineseTradParser(cacheServ
     protected override Dictionary<string, Func<Stat, string, (bool, int?)>> SpecialCaseStat { get; } = new()
     {
         {
-            "stat_700317374", TryResolveFlaskAmountRecovered
+            "stat_700317374", TryResolveIncreasedAndDecreased
+        },
+        {
+            "stat_3338298622", TryResolveIncreasedAndDecreased
         }
     };
 
@@ -170,7 +173,7 @@ internal class EnParser(CacheService cacheService) : ChineseTradParser(cacheServ
         return false;
     }
 
-    private static (bool, int?) TryResolveFlaskAmountRecovered(Stat stat, string statText)
+    private static (bool, int?) TryResolveIncreasedAndDecreased(Stat stat, string statText)
     {
         // try match normal case
         var regex = stat.Text.Replace("#", "(\\d+)");

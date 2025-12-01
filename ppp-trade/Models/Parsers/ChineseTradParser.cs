@@ -103,7 +103,10 @@ public class ChineseTradParser(CacheService cacheService) : IParser
     protected virtual Dictionary<string, Func<Stat, string, (bool, int?)>> SpecialCaseStat { get; } = new()
     {
         {
-            "stat_700317374", TryResolveFlaskAmountRecovered
+            "stat_700317374", TryResolveIncreasedAndDecreased
+        },
+        {
+            "stat_3338298622", TryResolveIncreasedAndDecreased
         }
     };
 
@@ -647,7 +650,7 @@ public class ChineseTradParser(CacheService cacheService) : IParser
         return true;
     }
 
-    private static (bool, int?) TryResolveFlaskAmountRecovered(Stat stat, string statText)
+    private static (bool, int?) TryResolveIncreasedAndDecreased(Stat stat, string statText)
     {
         // try match normal case
         var regex = stat.Text.Replace("#", "(\\d+)");
