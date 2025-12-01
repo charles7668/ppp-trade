@@ -369,8 +369,14 @@ public partial class MainWindowViewModel : ObservableObject
     {
         return _mapper.Map<ItemVM>(item, opt =>
         {
-            opt.AfterMap((_, dest) =>
+            opt.AfterMap((src, dest) =>
             {
+                var itemObj = (Poe1Item)src;
+                if (itemObj.ItemType == ItemType.FLASK)
+                {
+                    dest.ItemName = itemObj.ItemName;
+                }
+
                 dest.Rarity = item.Rarity switch
                 {
                     Rarity.MAGIC => _gameStringService.Get(GameString.MAGIC)!,

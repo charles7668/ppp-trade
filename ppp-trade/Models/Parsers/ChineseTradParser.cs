@@ -33,7 +33,7 @@ public class ChineseTradParser(CacheService cacheService) : IParser
 
     protected virtual string LocalKeyword => "(部分)";
 
-    protected virtual string[] FlaskSplitKeywords => ["之", "的"];
+    private static string[] FlaskSplitKeywords => ["之", "的"];
 
     protected virtual string ReqLevelKeyword => "等級: ";
 
@@ -85,7 +85,8 @@ public class ChineseTradParser(CacheService cacheService) : IParser
         { "護身符", ItemType.TALISMAN },
 
         { "功能藥劑", ItemType.FLASK },
-        { "生命藥劑", ItemType.FLASK }
+        { "生命藥劑", ItemType.FLASK },
+        { "魔力藥劑", ItemType.FLASK }
     };
 
     protected virtual Dictionary<string, Rarity> RarityMap => new()
@@ -139,8 +140,7 @@ public class ChineseTradParser(CacheService cacheService) : IParser
                         parsedItem.IsFoulBorn = true;
                     }
 
-                    if (parsedItem.ItemType == ItemType.FLASK &&
-                        (parsedItem.Rarity != Rarity.NORMAL || parsedItem.Rarity != Rarity.UNIQUE))
+                    if (parsedItem is { ItemType: ItemType.FLASK, Rarity: not (Rarity.NORMAL or Rarity.UNIQUE) })
                     {
                         foreach (var flaskSplitKeyword in FlaskSplitKeywords)
                         {
@@ -151,7 +151,7 @@ public class ChineseTradParser(CacheService cacheService) : IParser
                                 continue;
                             }
 
-                            parsedItem.ItemName = split[0] + flaskSplitKeyword;
+                            parsedItem.ItemName = replace;
                             parsedItem.ItemBaseName = split[1];
                             break;
                         }

@@ -31,8 +31,6 @@ internal class EnParser(CacheService cacheService) : ChineseTradParser(cacheServ
 
     protected override string LocalKeyword => "(local)";
 
-    protected override string[] FlaskSplitKeywords => ["of"];
-
     protected override string ReqLevelKeyword => "Level: ";
 
     protected override string ReqIntKeyword => "Int: ";
@@ -84,7 +82,8 @@ internal class EnParser(CacheService cacheService) : ChineseTradParser(cacheServ
         { "Abyss Jewels", ItemType.ABYSS_JEWEL },
 
         { "Utility Flasks", ItemType.FLASK },
-        { "Life Flasks", ItemType.FLASK }
+        { "Life Flasks", ItemType.FLASK },
+        { "Mana Flasks", ItemType.FLASK },
     };
 
     protected override Dictionary<string, Rarity> RarityMap => new()
@@ -154,21 +153,30 @@ internal class EnParser(CacheService cacheService) : ChineseTradParser(cacheServ
                         parsedItem.IsFoulBorn = true;
                     }
 
-                    if (parsedItem.ItemType == ItemType.FLASK &&
-                        (parsedItem.Rarity != Rarity.NORMAL || parsedItem.Rarity != Rarity.UNIQUE))
+                    if (parsedItem is { ItemType: ItemType.FLASK, Rarity: not (Rarity.NORMAL or Rarity.UNIQUE) })
                     {
-                        foreach (var flaskSplitKeyword in FlaskSplitKeywords)
+                        var removeFoulBorn = line.Replace(FoulBornKeyword, "");
+                        if (removeFoulBorn.Contains(" of "))
                         {
-                            var replace = line.Replace(FoulBornKeyword, "");
-                            var split = replace.Split(flaskSplitKeyword);
-                            if (split.Length != 2)
+                            parsedItem.ItemName = removeFoulBorn;
+                            var splitWords = line.Split(' ');
+                            var tempBaseName = "";
+                            for (int x = 1; x < splitWords.Length; x++)
                             {
-                                continue;
+                                if (splitWords[x] == "of")
+                                {
+                                    break;
+                                }
+
+                                tempBaseName += splitWords[x] + " ";
                             }
 
-                            parsedItem.ItemName = split[0] + flaskSplitKeyword;
-                            parsedItem.ItemBaseName = split[1];
-                            break;
+                            parsedItem.ItemBaseName = tempBaseName.Trim();
+                        }
+                        else
+                        {
+                            parsedItem.ItemName = removeFoulBorn;
+                            parsedItem.ItemBaseName = removeFoulBorn;
                         }
 
                         parsingState = ParsingState.PARSING_UNKNOW;
