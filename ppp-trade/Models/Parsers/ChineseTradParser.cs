@@ -110,8 +110,7 @@ public class ChineseTradParser(CacheService cacheService) : IParser
                     parsingState = ParsingState.PARSING_UNKNOW;
                     break;
                 case ParsingState.PARSING_ITEM_LEVEL:
-                    parsedItem.ItemLevel = int.Parse(line.Substring(ITEM_LEVEL_KEYWORD.Length,
-                        line.Length - ITEM_LEVEL_KEYWORD.Length));
+                    parsedItem.ItemLevel = int.Parse(line.Substring(ITEM_LEVEL_KEYWORD.Length));
                     parsingState = ParsingState.PARSING_STAT;
                     break;
                 case ParsingState.PARSING_STAT:
@@ -235,8 +234,7 @@ public class ChineseTradParser(CacheService cacheService) : IParser
                 key = reqDexKeyword;
             }
 
-            var value = int.Parse(reqText.Substring(reqLevelKeyword.Length,
-                reqText.Length - reqLevelKeyword.Length));
+            var value = int.Parse(reqText.Substring(reqLevelKeyword.Length));
             results.Add(new ItemRequirement
             {
                 ItemRequirementType = typeMap[key],
@@ -249,7 +247,7 @@ public class ChineseTradParser(CacheService cacheService) : IParser
 
     private static ItemType ResolveItemType(string lineText)
     {
-        var substr = lineText.Substring(ITEM_TYPE_KEYWORD.Length, lineText.Length - ITEM_TYPE_KEYWORD.Length).Trim();
+        var substr = lineText.Substring(ITEM_TYPE_KEYWORD.Length).Trim();
         var typeMap = new Dictionary<string, ItemType>
         {
             { "爪", ItemType.CLAW },
@@ -299,8 +297,7 @@ public class ChineseTradParser(CacheService cacheService) : IParser
 
     private static int ResolveLinkCount(string line)
     {
-        var socketInfoText = line.Substring(ITEM_SOCKET_KEYWORD.Length,
-            line.Length - ITEM_SOCKET_KEYWORD.Length);
+        var socketInfoText = line.Substring(ITEM_SOCKET_KEYWORD.Length);
         socketInfoText = Regex.Replace(socketInfoText, "[A-Z]", "");
         var split = socketInfoText.Split(' ');
         return split.Select(linkText => linkText.Length).Prepend(0).Max() + 1;
@@ -369,7 +366,7 @@ public class ChineseTradParser(CacheService cacheService) : IParser
 
     private static Rarity ResolveRarity(string lineText)
     {
-        var rarityStr = lineText.Substring(RARITY_KEYWORD.Length, lineText.Length - RARITY_KEYWORD.Length).Trim();
+        var rarityStr = lineText.Substring(RARITY_KEYWORD.Length).Trim();
         var result = rarityStr switch
         {
             "普通" => Rarity.NORMAL,
