@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using ppp_trade.Enums;
 using ppp_trade.Services;
 
@@ -96,6 +97,13 @@ internal class EnParser(CacheService cacheService) : ChineseTradParser(cacheServ
         { "Divination Cards", Rarity.DIVINATION_CARD }
     };
 
+    protected override Dictionary<string, Func<Stat, string, (bool, int?)>> SpecialCaseStat { get; } = new()
+    {
+        {
+            "stat_700317374", TryResolveFlaskAmountRecovered
+        }
+    };
+
     protected override List<StatGroup> GetStatGroups()
     {
         if (!_cacheService.TryGet(StatEnCacheKey, out List<StatGroup>? statEn))
@@ -160,5 +168,25 @@ internal class EnParser(CacheService cacheService) : ChineseTradParser(cacheServ
         }
 
         return false;
+    }
+
+    private static (bool, int?) TryResolveFlaskAmountRecovered(Stat stat, string statText)
+    {
+        // try match normal case
+        var regex = stat.Text.Replace("#", "(\\d+)");
+        var match = Regex.Match(statText, regex);
+        if (match.Success)
+        {
+            return (true, int.Parse(match.Groups[1].Value));
+        }
+
+        regex = stat.Text.Replace("increased", "reduced").Replace("#", "(\\d+)");
+        match = Regex.Match(statText, regex);
+        if (match.Success)
+        {
+            return (true, int.Parse(match.Groups[1].Value) * -1);
+        }
+
+        return (false, null);
     }
 }

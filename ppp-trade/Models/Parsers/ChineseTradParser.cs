@@ -100,6 +100,13 @@ public class ChineseTradParser(CacheService cacheService) : IParser
         { "命運卡", Rarity.DIVINATION_CARD }
     };
 
+    protected virtual Dictionary<string, Func<Stat, string, (bool, int?)>> SpecialCaseStat { get; } = new()
+    {
+        {
+            "stat_700317374", TryResolveFlaskAmountRecovered
+        }
+    };
+
     public virtual bool IsMatch(string text, string game)
     {
         return game == "POE1" && text.Contains(RarityKeyword);
@@ -395,7 +402,6 @@ public class ChineseTradParser(CacheService cacheService) : IParser
     protected List<ItemStat> ResolveStats(IEnumerable<string> statTexts, List<StatGroup> stats)
     {
         List<ItemStat> result = [];
-
         foreach (var statText in statTexts)
         {
             if (statText.Trim().EndsWith(ImplicitKeyword))
@@ -462,6 +468,18 @@ public class ChineseTradParser(CacheService cacheService) : IParser
             {
                 foreach (var entry in group.Entries)
                 {
+                    var statId = entry.Id.Split('.')[1];
+                    if (SpecialCaseStat.TryGetValue(statId, out var specialFunc))
+                    {
+                        var (matched, value) = specialFunc(entry, stat);
+                        if (!matched)
+                        {
+                            continue;
+                        }
+
+                        return (entry, value);
+                    }
+
                     foreach (var splitEntry in entry.Text.Split('\n'))
                     {
                         string regex;
@@ -627,6 +645,26 @@ public class ChineseTradParser(CacheService cacheService) : IParser
         }
 
         return true;
+    }
+
+    private static (bool, int?) TryResolveFlaskAmountRecovered(Stat stat, string statText)
+    {
+        // try match normal case
+        var regex = stat.Text.Replace("#", "(\\d+)");
+        var match = Regex.Match(statText, regex);
+        if (match.Success)
+        {
+            return (true, int.Parse(match.Groups[1].Value));
+        }
+
+        regex = stat.Text.Replace("增加", "減少").Replace("#", "(\\d+)");
+        match = Regex.Match(statText, regex);
+        if (match.Success)
+        {
+            return (true, int.Parse(match.Groups[1].Value) * -1);
+        }
+
+        return (false, null);
     }
 
     private enum ParsingState
