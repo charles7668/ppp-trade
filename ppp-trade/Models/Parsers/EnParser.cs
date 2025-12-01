@@ -106,6 +106,9 @@ internal class EnParser(CacheService cacheService) : ChineseTradParser(cacheServ
         },
         {
             "stat_3338298622", TryResolveIncreasedAndDecreased
+        },
+        {
+            "stat_4016885052", TryResolveAdditionalProjectile
         }
     };
 
@@ -190,6 +193,18 @@ internal class EnParser(CacheService cacheService) : ChineseTradParser(cacheServ
         if (match.Success)
         {
             return (true, int.Parse(match.Groups[1].Value) * -1);
+        }
+
+        return (false, null);
+    }
+
+    private static (bool, int?) TryResolveAdditionalProjectile(Stat stat, string statText)
+    {
+        var regex = stat.Text.Replace(" an ", " (\\d+) ");
+        var match = Regex.Match(statText, regex);
+        if (match.Success)
+        {
+            return (true, int.Parse(match.Groups[1].Value));
         }
 
         return (false, null);
