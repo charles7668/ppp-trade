@@ -377,6 +377,7 @@ public partial class MainWindowViewModel : ObservableObject
                     case ItemType.CORPSE:
                     case ItemType.FLASK:
                         dest.ItemName = itemObj.ItemName;
+                        dest.FilterItemBase = true;
                         break;
                 }
 
