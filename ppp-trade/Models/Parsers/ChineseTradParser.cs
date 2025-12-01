@@ -17,6 +17,7 @@ public class ChineseTradParser(CacheService cacheService) : IParser
     private const string SPLIT_KEYWORD = "--------";
     private const string IMPLICIT_KEYWORD = "(implicit)";
     private const string CRAFTED_KEYWORD = "(crafted)";
+    private const string AUGMENTED_KEYWORD = "(augmented)";
     private const string STAT_TW_CACHE_KEY = "parser:stat_zh_tw";
     private const string FOUL_BORN_KEYWORD = "穢生 ";
     private const string LOCAL_KEYWORD = "(部分)";
@@ -234,7 +235,7 @@ public class ChineseTradParser(CacheService cacheService) : IParser
                 key = reqDexKeyword;
             }
 
-            var value = int.Parse(reqText.Substring(reqLevelKeyword.Length));
+            var value = int.Parse(reqText.Replace(AUGMENTED_KEYWORD, "").Substring(reqLevelKeyword.Length).Trim());
             results.Add(new ItemRequirement
             {
                 ItemRequirementType = typeMap[key],
