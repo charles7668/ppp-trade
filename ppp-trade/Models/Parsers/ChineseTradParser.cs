@@ -555,8 +555,8 @@ public class ChineseTradParser(CacheService cacheService) : IParser
 
                         regex = splitEntry.Replace("(", "\\(");
                         regex = regex.Replace(")", "\\)");
-                        regex = regex.Replace("+#", "([+-]\\d+)");
-                        regex = regex.Replace("#", "(\\d+)");
+                        regex = regex.Replace("+#", "([+-][\\d.]+)");
+                        regex = regex.Replace("#", "([\\d.]+)");
                         regex = $"^{regex}$";
                         try
                         {
@@ -571,8 +571,8 @@ public class ChineseTradParser(CacheService cacheService) : IParser
 
                             int? value = match.Groups.Count switch
                             {
-                                3 => (int.Parse(match.Groups[2].Value) + int.Parse(match.Groups[1].Value)) / 2,
-                                > 1 => int.Parse(match.Groups[1].Value),
+                                3 => (int)((double.Parse(match.Groups[2].Value, System.Globalization.CultureInfo.InvariantCulture) + double.Parse(match.Groups[1].Value, System.Globalization.CultureInfo.InvariantCulture)) / 2),
+                                > 1 => (int)double.Parse(match.Groups[1].Value, System.Globalization.CultureInfo.InvariantCulture),
                                 _ => null
                             };
 
