@@ -88,7 +88,8 @@ public class RequestBodyBuilder(CacheService cacheService)
             cacheService.Set(fullNameMapCacheKey, fullMap);
         }
 
-        var target = fullMap?[uniqueName + ";" + uniqueBase];
+        string? target = null;
+        fullMap?.TryGetValue(uniqueName + ";" + uniqueBase, out target);
         if (target == null)
         {
             return (uniqueName, uniqueBase);
