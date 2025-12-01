@@ -24,7 +24,7 @@ public partial class App
         services.AddSingleton<RateLimitParser>();
         services.AddSingleton<IconService>();
         services.AddTransient<RequestBodyBuilder>();
-        services.AddScoped<IParser, EngParser>();
+        services.AddScoped<IParser, EnParser>();
         services.AddScoped<IParser, ChineseTradParser>();
         services.AddScoped<IParser, Poe2TWParser>();
         services.AddSingleton<ParserFactory>();

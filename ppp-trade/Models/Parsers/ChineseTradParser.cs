@@ -10,21 +10,37 @@ namespace ppp_trade.Models.Parsers;
 public class ChineseTradParser(CacheService cacheService) : IParser
 {
     protected virtual string RarityKeyword => "稀有度: ";
+
     protected virtual string ItemTypeKeyword => "物品種類: ";
+
     protected virtual string ItemRequirementKeyword => "需求:";
+
     protected virtual string ItemSocketKeyword => "插槽: ";
+
     protected virtual string ItemLevelKeyword => "物品等級: ";
+
     protected virtual string SplitKeyword => "--------";
+
     protected virtual string ImplicitKeyword => "(implicit)";
+
     protected virtual string CraftedKeyword => "(crafted)";
+
     protected virtual string AugmentedKeyword => "(augmented)";
-    protected virtual string StatTwCacheKey => "parser:stat_zh_tw";
+
+    private static string StatTwCacheKey => "parser:stat_zh_tw";
+
     protected virtual string FoulBornKeyword => "穢生 ";
+
     protected virtual string LocalKeyword => "(部分)";
+
     protected virtual string[] FlaskSplitKeywords => ["之", "的"];
+
     protected virtual string ReqLevelKeyword => "等級: ";
+
     protected virtual string ReqIntKeyword => "智慧: ";
+
     protected virtual string ReqStrKeyword => "力量: ";
+
     protected virtual string ReqDexKeyword => "敏捷: ";
 
     protected virtual Dictionary<string, ItemType> ItemTypeMap => new()
@@ -43,6 +59,7 @@ public class ChineseTradParser(CacheService cacheService) : IParser
         { "雙手劍", ItemType.TWO_HAND_SWORD },
         { "雙手斧", ItemType.TWO_HAND_AXE },
         { "雙手錘", ItemType.TWO_HAND_MACE },
+        { "征戰長杖", ItemType.WAR_STAFF },
         { "魚竿", ItemType.FISHING_ROD },
 
         { "箭袋", ItemType.QUIVER },
@@ -81,12 +98,12 @@ public class ChineseTradParser(CacheService cacheService) : IParser
         { "命運卡", Rarity.DIVINATION_CARD }
     };
 
-    public bool IsMatch(string text, string game)
+    public virtual bool IsMatch(string text, string game)
     {
         return game == "POE1" && text.Contains(RarityKeyword);
     }
 
-    public ItemBase? Parse(string text)
+    public virtual ItemBase? Parse(string text)
     {
         #region Get stat data
 
@@ -259,7 +276,7 @@ public class ChineseTradParser(CacheService cacheService) : IParser
         return JsonSerializer.Deserialize<List<StatGroup>>(json, options) ?? [];
     }
 
-    private IEnumerable<ItemRequirement> ResolveItemRequirements(IEnumerable<string> reqTexts)
+    protected IEnumerable<ItemRequirement> ResolveItemRequirements(IEnumerable<string> reqTexts)
     {
         Dictionary<string, ItemRequirementType> typeMap = new()
         {
@@ -300,13 +317,13 @@ public class ChineseTradParser(CacheService cacheService) : IParser
         return results;
     }
 
-    private ItemType ResolveItemType(string lineText)
+    protected ItemType ResolveItemType(string lineText)
     {
         var substr = lineText.Substring(ItemTypeKeyword.Length).Trim();
         return ItemTypeMap.GetValueOrDefault(substr, ItemType.OTHER);
     }
 
-    private int ResolveLinkCount(string line)
+    protected int ResolveLinkCount(string line)
     {
         var socketInfoText = line.Substring(ItemSocketKeyword.Length);
         socketInfoText = Regex.Replace(socketInfoText, "[A-Z]", "");
@@ -375,13 +392,13 @@ public class ChineseTradParser(CacheService cacheService) : IParser
         }).ToList();
     }
 
-    private Rarity ResolveRarity(string lineText)
+    protected Rarity ResolveRarity(string lineText)
     {
         var rarityStr = lineText.Substring(RarityKeyword.Length).Trim();
         return RarityMap.GetValueOrDefault(rarityStr, Rarity.NORMAL);
     }
 
-    private static IEnumerable<ItemStat> TryMapLocalAndGlobal(ItemType itemType, IEnumerable<ItemStat> stats,
+    protected static IEnumerable<ItemStat> TryMapLocalAndGlobal(ItemType itemType, IEnumerable<ItemStat> stats,
         List<StatGroup> statGroups)
     {
         var genre = GetGenre(itemType);
@@ -473,7 +490,7 @@ public class ChineseTradParser(CacheService cacheService) : IParser
         }
     }
 
-    private List<ItemStat> ResolveStats(IEnumerable<string> statTexts, List<StatGroup> stats)
+    protected List<ItemStat> ResolveStats(IEnumerable<string> statTexts, List<StatGroup> stats)
     {
         List<ItemStat> result = [];
 
@@ -571,8 +588,12 @@ public class ChineseTradParser(CacheService cacheService) : IParser
 
                             int? value = match.Groups.Count switch
                             {
-                                3 => (int)((double.Parse(match.Groups[2].Value, System.Globalization.CultureInfo.InvariantCulture) + double.Parse(match.Groups[1].Value, System.Globalization.CultureInfo.InvariantCulture)) / 2),
-                                > 1 => (int)double.Parse(match.Groups[1].Value, System.Globalization.CultureInfo.InvariantCulture),
+                                3 => (int)((double.Parse(match.Groups[2].Value,
+                                                System.Globalization.CultureInfo.InvariantCulture) +
+                                            double.Parse(match.Groups[1].Value,
+                                                System.Globalization.CultureInfo.InvariantCulture)) / 2),
+                                > 1 => (int)double.Parse(match.Groups[1].Value,
+                                    System.Globalization.CultureInfo.InvariantCulture),
                                 _ => null
                             };
 
@@ -590,7 +611,7 @@ public class ChineseTradParser(CacheService cacheService) : IParser
         }
     }
 
-    private enum ParsingState
+    protected enum ParsingState
     {
         PARSING_ITEM_TYPE,
         PARSING_RARITY,

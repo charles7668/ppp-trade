@@ -25,6 +25,7 @@ public enum ItemType
     TWO_HAND_SWORD,
     TWO_HAND_AXE,
     TWO_HAND_MACE,
+    WAR_STAFF,
     FISHING_ROD,
     SHIELD,
     BODY_ARMOUR,
