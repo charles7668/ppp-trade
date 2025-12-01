@@ -83,7 +83,7 @@ internal class EnParser(CacheService cacheService) : ChineseTradParser(cacheServ
 
         { "Utility Flasks", ItemType.FLASK },
         { "Life Flasks", ItemType.FLASK },
-        { "Mana Flasks", ItemType.FLASK },
+        { "Mana Flasks", ItemType.FLASK }
     };
 
     protected override Dictionary<string, Rarity> RarityMap => new()
@@ -95,6 +95,17 @@ internal class EnParser(CacheService cacheService) : ChineseTradParser(cacheServ
         { "Currency", Rarity.CURRENCY },
         { "Divination Cards", Rarity.DIVINATION_CARD }
     };
+
+    protected override List<StatGroup> GetStatGroups()
+    {
+        if (!_cacheService.TryGet(StatEnCacheKey, out List<StatGroup>? statEn))
+        {
+            statEn = LoadStats("stats_eng.json");
+            _cacheService.Set(StatEnCacheKey, statEn);
+        }
+
+        return statEn ?? [];
+    }
 
     public override bool IsMatch(string text, string game)
     {
@@ -117,169 +128,37 @@ internal class EnParser(CacheService cacheService) : ChineseTradParser(cacheServ
         return JsonSerializer.Deserialize<List<StatGroup>>(json, options) ?? [];
     }
 
-    public override ItemBase? Parse(string text)
+    protected override bool TryParseFlask(Poe1Item parsingItem, string line)
     {
-        #region Get stat data
-
-        if (!_cacheService.TryGet(StatEnCacheKey, out List<StatGroup>? statEn))
+        if (parsingItem is { ItemType: ItemType.FLASK, Rarity: not (Rarity.NORMAL or Rarity.UNIQUE) })
         {
-            statEn = LoadStats("stats_eng.json");
-            _cacheService.Set(StatEnCacheKey, statEn);
-        }
-
-        #endregion
-
-        var lines = text.Replace("\r", "").Split("\n");
-        var indexOfRarity = Array.FindIndex(lines, l => l.StartsWith(RarityKeyword));
-        if (indexOfRarity == -1)
-        {
-            return null;
-        }
-
-        var parsedItem = new Poe1Item();
-        var parsingState = ParsingState.PARSING_UNKNOW;
-        for (var i = 0; i < lines.Length; ++i)
-        {
-            var line = lines[i];
-            switch (parsingState)
+            var removeFoulBorn = line.Replace(FoulBornKeyword, "");
+            if (removeFoulBorn.Contains(" of "))
             {
-                case ParsingState.PARSING_RARITY:
-                    parsedItem.Rarity = ResolveRarity(line);
-                    parsingState = ParsingState.PARSING_ITEM_NAME;
-                    break;
-                case ParsingState.PARSING_ITEM_NAME:
-                    if (line.StartsWith(FoulBornKeyword))
+                parsingItem.ItemName = removeFoulBorn;
+                var splitWords = line.Split(' ');
+                var tempBaseName = "";
+                for (var x = 1; x < splitWords.Length; x++)
+                {
+                    if (splitWords[x] == "of")
                     {
-                        parsedItem.IsFoulBorn = true;
-                    }
-
-                    if (parsedItem is { ItemType: ItemType.FLASK, Rarity: not (Rarity.NORMAL or Rarity.UNIQUE) })
-                    {
-                        var removeFoulBorn = line.Replace(FoulBornKeyword, "");
-                        if (removeFoulBorn.Contains(" of "))
-                        {
-                            parsedItem.ItemName = removeFoulBorn;
-                            var splitWords = line.Split(' ');
-                            var tempBaseName = "";
-                            for (int x = 1; x < splitWords.Length; x++)
-                            {
-                                if (splitWords[x] == "of")
-                                {
-                                    break;
-                                }
-
-                                tempBaseName += splitWords[x] + " ";
-                            }
-
-                            parsedItem.ItemBaseName = tempBaseName.Trim();
-                        }
-                        else
-                        {
-                            parsedItem.ItemName = removeFoulBorn;
-                            parsedItem.ItemBaseName = removeFoulBorn;
-                        }
-
-                        parsingState = ParsingState.PARSING_UNKNOW;
                         break;
                     }
 
-                    parsedItem.ItemName = line.Replace(FoulBornKeyword, "");
-                    parsingState = parsedItem.Rarity == Rarity.CURRENCY
-                        ? ParsingState.PARSING_UNKNOW
-                        : ParsingState.PARSING_ITEM_BASE;
-                    break;
-                case ParsingState.PARSING_ITEM_BASE:
-                    parsedItem.ItemBaseName = line;
-                    parsingState = ParsingState.PARSING_UNKNOW;
-                    break;
-                case ParsingState.PARSING_ITEM_TYPE:
-                    parsedItem.ItemType = ResolveItemType(line);
-                    parsingState = ParsingState.PARSING_UNKNOW;
-                    break;
-                case ParsingState.PARSING_REQUIREMENT:
-                    List<string> reqTexts = [];
-                    i++;
-                    while (i < lines.Length && lines[i] != SplitKeyword)
-                    {
-                        reqTexts.Add(lines[i]);
-                        i++;
-                    }
+                    tempBaseName += splitWords[x] + " ";
+                }
 
-                    parsedItem.Requirements = ResolveItemRequirements(reqTexts);
-                    parsingState = ParsingState.PARSING_UNKNOW;
-                    break;
-                case ParsingState.PARSING_ITEM_LEVEL:
-                    parsedItem.ItemLevel = int.Parse(line.Substring(ItemLevelKeyword.Length));
-                    parsingState = ParsingState.PARSING_STAT;
-                    break;
-                case ParsingState.PARSING_STAT:
-                    var hasImplicit = false;
-                    List<string> statTexts = [];
-                    if (line == SplitKeyword)
-                    {
-                        i++;
-                        if (lines[i].Contains(ImplicitKeyword))
-                        {
-                            hasImplicit = true;
-                        }
-
-                        while (i < lines.Length && lines[i] != SplitKeyword)
-                        {
-                            statTexts.Add(lines[i]);
-                            i++;
-                        }
-                    }
-
-                    if (hasImplicit && i < lines.Length && lines[i] == SplitKeyword)
-                    {
-                        i++;
-
-                        while (i < lines.Length && lines[i] != SplitKeyword)
-                        {
-                            statTexts.Add(lines[i]);
-                            i++;
-                        }
-                    }
-
-                    var stats = ResolveStats(statTexts, statEn!);
-                    parsedItem.Stats = TryMapLocalAndGlobal(parsedItem.ItemType, stats, statEn!);
-                    parsingState = ParsingState.PARSING_UNKNOW;
-                    break;
-                case ParsingState.PARSING_LINK:
-                    parsedItem.Link = ResolveLinkCount(line);
-                    parsingState = ParsingState.PARSING_UNKNOW;
-                    break;
-                case ParsingState.PARSING_UNKNOW:
-                    if (i == indexOfRarity)
-                    {
-                        i--;
-                        parsingState = ParsingState.PARSING_RARITY;
-                    }
-                    else if (line.StartsWith(ItemTypeKeyword))
-                    {
-                        i--;
-                        parsingState = ParsingState.PARSING_ITEM_TYPE;
-                    }
-                    else if (line.StartsWith(ItemRequirementKeyword))
-                    {
-                        i--;
-                        parsingState = ParsingState.PARSING_REQUIREMENT;
-                    }
-                    else if (line.StartsWith(ItemLevelKeyword))
-                    {
-                        i--;
-                        parsingState = ParsingState.PARSING_ITEM_LEVEL;
-                    }
-                    else if (line.StartsWith(ItemSocketKeyword))
-                    {
-                        i--;
-                        parsingState = ParsingState.PARSING_LINK;
-                    }
-
-                    break;
+                parsingItem.ItemBaseName = tempBaseName.Trim();
             }
+            else
+            {
+                parsingItem.ItemName = removeFoulBorn;
+                parsingItem.ItemBaseName = removeFoulBorn;
+            }
+
+            return true;
         }
 
-        return parsedItem;
+        return false;
     }
 }

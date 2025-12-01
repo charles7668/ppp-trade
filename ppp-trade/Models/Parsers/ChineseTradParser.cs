@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Text.Json;
 using System.Text.RegularExpressions;
@@ -108,11 +109,7 @@ public class ChineseTradParser(CacheService cacheService) : IParser
     {
         #region Get stat data
 
-        if (!cacheService.TryGet(StatTwCacheKey, out List<StatGroup>? statTw))
-        {
-            statTw = LoadStats("stats_zh_tw.json");
-            cacheService.Set(StatTwCacheKey, statTw);
-        }
+        var statGroups = GetStatGroups();
 
         #endregion
 
@@ -140,22 +137,8 @@ public class ChineseTradParser(CacheService cacheService) : IParser
                         parsedItem.IsFoulBorn = true;
                     }
 
-                    if (parsedItem is { ItemType: ItemType.FLASK, Rarity: not (Rarity.NORMAL or Rarity.UNIQUE) })
+                    if (TryParseFlask(parsedItem, line))
                     {
-                        foreach (var flaskSplitKeyword in FlaskSplitKeywords)
-                        {
-                            var replace = line.Replace(FoulBornKeyword, "");
-                            var split = replace.Split(flaskSplitKeyword);
-                            if (split.Length != 2)
-                            {
-                                continue;
-                            }
-
-                            parsedItem.ItemName = replace;
-                            parsedItem.ItemBaseName = split[1];
-                            break;
-                        }
-
                         parsingState = ParsingState.PARSING_UNKNOW;
                         break;
                     }
@@ -218,8 +201,8 @@ public class ChineseTradParser(CacheService cacheService) : IParser
                         }
                     }
 
-                    List<ItemStat> stats = ResolveStats(statTexts, statTw!);
-                    parsedItem.Stats = TryMapLocalAndGlobal(parsedItem.ItemType, stats, statTw!);
+                    var stats = ResolveStats(statTexts, statGroups);
+                    parsedItem.Stats = TryMapLocalAndGlobal(parsedItem.ItemType, stats, statGroups);
                     parsingState = ParsingState.PARSING_UNKNOW;
                     break;
                 case ParsingState.PARSING_LINK:
@@ -258,6 +241,17 @@ public class ChineseTradParser(CacheService cacheService) : IParser
         }
 
         return parsedItem;
+    }
+
+    protected virtual List<StatGroup> GetStatGroups()
+    {
+        if (!cacheService.TryGet(StatTwCacheKey, out List<StatGroup>? statTw))
+        {
+            statTw = LoadStats("stats_zh_tw.json");
+            cacheService.Set(StatTwCacheKey, statTw);
+        }
+
+        return statTw ?? [];
     }
 
     private List<StatGroup> LoadStats(string fileName)
@@ -369,7 +363,7 @@ public class ChineseTradParser(CacheService cacheService) : IParser
         foreach (var stat in itemStats)
         {
             var statId = stat.Stat.Id;
-            if (!mapping.TryGetValue(statId, out List<string>? value))
+            if (!mapping.TryGetValue(statId, out var value))
             {
                 continue;
             }
@@ -396,6 +390,127 @@ public class ChineseTradParser(CacheService cacheService) : IParser
     {
         var rarityStr = lineText.Substring(RarityKeyword.Length).Trim();
         return RarityMap.GetValueOrDefault(rarityStr, Rarity.NORMAL);
+    }
+
+    protected List<ItemStat> ResolveStats(IEnumerable<string> statTexts, List<StatGroup> stats)
+    {
+        List<ItemStat> result = [];
+
+        foreach (var statText in statTexts)
+        {
+            if (statText.Trim().EndsWith(ImplicitKeyword))
+            {
+                var group = stats.First(s => s.Id == "implicit");
+                var (statEng, value) = FindState(group, statText);
+                if (statEng != null)
+                {
+                    result.Add(new ItemStat
+                    {
+                        Stat = statEng,
+                        Value = value
+                    });
+                }
+            }
+            else if (statText.Trim().EndsWith(CraftedKeyword))
+            {
+                var group = stats.First(s => s.Id == "crafted");
+                var (state, value) = FindState(group, statText);
+                if (state != null)
+                {
+                    result.Add(new ItemStat
+                    {
+                        Stat = state,
+                        Value = value
+                    });
+                }
+            }
+            else
+            {
+                var group = stats.First(s => s.Id == "explicit");
+                var (state, value) = FindState(group, statText);
+                if (state != null)
+                {
+                    result.Add(new ItemStat
+                    {
+                        Stat = state,
+                        Value = value
+                    });
+                }
+            }
+        }
+
+        result = result.DistinctBy(x => x.Stat.Id).ToList();
+
+        var pseudoStats = ResolvePseudoStats(result, stats.First(s => s.Id == "pseudo"));
+
+        result.InsertRange(0, pseudoStats);
+
+        return result;
+
+        (Stat?, int?) FindState(StatGroup group, string stat)
+        {
+            var matchResult = TryMatch();
+            if (matchResult is (null, null))
+            {
+                stat = $"{stat} {LocalKeyword}";
+                matchResult = TryMatch(true);
+            }
+
+            return matchResult;
+
+            (Stat?, int?) TryMatch(bool matchLocal = false)
+            {
+                foreach (var entry in group.Entries)
+                {
+                    foreach (var splitEntry in entry.Text.Split('\n'))
+                    {
+                        string regex;
+                        var realItemStat = stat;
+                        if (!matchLocal)
+                        {
+                            regex = @"\(.*?\)";
+                            realItemStat = Regex.Replace(stat, regex, "").Trim();
+                        }
+
+                        regex = splitEntry.Replace("(", "\\(");
+                        regex = regex.Replace(")", "\\)");
+                        regex = regex.Replace("+#", "([+-][\\d.]+)");
+                        regex = regex.Replace("#", "([\\d.]+)");
+                        regex = $"^{regex}$";
+                        try
+                        {
+                            var match = Regex.Match(realItemStat, regex);
+                            if (!match.Success)
+                            {
+                                if (!match.Success)
+                                {
+                                    continue;
+                                }
+                            }
+
+                            int? value = match.Groups.Count switch
+                            {
+                                3 => (int)((double.Parse(match.Groups[2].Value,
+                                                CultureInfo.InvariantCulture) +
+                                            double.Parse(match.Groups[1].Value,
+                                                CultureInfo.InvariantCulture)) / 2),
+                                > 1 => (int)double.Parse(match.Groups[1].Value,
+                                    CultureInfo.InvariantCulture),
+                                _ => null
+                            };
+
+                            return (entry, value);
+                        }
+                        catch (Exception e)
+                        {
+                            Debug.WriteLine(e.Message);
+                        }
+                    }
+                }
+
+                return (null, null);
+            }
+        }
     }
 
     protected static IEnumerable<ItemStat> TryMapLocalAndGlobal(ItemType itemType, IEnumerable<ItemStat> stats,
@@ -490,128 +605,31 @@ public class ChineseTradParser(CacheService cacheService) : IParser
         }
     }
 
-    protected List<ItemStat> ResolveStats(IEnumerable<string> statTexts, List<StatGroup> stats)
+    protected virtual bool TryParseFlask(Poe1Item parsingItem, string line)
     {
-        List<ItemStat> result = [];
-
-        foreach (var statText in statTexts)
+        if (parsingItem is not { ItemType: ItemType.FLASK, Rarity: not (Rarity.NORMAL or Rarity.UNIQUE) })
         {
-            if (statText.Trim().EndsWith(ImplicitKeyword))
-            {
-                var group = stats.First(s => s.Id == "implicit");
-                var (statEng, value) = FindState(group, statText);
-                if (statEng != null)
-                {
-                    result.Add(new ItemStat
-                    {
-                        Stat = statEng,
-                        Value = value
-                    });
-                }
-            }
-            else if (statText.Trim().EndsWith(CraftedKeyword))
-            {
-                var group = stats.First(s => s.Id == "crafted");
-                var (state, value) = FindState(group, statText);
-                if (state != null)
-                {
-                    result.Add(new ItemStat
-                    {
-                        Stat = state,
-                        Value = value
-                    });
-                }
-            }
-            else
-            {
-                var group = stats.First(s => s.Id == "explicit");
-                var (state, value) = FindState(group, statText);
-                if (state != null)
-                {
-                    result.Add(new ItemStat
-                    {
-                        Stat = state,
-                        Value = value
-                    });
-                }
-            }
+            return false;
         }
 
-        result = result.DistinctBy(x => x.Stat.Id).ToList();
-
-        List<ItemStat> pseudoStats = ResolvePseudoStats(result, stats.First(s => s.Id == "pseudo"));
-
-        result.InsertRange(0, pseudoStats);
-
-        return result;
-
-        (Stat?, int?) FindState(StatGroup group, string stat)
+        foreach (var flaskSplitKeyword in FlaskSplitKeywords)
         {
-            (Stat?, int?) matchResult = TryMatch();
-            if (matchResult is (null, null))
+            var replace = line.Replace(FoulBornKeyword, "");
+            var split = replace.Split(flaskSplitKeyword);
+            if (split.Length != 2)
             {
-                stat = $"{stat} {LocalKeyword}";
-                matchResult = TryMatch(true);
+                continue;
             }
 
-            return matchResult;
-
-            (Stat?, int?) TryMatch(bool matchLocal = false)
-            {
-                foreach (var entry in group.Entries)
-                {
-                    foreach (var splitEntry in entry.Text.Split('\n'))
-                    {
-                        string regex;
-                        var realItemStat = stat;
-                        if (!matchLocal)
-                        {
-                            regex = @"\(.*?\)";
-                            realItemStat = Regex.Replace(stat, regex, "").Trim();
-                        }
-
-                        regex = splitEntry.Replace("(", "\\(");
-                        regex = regex.Replace(")", "\\)");
-                        regex = regex.Replace("+#", "([+-][\\d.]+)");
-                        regex = regex.Replace("#", "([\\d.]+)");
-                        regex = $"^{regex}$";
-                        try
-                        {
-                            var match = Regex.Match(realItemStat, regex);
-                            if (!match.Success)
-                            {
-                                if (!match.Success)
-                                {
-                                    continue;
-                                }
-                            }
-
-                            int? value = match.Groups.Count switch
-                            {
-                                3 => (int)((double.Parse(match.Groups[2].Value,
-                                                System.Globalization.CultureInfo.InvariantCulture) +
-                                            double.Parse(match.Groups[1].Value,
-                                                System.Globalization.CultureInfo.InvariantCulture)) / 2),
-                                > 1 => (int)double.Parse(match.Groups[1].Value,
-                                    System.Globalization.CultureInfo.InvariantCulture),
-                                _ => null
-                            };
-
-                            return (entry, value);
-                        }
-                        catch (Exception e)
-                        {
-                            Debug.WriteLine(e.Message);
-                        }
-                    }
-                }
-
-                return (null, null);
-            }
+            parsingItem.ItemName = replace;
+            parsingItem.ItemBaseName = split[1];
+            break;
         }
+
+        return true;
     }
 
-    protected enum ParsingState
+    private enum ParsingState
     {
         PARSING_ITEM_TYPE,
         PARSING_RARITY,
