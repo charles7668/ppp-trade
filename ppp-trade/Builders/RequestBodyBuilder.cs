@@ -26,6 +26,7 @@ public class RequestBodyBuilder(CacheService cacheService)
             ItemType.TWO_HAND_MACE => "weapon.twomace",
             ItemType.TWO_HAND_SWORD => "weapon.twosword",
             ItemType.WAND => "weapon.wand",
+            ItemType.WAR_STAFF => "weapon.warstaff",
             ItemType.FISHING_ROD => "weapon.rod",
             ItemType.BODY_ARMOUR => "armour.chest",
             ItemType.BOOTS => "armour.boots",
@@ -253,10 +254,12 @@ public class RequestBodyBuilder(CacheService cacheService)
                             {
                                 option = RarityToString(item.Rarity)
                             },
-                        category = new
-                        {
-                            option = ItemTypeToString(item.ItemType)
-                        }
+                        category = ItemTypeToString(item.ItemType) == null
+                            ? null
+                            : new
+                            {
+                                option = ItemTypeToString(item.ItemType)
+                            }
                     }
                 },
                 misc_filters = new
