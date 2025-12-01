@@ -102,14 +102,11 @@ public class ChineseTradParser(CacheService cacheService) : IParser
         { "命運卡", Rarity.DIVINATION_CARD }
     };
 
-    protected virtual Dictionary<string, Func<Stat, string, (bool, int?)>> SpecialCaseStat { get; } = new()
+    protected virtual Dictionary<string, Func<Stat, string, ItemBase, (bool, int?)>> SpecialCaseStat { get; } = new()
     {
-        {
-            "stat_700317374", TryResolveIncreasedAndDecreased
-        },
-        {
-            "stat_3338298622", TryResolveIncreasedAndDecreased
-        }
+        { "stat_700317374", TryResolveIncreasedAndDecreased },
+        { "stat_3338298622", TryResolveIncreasedAndDecreased },
+        { "stat_1001829678", TryResolveStaffStats }
     };
 
     public virtual bool IsMatch(string text, string game)
@@ -229,7 +226,7 @@ public class ChineseTradParser(CacheService cacheService) : IParser
                         }
                     }
 
-                    var stats = ResolveStats(statTexts, statGroups);
+                    var stats = ResolveStats(statTexts, statGroups, parsedItem);
                     parsedItem.Stats = TryMapLocalAndGlobal(parsedItem.ItemType, stats, statGroups);
                     parsingState = ParsingState.PARSING_UNKNOW;
                     break;
@@ -420,7 +417,7 @@ public class ChineseTradParser(CacheService cacheService) : IParser
         return RarityMap.GetValueOrDefault(rarityStr, Rarity.NORMAL);
     }
 
-    protected List<ItemStat> ResolveStats(IEnumerable<string> statTexts, List<StatGroup> stats)
+    protected List<ItemStat> ResolveStats(IEnumerable<string> statTexts, List<StatGroup> stats, ItemBase parsingItem)
     {
         List<ItemStat> result = [];
         foreach (var statText in statTexts)
@@ -492,7 +489,7 @@ public class ChineseTradParser(CacheService cacheService) : IParser
                     var statId = entry.Id.Split('.')[1];
                     if (SpecialCaseStat.TryGetValue(statId, out var specialFunc))
                     {
-                        var (matched, value) = specialFunc(entry, stat);
+                        var (matched, value) = specialFunc(entry, stat, parsingItem);
                         if (!matched)
                         {
                             continue;
@@ -667,8 +664,30 @@ public class ChineseTradParser(CacheService cacheService) : IParser
 
         return true;
     }
+    private static (bool, int?) TryResolveStaffStats(Stat stat, string statText, ItemBase parsingItem)
+    {
+        if (parsingItem.ItemType != ItemType.STAFF && parsingItem.ItemType != ItemType.WAR_STAFF)
+        {
+            return (false, null);
+        }
 
-    private static (bool, int?) TryResolveIncreasedAndDecreased(Stat stat, string statText)
+        var regex = @"\(.*?\)";
+        var realItemStat = Regex.Replace(statText, regex, "").Trim();
+        realItemStat += " (法杖)";
+        regex = stat.Text.Replace("(", "\\(");
+        regex = regex.Replace(")", "\\)");
+        regex = regex.Replace("+#", "([+-][\\d.]+)");
+        regex = regex.Replace("#", "([\\d.]+)");
+        var match = Regex.Match(realItemStat, regex);
+        if (match.Success)
+        {
+            return (true, int.Parse(match.Groups[1].Value));
+        }
+
+        return (false, null);
+    }
+
+    private static (bool, int?) TryResolveIncreasedAndDecreased(Stat stat, string statText, ItemBase itemBase)
     {
         // try match normal case
         var regex = stat.Text.Replace("#", "(\\d+)");

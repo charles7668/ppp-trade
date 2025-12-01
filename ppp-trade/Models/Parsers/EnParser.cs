@@ -86,7 +86,7 @@ internal class EnParser(CacheService cacheService) : ChineseTradParser(cacheServ
         { "Life Flasks", ItemType.FLASK },
         { "Mana Flasks", ItemType.FLASK },
 
-        { "Corpses", ItemType.CORPSE },
+        { "Corpses", ItemType.CORPSE }
     };
 
     protected override Dictionary<string, Rarity> RarityMap => new()
@@ -99,17 +99,12 @@ internal class EnParser(CacheService cacheService) : ChineseTradParser(cacheServ
         { "Divination Cards", Rarity.DIVINATION_CARD }
     };
 
-    protected override Dictionary<string, Func<Stat, string, (bool, int?)>> SpecialCaseStat { get; } = new()
+    protected override Dictionary<string, Func<Stat, string, ItemBase, (bool, int?)>> SpecialCaseStat { get; } = new()
     {
-        {
-            "stat_700317374", TryResolveIncreasedAndDecreased
-        },
-        {
-            "stat_3338298622", TryResolveIncreasedAndDecreased
-        },
-        {
-            "stat_4016885052", TryResolveAdditionalProjectile
-        }
+        { "stat_700317374", TryResolveIncreasedAndDecreased },
+        { "stat_3338298622", TryResolveIncreasedAndDecreased },
+        { "stat_4016885052", TryResolveAdditionalProjectile },
+        { "stat_1001829678", TryResolveStaffStats }
     };
 
     protected override List<StatGroup> GetStatGroups()
@@ -178,7 +173,19 @@ internal class EnParser(CacheService cacheService) : ChineseTradParser(cacheServ
         return false;
     }
 
-    private static (bool, int?) TryResolveIncreasedAndDecreased(Stat stat, string statText)
+    private static (bool, int?) TryResolveAdditionalProjectile(Stat stat, string statText, ItemBase parsingItem)
+    {
+        var regex = stat.Text.Replace(" an ", " (\\d+) ");
+        var match = Regex.Match(statText, regex);
+        if (match.Success)
+        {
+            return (true, int.Parse(match.Groups[1].Value));
+        }
+
+        return (false, null);
+    }
+
+    private static (bool, int?) TryResolveIncreasedAndDecreased(Stat stat, string statText, ItemBase parsingItem)
     {
         // try match normal case
         var regex = stat.Text.Replace("#", "(\\d+)");
@@ -198,10 +205,21 @@ internal class EnParser(CacheService cacheService) : ChineseTradParser(cacheServ
         return (false, null);
     }
 
-    private static (bool, int?) TryResolveAdditionalProjectile(Stat stat, string statText)
+    private static (bool, int?) TryResolveStaffStats(Stat stat, string statText, ItemBase parsingItem)
     {
-        var regex = stat.Text.Replace(" an ", " (\\d+) ");
-        var match = Regex.Match(statText, regex);
+        if (parsingItem.ItemType != ItemType.STAFF && parsingItem.ItemType != ItemType.WAR_STAFF)
+        {
+            return (false, null);
+        }
+
+        var regex = @"\(.*?\)";
+        var realItemStat = Regex.Replace(statText, regex, "").Trim();
+        realItemStat += " (Staves)";
+        regex = stat.Text.Replace("(", "\\(");
+        regex = regex.Replace(")", "\\)");
+        regex = regex.Replace("+#", "([+-][\\d.]+)");
+        regex = regex.Replace("#", "([\\d.]+)");
+        var match = Regex.Match(realItemStat, regex);
         if (match.Success)
         {
             return (true, int.Parse(match.Groups[1].Value));
