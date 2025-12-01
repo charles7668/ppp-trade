@@ -328,7 +328,7 @@ public class ChineseTradParser(CacheService cacheService) : IParser
                 key = ReqDexKeyword;
             }
 
-            var value = int.Parse(reqText.Replace(AugmentedKeyword, "").Substring(ReqLevelKeyword.Length).Trim());
+            var value = int.Parse(reqText.Replace(AugmentedKeyword, "")[key.Length..].Trim());
             results.Add(new ItemRequirement
             {
                 ItemRequirementType = typeMap[key],
