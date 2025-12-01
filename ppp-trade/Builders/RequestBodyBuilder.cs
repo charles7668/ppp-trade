@@ -38,6 +38,7 @@ public class RequestBodyBuilder(CacheService cacheService)
             ItemType.JEWEL => "jewel.base",
             ItemType.FLASK => "flask",
             ItemType.WAY_STONE => "map.waystone",
+            ItemType.CORPSE => "corpse",
             _ => null
         };
     }
@@ -246,10 +247,12 @@ public class RequestBodyBuilder(CacheService cacheService)
                     disabled = false,
                     filters = new
                     {
-                        rarity = new
-                        {
-                            option = RarityToString(item.Rarity)
-                        },
+                        rarity = RarityToString(item.Rarity) == null
+                            ? (object?)null
+                            : new
+                            {
+                                option = RarityToString(item.Rarity)
+                            },
                         category = new
                         {
                             option = ItemTypeToString(item.ItemType)

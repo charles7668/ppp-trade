@@ -8,6 +8,7 @@ public enum ItemType
     STACKABLE_CURRENCY,
     DIVINATION_CARD,
     FLASK,
+    CORPSE,
 
     #region Equipment
 

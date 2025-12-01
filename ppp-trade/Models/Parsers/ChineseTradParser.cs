@@ -87,7 +87,9 @@ public class ChineseTradParser(CacheService cacheService) : IParser
 
         { "功能藥劑", ItemType.FLASK },
         { "生命藥劑", ItemType.FLASK },
-        { "魔力藥劑", ItemType.FLASK }
+        { "魔力藥劑", ItemType.FLASK },
+
+        { "屍體", ItemType.CORPSE }
     };
 
     protected virtual Dictionary<string, Rarity> RarityMap => new()
@@ -152,6 +154,22 @@ public class ChineseTradParser(CacheService cacheService) : IParser
                         parsingState = ParsingState.PARSING_UNKNOW;
                         break;
                     }
+
+                    var parsed = true;
+                    switch (parsedItem.ItemType)
+                    {
+                        case ItemType.CORPSE:
+                            parsedItem.ItemName = line.Replace(FoulBornKeyword, "");
+                            parsedItem.ItemBaseName = parsedItem.ItemName;
+                            parsingState = ParsingState.PARSING_UNKNOW;
+                            break;
+                        default:
+                            parsed = false;
+                            break;
+                    }
+
+                    if (parsed)
+                        break;
 
                     parsedItem.ItemName = line.Replace(FoulBornKeyword, "");
                     parsingState = parsedItem.Rarity == Rarity.CURRENCY

@@ -84,7 +84,9 @@ internal class EnParser(CacheService cacheService) : ChineseTradParser(cacheServ
 
         { "Utility Flasks", ItemType.FLASK },
         { "Life Flasks", ItemType.FLASK },
-        { "Mana Flasks", ItemType.FLASK }
+        { "Mana Flasks", ItemType.FLASK },
+
+        { "Corpses", ItemType.CORPSE },
     };
 
     protected override Dictionary<string, Rarity> RarityMap => new()

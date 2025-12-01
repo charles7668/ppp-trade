@@ -372,9 +372,12 @@ public partial class MainWindowViewModel : ObservableObject
             opt.AfterMap((src, dest) =>
             {
                 var itemObj = (Poe1Item)src;
-                if (itemObj.ItemType == ItemType.FLASK)
+                switch (itemObj.ItemType)
                 {
-                    dest.ItemName = itemObj.ItemName;
+                    case ItemType.CORPSE:
+                    case ItemType.FLASK:
+                        dest.ItemName = itemObj.ItemName;
+                        break;
                 }
 
                 dest.Rarity = item.Rarity switch
