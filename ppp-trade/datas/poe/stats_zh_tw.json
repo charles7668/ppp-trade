@@ -26703,7 +26703,7 @@
             },
             {
                 "id": "explicit.indexable_skill_226",
-                "text": "全部 # 寶石等級 +贖罪烙印",
+                "text": "全部 贖罪烙印 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -26908,7 +26908,7 @@
             },
             {
                 "id": "explicit.indexable_skill_104",
-                "text": "全部 # 寶石等級 +天雷之珠",
+                "text": "全部 天雷之珠 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -26918,7 +26918,7 @@
             },
             {
                 "id": "explicit.indexable_skill_258",
-                "text": "全部 # 寶石等級 +毒藥",
+                "text": "全部 毒藥 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -27013,7 +27013,7 @@
             },
             {
                 "id": "explicit.indexable_skill_119",
-                "text": "全部 # 寶石等級 +魅影射擊",
+                "text": "全部 魅影射擊 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -27063,7 +27063,7 @@
             },
             {
                 "id": "explicit.indexable_skill_161",
-                "text": "全部 # 寶石等級 +熔炎送葬",
+                "text": "全部 熔炎送葬 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -27083,12 +27083,12 @@
             },
             {
                 "id": "explicit.indexable_skill_247",
-                "text": "全部 # 寶石等級 +碎骨",
+                "text": "全部 碎骨 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_145",
-                "text": "全部 # 寶石等級 +召喚巨石魔像",
+                "text": "全部 召喚巨石魔像 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -27108,7 +27108,7 @@
             },
             {
                 "id": "explicit.indexable_skill_17",
-                "text": "全部 # 寶石等級 +屍體爆破",
+                "text": "全部 屍體爆破 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -27153,7 +27153,7 @@
             },
             {
                 "id": "explicit.indexable_skill_37",
-                "text": "全部 # 寶石等級 +爆炸箭矢",
+                "text": "全部 爆炸箭矢 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -27213,7 +27213,7 @@
             },
             {
                 "id": "explicit.indexable_skill_188",
-                "text": "全部 # 寶石等級 +淨化烈焰",
+                "text": "全部 淨化烈焰 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -27238,7 +27238,7 @@
             },
             {
                 "id": "explicit.indexable_skill_29",
-                "text": "全部 # 寶石等級 +喚醒幽魂",
+                "text": "全部 喚醒幽魂 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -27318,7 +27318,7 @@
             },
             {
                 "id": "explicit.indexable_skill_260",
-                "text": "全部 # 寶石等級 +能量之刃",
+                "text": "全部 能量之刃 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -27333,7 +27333,7 @@
             },
             {
                 "id": "explicit.indexable_skill_159",
-                "text": "全部 # 寶石等級 +暗夜血契",
+                "text": "全部 暗夜血契 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -27403,7 +27403,7 @@
             },
             {
                 "id": "explicit.indexable_skill_218",
-                "text": "全部 # 寶石等級 +法術回音",
+                "text": "全部 法術回音 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -27438,7 +27438,7 @@
             },
             {
                 "id": "explicit.indexable_skill_71",
-                "text": "全部 # 寶石等級 +燃燒箭矢",
+                "text": "全部 燃燒箭矢 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -27523,7 +27523,7 @@
             },
             {
                 "id": "explicit.indexable_skill_154",
-                "text": "全部 # 寶石等級 +漩渦",
+                "text": "全部 漩渦 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -27538,7 +27538,7 @@
             },
             {
                 "id": "explicit.indexable_skill_143",
-                "text": "全部 # 寶石等級 +風暴漩渦",
+                "text": "全部 風暴漩渦 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -27553,7 +27553,7 @@
             },
             {
                 "id": "explicit.indexable_skill_182",
-                "text": "全部 # 寶石等級 +末日烙印",
+                "text": "全部 末日烙印 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -27608,7 +27608,7 @@
             },
             {
                 "id": "explicit.indexable_skill_219",
-                "text": "全部 # 寶石等級 +力量穿引",
+                "text": "全部 力量穿引 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -27628,7 +27628,7 @@
             },
             {
                 "id": "explicit.indexable_skill_190",
-                "text": "全部 # 寶石等級 +災厄",
+                "text": "全部 災厄 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -27648,12 +27648,12 @@
             },
             {
                 "id": "explicit.indexable_skill_201",
-                "text": "全部 # 寶石等級 +裂地刺穿",
+                "text": "全部 裂地刺穿 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_243",
-                "text": "全部 # 寶石等級 +暴風雷雨",
+                "text": "全部 暴風雷雨 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -27693,12 +27693,12 @@
             },
             {
                 "id": "explicit.indexable_skill_65",
-                "text": "全部 # 寶石等級 +紀律",
+                "text": "全部 紀律 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_125",
-                "text": "全部 # 寶石等級 +召喚閃電魔像",
+                "text": "全部 召喚閃電魔像 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -27718,7 +27718,7 @@
             },
             {
                 "id": "explicit.indexable_skill_59",
-                "text": "全部 # 寶石等級 +放血",
+                "text": "全部 放血 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -27773,7 +27773,7 @@
             },
             {
                 "id": "explicit.indexable_skill_191",
-                "text": "全部 # 寶石等級 +聖怒",
+                "text": "全部 聖怒 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -27783,7 +27783,7 @@
             },
             {
                 "id": "explicit.indexable_skill_203",
-                "text": "全部 # 寶石等級 +霜漣之瞬",
+                "text": "全部 霜漣之瞬 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -27798,7 +27798,7 @@
             },
             {
                 "id": "explicit.indexable_skill_261",
-                "text": "全部 # 寶石等級 +龍捲風",
+                "text": "全部 龍捲風 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -27808,7 +27808,7 @@
             },
             {
                 "id": "explicit.indexable_skill_275",
-                "text": "全部 # 寶石等級 +神聖制裁",
+                "text": "全部 神聖制裁 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -27823,7 +27823,7 @@
             },
             {
                 "id": "explicit.indexable_skill_98",
-                "text": "全部 # 寶石等級 +火焰淨化",
+                "text": "全部 火焰淨化 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -27848,7 +27848,7 @@
             },
             {
                 "id": "explicit.indexable_skill_174",
-                "text": "全部 # 寶石等級 +苦痛之捷",
+                "text": "全部 苦痛之捷 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -27883,7 +27883,7 @@
             },
             {
                 "id": "explicit.indexable_skill_193",
-                "text": "全部 # 寶石等級 +狂熱",
+                "text": "全部 狂熱 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -27918,7 +27918,7 @@
             },
             {
                 "id": "explicit.indexable_skill_88",
-                "text": "全部 # 寶石等級 +灼熱連結",
+                "text": "全部 灼熱連結 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -27928,17 +27928,17 @@
             },
             {
                 "id": "explicit.indexable_skill_22",
-                "text": "全部 # 寶石等級 +分裂箭矢",
+                "text": "全部 分裂箭矢 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_12",
-                "text": "全部 # 寶石等級 +雙持打擊",
+                "text": "全部 雙持打擊 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_263",
-                "text": "全部 # 寶石等級 +連結：烈焰",
+                "text": "全部 連結：烈焰 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -27963,12 +27963,12 @@
             },
             {
                 "id": "explicit.indexable_skill_162",
-                "text": "全部 # 寶石等級 +屍術傳送",
+                "text": "全部 屍術傳送 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_250",
-                "text": "全部 # 寶石等級 +戰法戰吼",
+                "text": "全部 戰法戰吼 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -27978,7 +27978,7 @@
             },
             {
                 "id": "explicit.indexable_skill_268",
-                "text": "全部 # 寶石等級 +電光領域",
+                "text": "全部 電光領域 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -27998,7 +27998,7 @@
             },
             {
                 "id": "explicit.indexable_skill_150",
-                "text": "全部 # 寶石等級 +大地震擊",
+                "text": "全部 大地震擊 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -28013,7 +28013,7 @@
             },
             {
                 "id": "explicit.indexable_skill_9",
-                "text": "全部 # 寶石等級 +雙重打擊",
+                "text": "全部 雙重打擊 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -28053,7 +28053,7 @@
             },
             {
                 "id": "explicit.indexable_skill_118",
-                "text": "全部 # 寶石等級 +電能釋放",
+                "text": "全部 電能釋放 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -28063,7 +28063,7 @@
             },
             {
                 "id": "explicit.indexable_skill_112",
-                "text": "全部 # 寶石等級 +熔岩之擊",
+                "text": "全部 熔岩之擊 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -28128,7 +28128,7 @@
             },
             {
                 "id": "explicit.indexable_skill_116",
-                "text": "全部 # 寶石等級 +閃電之捷",
+                "text": "全部 閃電之捷 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -28168,7 +28168,7 @@
             },
             {
                 "id": "explicit.indexable_skill_228",
-                "text": "全部 # 寶石等級 +碎地重擊",
+                "text": "全部 碎地重擊 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -28228,7 +28228,7 @@
             },
             {
                 "id": "explicit.indexable_skill_123",
-                "text": "全部 # 寶石等級 +召喚寒冰魔像",
+                "text": "全部 召喚寒冰魔像 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -28268,12 +28268,12 @@
             },
             {
                 "id": "explicit.indexable_skill_229",
-                "text": "全部 # 寶石等級 +咒符之力",
+                "text": "全部 咒符之力 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_156",
-                "text": "全部 # 寶石等級 +熾灼奔流",
+                "text": "全部 熾灼奔流 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -28363,7 +28363,7 @@
             },
             {
                 "id": "explicit.indexable_skill_200",
-                "text": "全部 # 寶石等級 +狂戰",
+                "text": "全部 狂戰 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -28388,12 +28388,12 @@
             },
             {
                 "id": "explicit.indexable_skill_195",
-                "text": "全部 # 寶石等級 +精準",
+                "text": "全部 精準 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_249",
-                "text": "全部 # 寶石等級 +魔痕爆發",
+                "text": "全部 魔痕爆發 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -28408,7 +28408,7 @@
             },
             {
                 "id": "explicit.indexable_skill_210",
-                "text": "全部 # 寶石等級 +病疫之難",
+                "text": "全部 病疫之難 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -28493,7 +28493,7 @@
             },
             {
                 "id": "explicit.indexable_skill_222",
-                "text": "全部 # 寶石等級 +先祖戰吼",
+                "text": "全部 先祖戰吼 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -28503,7 +28503,7 @@
             },
             {
                 "id": "explicit.indexable_skill_46",
-                "text": "全部 # 寶石等級 +閃電傳送",
+                "text": "全部 閃電傳送 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -28533,7 +28533,7 @@
             },
             {
                 "id": "explicit.indexable_skill_223",
-                "text": "全部 # 寶石等級 +裂地戰吼",
+                "text": "全部 裂地戰吼 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -28568,12 +28568,12 @@
             },
             {
                 "id": "explicit.indexable_skill_166",
-                "text": "全部 # 寶石等級 +虹吸陷阱",
+                "text": "全部 虹吸陷阱 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_24",
-                "text": "全部 # 寶石等級 +正義之火",
+                "text": "全部 正義之火 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -28598,12 +28598,12 @@
             },
             {
                 "id": "explicit.indexable_skill_43",
-                "text": "全部 # 寶石等級 +刺客印記",
+                "text": "全部 刺客印記 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_7",
-                "text": "全部 # 寶石等級 +重盾衝鋒",
+                "text": "全部 重盾衝鋒 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -28618,7 +28618,7 @@
             },
             {
                 "id": "explicit.indexable_skill_242",
-                "text": "全部 # 寶石等級 +反抗之旗",
+                "text": "全部 反抗之旗 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -28633,7 +28633,7 @@
             },
             {
                 "id": "explicit.indexable_skill_267",
-                "text": "全部 # 寶石等級 +連結：破壞",
+                "text": "全部 連結：破壞 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -28678,12 +28678,12 @@
             },
             {
                 "id": "explicit.indexable_skill_30",
-                "text": "全部 # 寶石等級 +煉獄之擊",
+                "text": "全部 煉獄之擊 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_28",
-                "text": "全部 # 寶石等級 +冰矛",
+                "text": "全部 冰矛 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -28693,7 +28693,7 @@
             },
             {
                 "id": "explicit.indexable_skill_4",
-                "text": "全部 # 寶石等級 +橫掃",
+                "text": "全部 橫掃 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -28743,7 +28743,7 @@
             },
             {
                 "id": "explicit.indexable_skill_262",
-                "text": "全部 # 寶石等級 +連結：靈魂",
+                "text": "全部 連結：靈魂 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -28758,7 +28758,7 @@
             },
             {
                 "id": "explicit.indexable_skill_78",
-                "text": "全部 # 寶石等級 +誘餌圖騰",
+                "text": "全部 誘餌圖騰 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -28783,7 +28783,7 @@
             },
             {
                 "id": "explicit.indexable_skill_184",
-                "text": "全部 # 寶石等級 +戰爭之旗",
+                "text": "全部 戰爭之旗 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -28803,7 +28803,7 @@
             },
             {
                 "id": "explicit.indexable_skill_196",
-                "text": "全部 # 寶石等級 +鋼筋鐵骨",
+                "text": "全部 鋼筋鐵骨 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -28828,7 +28828,7 @@
             },
             {
                 "id": "explicit.indexable_skill_13",
-                "text": "全部 # 寶石等級 +迴旋之刃",
+                "text": "全部 迴旋之刃 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -28838,7 +28838,7 @@
             },
             {
                 "id": "explicit.indexable_skill_11",
-                "text": "全部 # 寶石等級 +不朽怒嚎",
+                "text": "全部 不朽怒嚎 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -28883,7 +28883,7 @@
             },
             {
                 "id": "explicit.indexable_skill_254",
-                "text": "全部 # 寶石等級 +禁忌儀式",
+                "text": "全部 禁忌儀式 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -28983,7 +28983,7 @@
             },
             {
                 "id": "explicit.indexable_skill_252",
-                "text": "全部 # 寶石等級 +凜冬之眼",
+                "text": "全部 凜冬之眼 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -29088,7 +29088,7 @@
             },
             {
                 "id": "explicit.indexable_skill_111",
-                "text": "全部 # 寶石等級 +號召",
+                "text": "全部 號召 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -29098,7 +29098,7 @@
             },
             {
                 "id": "explicit.indexable_skill_95",
-                "text": "全部 # 寶石等級 +幻化守衛",
+                "text": "全部 幻化守衛 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -29133,7 +29133,7 @@
             },
             {
                 "id": "explicit.indexable_skill_185",
-                "text": "全部 # 寶石等級 +恐懼之旗",
+                "text": "全部 恐懼之旗 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -29183,12 +29183,12 @@
             },
             {
                 "id": "explicit.indexable_skill_121",
-                "text": "全部 # 寶石等級 +力量爆破",
+                "text": "全部 力量爆破 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_239",
-                "text": "全部 # 寶石等級 +腐化潮",
+                "text": "全部 腐化潮 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -29248,12 +29248,12 @@
             },
             {
                 "id": "explicit.indexable_skill_105",
-                "text": "全部 # 寶石等級 +召喚憤怒狂靈",
+                "text": "全部 召喚憤怒狂靈 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_274",
-                "text": "全部 # 寶石等級 +自動竭盡",
+                "text": "全部 自動竭盡 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -29268,7 +29268,7 @@
             },
             {
                 "id": "explicit.indexable_skill_213",
-                "text": "全部 # 寶石等級 +火砲砲塔",
+                "text": "全部 火砲砲塔 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -29323,7 +29323,7 @@
             },
             {
                 "id": "explicit.indexable_skill_96",
-                "text": "全部 # 寶石等級 +靈體投擲",
+                "text": "全部 靈體投擲 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -29333,7 +29333,7 @@
             },
             {
                 "id": "explicit.indexable_skill_246",
-                "text": "全部 # 寶石等級 +召喚奪魂鐮",
+                "text": "全部 召喚奪魂鐮 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -29373,7 +29373,7 @@
             },
             {
                 "id": "explicit.indexable_skill_202",
-                "text": "全部 # 寶石等級 +奪魂勾索",
+                "text": "全部 奪魂勾索 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -29413,7 +29413,7 @@
             },
             {
                 "id": "explicit.indexable_skill_93",
-                "text": "全部 # 寶石等級 +冰雹地雷",
+                "text": "全部 冰雹地雷 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -29423,7 +29423,7 @@
             },
             {
                 "id": "explicit.indexable_skill_138",
-                "text": "全部 # 寶石等級 +飛刃風暴",
+                "text": "全部 飛刃風暴 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -29433,12 +29433,12 @@
             },
             {
                 "id": "explicit.indexable_skill_16",
-                "text": "全部 # 寶石等級 +殭屍復甦",
+                "text": "全部 殭屍復甦 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_18",
-                "text": "全部 # 寶石等級 +腐蝕箭矢",
+                "text": "全部 腐蝕箭矢 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -29553,7 +29553,7 @@
             },
             {
                 "id": "explicit.indexable_skill_164",
-                "text": "全部 # 寶石等級 +屍術矢",
+                "text": "全部 屍術矢 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -29568,7 +29568,7 @@
             },
             {
                 "id": "explicit.indexable_skill_72",
-                "text": "全部 # 寶石等級 +清晰",
+                "text": "全部 清晰 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -29583,7 +29583,7 @@
             },
             {
                 "id": "explicit.indexable_skill_80",
-                "text": "全部 # 寶石等級 +虛空匕首",
+                "text": "全部 虛空匕首 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -29663,7 +29663,7 @@
             },
             {
                 "id": "explicit.indexable_skill_216",
-                "text": "全部 # 寶石等級 +風暴術符",
+                "text": "全部 風暴術符 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -29678,12 +29678,12 @@
             },
             {
                 "id": "explicit.indexable_skill_73",
-                "text": "全部 # 寶石等級 +震波圖騰",
+                "text": "全部 震波圖騰 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_15",
-                "text": "全部 # 寶石等級 +霜暴",
+                "text": "全部 霜暴 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -29693,7 +29693,7 @@
             },
             {
                 "id": "explicit.indexable_skill_206",
-                "text": "全部 # 寶石等級 +毒蛇鞭笞",
+                "text": "全部 毒蛇鞭笞 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -29703,7 +29703,7 @@
             },
             {
                 "id": "explicit.indexable_skill_56",
-                "text": "全部 # 寶石等級 +暴風之盾",
+                "text": "全部 暴風之盾 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -29723,7 +29723,7 @@
             },
             {
                 "id": "explicit.indexable_skill_224",
-                "text": "全部 # 寶石等級 +將軍戰吼",
+                "text": "全部 將軍戰吼 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -29753,7 +29753,7 @@
             },
             {
                 "id": "explicit.indexable_skill_232",
-                "text": "全部 # 寶石等級 +熾熱魔炮",
+                "text": "全部 熾熱魔炮 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -29833,7 +29833,7 @@
             },
             {
                 "id": "explicit.indexable_skill_251",
-                "text": "全部 # 寶石等級 +赦免",
+                "text": "全部 赦免 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -29843,7 +29843,7 @@
             },
             {
                 "id": "explicit.indexable_skill_181",
-                "text": "全部 # 寶石等級 +風暴烙印",
+                "text": "全部 風暴烙印 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -29858,7 +29858,7 @@
             },
             {
                 "id": "explicit.indexable_skill_60",
-                "text": "全部 # 寶石等級 +閃電箭矢",
+                "text": "全部 閃電箭矢 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -29903,7 +29903,7 @@
             },
             {
                 "id": "explicit.indexable_skill_47",
-                "text": "全部 # 寶石等級 +召喚骷髏",
+                "text": "全部 召喚骷髏 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -29998,7 +29998,7 @@
             },
             {
                 "id": "explicit.indexable_skill_101",
-                "text": "全部 # 寶石等級 +風暴呼喚",
+                "text": "全部 風暴呼喚 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -30038,7 +30038,7 @@
             },
             {
                 "id": "explicit.indexable_skill_234",
-                "text": "全部 # 寶石等級 +虛無玉",
+                "text": "全部 虛無玉 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -30068,7 +30068,7 @@
             },
             {
                 "id": "explicit.indexable_skill_58",
-                "text": "全部 # 寶石等級 +力量抽取",
+                "text": "全部 力量抽取 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -30088,7 +30088,7 @@
             },
             {
                 "id": "explicit.indexable_skill_240",
-                "text": "全部 # 寶石等級 +石化之血",
+                "text": "全部 石化之血 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -30113,7 +30113,7 @@
             },
             {
                 "id": "explicit.indexable_skill_135",
-                "text": "全部 # 寶石等級 +爆裂箭雨",
+                "text": "全部 爆裂箭雨 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -30128,12 +30128,12 @@
             },
             {
                 "id": "explicit.indexable_skill_128",
-                "text": "全部 # 寶石等級 +煉獄戰吼",
+                "text": "全部 煉獄戰吼 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_225",
-                "text": "全部 # 寶石等級 +奧術烙印",
+                "text": "全部 奧術烙印 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -30143,7 +30143,7 @@
             },
             {
                 "id": "explicit.indexable_skill_27",
-                "text": "全部 # 寶石等級 +電球",
+                "text": "全部 電球 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -30158,12 +30158,12 @@
             },
             {
                 "id": "explicit.indexable_skill_244",
-                "text": "全部 # 寶石等級 +盛怒漩渦",
+                "text": "全部 盛怒漩渦 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_165",
-                "text": "全部 # 寶石等級 +爆裂陷阱",
+                "text": "全部 爆裂陷阱 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -30173,12 +30173,12 @@
             },
             {
                 "id": "explicit.indexable_skill_69",
-                "text": "全部 # 寶石等級 +憎恨",
+                "text": "全部 憎恨 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_6",
-                "text": "全部 # 寶石等級 +劈砍",
+                "text": "全部 劈砍 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -30198,12 +30198,12 @@
             },
             {
                 "id": "explicit.indexable_skill_139",
-                "text": "全部 # 寶石等級 +瘟疫",
+                "text": "全部 瘟疫 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_142",
-                "text": "全部 # 寶石等級 +冰凍陷阱",
+                "text": "全部 冰凍陷阱 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -30218,7 +30218,7 @@
             },
             {
                 "id": "explicit.indexable_skill_25",
-                "text": "全部 # 寶石等級 +解放",
+                "text": "全部 解放 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -30228,7 +30228,7 @@
             },
             {
                 "id": "explicit.indexable_skill_212",
-                "text": "全部 # 寶石等級 +召喚食腐魔像",
+                "text": "全部 召喚食腐魔像 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -30243,7 +30243,7 @@
             },
             {
                 "id": "explicit.indexable_skill_136",
-                "text": "全部 # 寶石等級 +虛空刀雨",
+                "text": "全部 虛空刀雨 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -30253,12 +30253,12 @@
             },
             {
                 "id": "explicit.indexable_skill_233",
-                "text": "全部 # 寶石等級 +碎雷電閃",
+                "text": "全部 碎雷電閃 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_253",
-                "text": "全部 # 寶石等級 +靈體旋武",
+                "text": "全部 靈體旋武 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -30303,12 +30303,12 @@
             },
             {
                 "id": "explicit.indexable_skill_208",
-                "text": "全部 # 寶石等級 +猛毒迴旋",
+                "text": "全部 猛毒迴旋 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_51",
-                "text": "全部 # 寶石等級 +沉重之擊",
+                "text": "全部 沉重之擊 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -30318,7 +30318,7 @@
             },
             {
                 "id": "explicit.indexable_skill_180",
-                "text": "全部 # 寶石等級 +凜冬之球",
+                "text": "全部 凜冬之球 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -30338,7 +30338,7 @@
             },
             {
                 "id": "explicit.indexable_skill_120",
-                "text": "全部 # 寶石等級 +閃現射擊",
+                "text": "全部 閃現射擊 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -30423,7 +30423,7 @@
             },
             {
                 "id": "explicit.indexable_skill_255",
-                "text": "全部 # 寶石等級 +刀鋒陷阱",
+                "text": "全部 刀鋒陷阱 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -30438,7 +30438,7 @@
             },
             {
                 "id": "explicit.indexable_skill_50",
-                "text": "全部 # 寶石等級 +劍刃風暴",
+                "text": "全部 劍刃風暴 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -30453,7 +30453,7 @@
             },
             {
                 "id": "explicit.indexable_skill_102",
-                "text": "全部 # 寶石等級 +烈焰爆破",
+                "text": "全部 烈焰爆破 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -30463,12 +30463,12 @@
             },
             {
                 "id": "explicit.indexable_skill_241",
-                "text": "全部 # 寶石等級 +收割",
+                "text": "全部 收割 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_110",
-                "text": "全部 # 寶石等級 +冰川之刺",
+                "text": "全部 冰川之刺 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -30498,17 +30498,17 @@
             },
             {
                 "id": "explicit.indexable_skill_189",
-                "text": "全部 # 寶石等級 +靈體撕裂",
+                "text": "全部 靈體撕裂 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_77",
-                "text": "全部 # 寶石等級 +火焰陷阱",
+                "text": "全部 火焰陷阱 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_44",
-                "text": "全部 # 寶石等級 +狙擊者印記",
+                "text": "全部 狙擊者印記 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -30533,7 +30533,7 @@
             },
             {
                 "id": "explicit.indexable_skill_70",
-                "text": "全部 # 寶石等級 +雷霆",
+                "text": "全部 雷霆 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -30573,12 +30573,12 @@
             },
             {
                 "id": "explicit.indexable_skill_91",
-                "text": "全部 # 寶石等級 +炎爆新星地雷",
+                "text": "全部 炎爆新星地雷 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_20",
-                "text": "全部 # 寶石等級 +冰霜射擊",
+                "text": "全部 冰霜射擊 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -30613,7 +30613,7 @@
             },
             {
                 "id": "explicit.indexable_skill_217",
-                "text": "全部 # 寶石等級 +劍刃爆破",
+                "text": "全部 劍刃爆破 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -30623,7 +30623,7 @@
             },
             {
                 "id": "explicit.indexable_skill_178",
-                "text": "全部 # 寶石等級 +腐蝕毒雨",
+                "text": "全部 腐蝕毒雨 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -30648,7 +30648,7 @@
             },
             {
                 "id": "explicit.indexable_skill_172",
-                "text": "全部 # 寶石等級 +盾靈投擲",
+                "text": "全部 盾靈投擲 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -30668,7 +30668,7 @@
             },
             {
                 "id": "explicit.indexable_skill_127",
-                "text": "全部 # 寶石等級 +激勵戰吼",
+                "text": "全部 激勵戰吼 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -30708,7 +30708,7 @@
             },
             {
                 "id": "explicit.indexable_skill_245",
-                "text": "全部 # 寶石等級 +重盾粉碎",
+                "text": "全部 重盾粉碎 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -30718,7 +30718,7 @@
             },
             {
                 "id": "explicit.indexable_skill_64",
-                "text": "全部 # 寶石等級 +活力",
+                "text": "全部 活力 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -30733,12 +30733,12 @@
             },
             {
                 "id": "explicit.indexable_skill_147",
-                "text": "全部 # 寶石等級 +狙擊",
+                "text": "全部 狙擊 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_124",
-                "text": "全部 # 寶石等級 +召喚烈焰魔像",
+                "text": "全部 召喚烈焰魔像 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -30763,7 +30763,7 @@
             },
             {
                 "id": "explicit.indexable_skill_157",
-                "text": "全部 # 寶石等級 +刀鋒亂舞",
+                "text": "全部 刀鋒亂舞 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -30793,12 +30793,12 @@
             },
             {
                 "id": "explicit.indexable_skill_137",
-                "text": "全部 # 寶石等級 +攻城炮台",
+                "text": "全部 攻城炮台 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_33",
-                "text": "全部 # 寶石等級 +冰霜脈衝",
+                "text": "全部 冰霜脈衝 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -30808,22 +30808,22 @@
             },
             {
                 "id": "explicit.indexable_skill_132",
-                "text": "全部 # 寶石等級 +冰霜之刃",
+                "text": "全部 冰霜之刃 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_39",
-                "text": "全部 # 寶石等級 +元素要害",
+                "text": "全部 元素要害 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_97",
-                "text": "全部 # 寶石等級 +幻化武器",
+                "text": "全部 幻化武器 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_227",
-                "text": "全部 # 寶石等級 +冬潮烙印",
+                "text": "全部 冬潮烙印 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -30833,7 +30833,7 @@
             },
             {
                 "id": "explicit.indexable_skill_23",
-                "text": "全部 # 寶石等級 +鮮血狂怒",
+                "text": "全部 鮮血狂怒 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -30843,12 +30843,12 @@
             },
             {
                 "id": "explicit.indexable_skill_32",
-                "text": "全部 # 寶石等級 +冰牆",
+                "text": "全部 冰牆 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_175",
-                "text": "全部 # 寶石等級 +奉獻之路",
+                "text": "全部 奉獻之路 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -30863,7 +30863,7 @@
             },
             {
                 "id": "explicit.indexable_skill_215",
-                "text": "全部 # 寶石等級 +誘捕箭矢",
+                "text": "全部 誘捕箭矢 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -30883,12 +30883,12 @@
             },
             {
                 "id": "explicit.indexable_skill_68",
-                "text": "全部 # 寶石等級 +憤怒",
+                "text": "全部 憤怒 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_5",
-                "text": "全部 # 寶石等級 +裂地之擊",
+                "text": "全部 裂地之擊 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -30928,12 +30928,12 @@
             },
             {
                 "id": "explicit.indexable_skill_87",
-                "text": "全部 # 寶石等級 +旋風斬",
+                "text": "全部 旋風斬 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_256",
-                "text": "全部 # 寶石等級 +魔能束縛",
+                "text": "全部 魔能束縛 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -30948,12 +30948,12 @@
             },
             {
                 "id": "explicit.indexable_skill_114",
-                "text": "全部 # 寶石等級 +灰燼之捷",
+                "text": "全部 灰燼之捷 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_53",
-                "text": "全部 # 寶石等級 +箭雨",
+                "text": "全部 箭雨 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -30963,17 +30963,17 @@
             },
             {
                 "id": "explicit.indexable_skill_86",
-                "text": "全部 # 寶石等級 +燒毀",
+                "text": "全部 燒毀 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_34",
-                "text": "全部 # 寶石等級 +閃電新星",
+                "text": "全部 閃電新星 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_270",
-                "text": "全部 # 寶石等級 +煉金術士印記",
+                "text": "全部 煉金術士印記 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -30983,17 +30983,17 @@
             },
             {
                 "id": "explicit.indexable_skill_61",
-                "text": "全部 # 寶石等級 +電弧",
+                "text": "全部 電弧 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_130",
-                "text": "全部 # 寶石等級 +熔岩翻騰",
+                "text": "全部 熔岩翻騰 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_264",
-                "text": "全部 # 寶石等級 +連結：直覺",
+                "text": "全部 連結：直覺 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -31003,12 +31003,12 @@
             },
             {
                 "id": "explicit.indexable_skill_117",
-                "text": "全部 # 寶石等級 +盜獵者印記",
+                "text": "全部 盜獵者印記 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_1",
-                "text": "全部 # 寶石等級 +火球",
+                "text": "全部 火球 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -31018,7 +31018,7 @@
             },
             {
                 "id": "explicit.indexable_skill_169",
-                "text": "全部 # 寶石等級 +地裂陷阱",
+                "text": "全部 地裂陷阱 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -31038,12 +31038,12 @@
             },
             {
                 "id": "explicit.indexable_skill_205",
-                "text": "全部 # 寶石等級 +驕傲",
+                "text": "全部 驕傲 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_108",
-                "text": "全部 # 寶石等級 +血肉奉獻",
+                "text": "全部 血肉奉獻 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -31078,7 +31078,7 @@
             },
             {
                 "id": "explicit.indexable_skill_38",
-                "text": "全部 # 寶石等級 +時空鎖鏈",
+                "text": "全部 時空鎖鏈 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -31093,22 +31093,22 @@
             },
             {
                 "id": "explicit.indexable_skill_94",
-                "text": "全部 # 寶石等級 +風暴地雷",
+                "text": "全部 風暴地雷 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_155",
-                "text": "全部 # 寶石等級 +邪風",
+                "text": "全部 邪風 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_140",
-                "text": "全部 # 寶石等級 +死亡凋零",
+                "text": "全部 死亡凋零 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_192",
-                "text": "全部 # 寶石等級 +信念浪湧",
+                "text": "全部 信念浪湧 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -31118,7 +31118,7 @@
             },
             {
                 "id": "explicit.indexable_skill_40",
-                "text": "全部 # 寶石等級 +督軍印記",
+                "text": "全部 督軍印記 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -31128,7 +31128,7 @@
             },
             {
                 "id": "explicit.indexable_skill_14",
-                "text": "全部 # 寶石等級 +狂怒",
+                "text": "全部 狂怒 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -31143,7 +31143,7 @@
             },
             {
                 "id": "explicit.indexable_skill_99",
-                "text": "全部 # 寶石等級 +冰霜淨化",
+                "text": "全部 冰霜淨化 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -31158,12 +31158,12 @@
             },
             {
                 "id": "explicit.indexable_skill_237",
-                "text": "全部 # 寶石等級 +咒術枯萎",
+                "text": "全部 咒術枯萎 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_90",
-                "text": "全部 # 寶石等級 +閃電陷阱",
+                "text": "全部 閃電陷阱 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -31178,22 +31178,22 @@
             },
             {
                 "id": "explicit.indexable_skill_10",
-                "text": "全部 # 寶石等級 +元素打擊",
+                "text": "全部 元素打擊 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_62",
-                "text": "全部 # 寶石等級 +迅捷",
+                "text": "全部 迅捷 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_269",
-                "text": "全部 # 寶石等級 +導雷",
+                "text": "全部 導雷 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_57",
-                "text": "全部 # 寶石等級 +熔岩護盾",
+                "text": "全部 熔岩護盾 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -31203,7 +31203,7 @@
             },
             {
                 "id": "explicit.indexable_skill_74",
-                "text": "全部 # 寶石等級 +回春圖騰",
+                "text": "全部 回春圖騰 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -31238,12 +31238,12 @@
             },
             {
                 "id": "explicit.indexable_skill_115",
-                "text": "全部 # 寶石等級 +冰霜之捷",
+                "text": "全部 冰霜之捷 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_41",
-                "text": "全部 # 寶石等級 +懲戒",
+                "text": "全部 懲戒 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -31258,7 +31258,7 @@
             },
             {
                 "id": "explicit.indexable_skill_63",
-                "text": "全部 # 寶石等級 +元素淨化",
+                "text": "全部 元素淨化 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -31293,17 +31293,17 @@
             },
             {
                 "id": "explicit.indexable_skill_194",
-                "text": "全部 # 寶石等級 +惡意",
+                "text": "全部 惡意 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_186",
-                "text": "全部 # 寶石等級 +鋼之碎擊",
+                "text": "全部 鋼之碎擊 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_221",
-                "text": "全部 # 寶石等級 +威嚇戰吼",
+                "text": "全部 威嚇戰吼 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -31333,7 +31333,7 @@
             },
             {
                 "id": "explicit.indexable_skill_173",
-                "text": "全部 # 寶石等級 +純淨之捷",
+                "text": "全部 純淨之捷 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -31343,12 +31343,12 @@
             },
             {
                 "id": "explicit.indexable_skill_230",
-                "text": "全部 # 寶石等級 +鋼之裂化",
+                "text": "全部 鋼之裂化 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_52",
-                "text": "全部 # 寶石等級 +霸氣之擊",
+                "text": "全部 霸氣之擊 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -31358,7 +31358,7 @@
             },
             {
                 "id": "explicit.indexable_skill_209",
-                "text": "全部 # 寶石等級 +召喚探測機獸",
+                "text": "全部 召喚探測機獸 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -31368,7 +31368,7 @@
             },
             {
                 "id": "explicit.indexable_skill_35",
-                "text": "全部 # 寶石等級 +毒蛇打擊",
+                "text": "全部 毒蛇打擊 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -31378,7 +31378,7 @@
             },
             {
                 "id": "explicit.indexable_skill_141",
-                "text": "全部 # 寶石等級 +靈魂吸取",
+                "text": "全部 靈魂吸取 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -31388,12 +31388,12 @@
             },
             {
                 "id": "explicit.indexable_skill_248",
-                "text": "全部 # 寶石等級 +伏擊",
+                "text": "全部 伏擊 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_148",
-                "text": "全部 # 寶石等級 +復仇之嚎",
+                "text": "全部 復仇之嚎 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -31418,12 +31418,12 @@
             },
             {
                 "id": "explicit.indexable_skill_160",
-                "text": "全部 # 寶石等級 +風爆",
+                "text": "全部 風爆 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_126",
-                "text": "全部 # 寶石等級 +寒冰衝擊",
+                "text": "全部 寒冰衝擊 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -31438,7 +31438,7 @@
             },
             {
                 "id": "explicit.indexable_skill_2",
-                "text": "全部 # 寶石等級 +冰霜新星",
+                "text": "全部 冰霜新星 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -31453,17 +31453,17 @@
             },
             {
                 "id": "explicit.indexable_skill_170",
-                "text": "全部 # 寶石等級 +脆弱",
+                "text": "全部 脆弱 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_26",
-                "text": "全部 # 寶石等級 +閃現打擊",
+                "text": "全部 閃現打擊 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_79",
-                "text": "全部 # 寶石等級 +吞噬圖騰",
+                "text": "全部 吞噬圖騰 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -31508,12 +31508,12 @@
             },
             {
                 "id": "explicit.indexable_skill_75",
-                "text": "全部 # 寶石等級 +迷魅陷阱",
+                "text": "全部 迷魅陷阱 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_55",
-                "text": "全部 # 寶石等級 +閃電打擊",
+                "text": "全部 閃電打擊 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -31538,17 +31538,17 @@
             },
             {
                 "id": "explicit.indexable_skill_144",
-                "text": "全部 # 寶石等級 +寒霜爆",
+                "text": "全部 寒霜爆 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_197",
-                "text": "全部 # 寶石等級 +幻步",
+                "text": "全部 幻步 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_129",
-                "text": "全部 # 寶石等級 +戒備打擊",
+                "text": "全部 戒備打擊 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -31568,7 +31568,7 @@
             },
             {
                 "id": "explicit.indexable_skill_21",
-                "text": "全部 # 寶石等級 +充能打擊",
+                "text": "全部 充能打擊 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -31578,7 +31578,7 @@
             },
             {
                 "id": "explicit.indexable_skill_231",
-                "text": "全部 # 寶石等級 +烈焰之牆",
+                "text": "全部 烈焰之牆 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -31618,7 +31618,7 @@
             },
             {
                 "id": "explicit.indexable_skill_49",
-                "text": "全部 # 寶石等級 +粉碎之拳",
+                "text": "全部 粉碎之拳 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -31633,7 +31633,7 @@
             },
             {
                 "id": "explicit.indexable_skill_36",
-                "text": "全部 # 寶石等級 +暗影迷蹤",
+                "text": "全部 暗影迷蹤 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -31643,7 +31643,7 @@
             },
             {
                 "id": "explicit.indexable_skill_83",
-                "text": "全部 # 寶石等級 +易燃",
+                "text": "全部 易燃 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -31653,7 +31653,7 @@
             },
             {
                 "id": "explicit.indexable_skill_238",
-                "text": "全部 # 寶石等級 +抽血",
+                "text": "全部 抽血 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -31663,12 +31663,12 @@
             },
             {
                 "id": "explicit.indexable_skill_257",
-                "text": "全部 # 寶石等級 +爆裂物",
+                "text": "全部 爆裂物 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_31",
-                "text": "全部 # 寶石等級 +冰霜之錘",
+                "text": "全部 冰霜之錘 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -31678,7 +31678,7 @@
             },
             {
                 "id": "explicit.indexable_skill_106",
-                "text": "全部 # 寶石等級 +怒焰奔騰",
+                "text": "全部 怒焰奔騰 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -31693,7 +31693,7 @@
             },
             {
                 "id": "explicit.indexable_skill_168",
-                "text": "全部 # 寶石等級 +鋒雷陷阱",
+                "text": "全部 鋒雷陷阱 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -31708,7 +31708,7 @@
             },
             {
                 "id": "explicit.indexable_skill_176",
-                "text": "全部 # 寶石等級 +雷鳴重擊",
+                "text": "全部 雷鳴重擊 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -31718,17 +31718,17 @@
             },
             {
                 "id": "explicit.indexable_skill_187",
-                "text": "全部 # 寶石等級 +鋼之突刺",
+                "text": "全部 鋼之突刺 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_122",
-                "text": "全部 # 寶石等級 +召喚混沌魔像",
+                "text": "全部 召喚混沌魔像 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_54",
-                "text": "全部 # 寶石等級 +烈炎風暴",
+                "text": "全部 烈炎風暴 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -31753,7 +31753,7 @@
             },
             {
                 "id": "explicit.indexable_skill_151",
-                "text": "全部 # 寶石等級 +破空斬",
+                "text": "全部 破空斬 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -31763,12 +31763,12 @@
             },
             {
                 "id": "explicit.indexable_skill_179",
-                "text": "全部 # 寶石等級 +召喚聖物",
+                "text": "全部 召喚聖物 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_276",
-                "text": "全部 # 寶石等級 +燎原箭矢",
+                "text": "全部 燎原箭矢 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -31783,7 +31783,7 @@
             },
             {
                 "id": "explicit.indexable_skill_81",
-                "text": "全部 # 寶石等級 +極地裝甲",
+                "text": "全部 極地裝甲 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -31793,17 +31793,17 @@
             },
             {
                 "id": "explicit.indexable_skill_134",
-                "text": "全部 # 寶石等級 +電流箭矢",
+                "text": "全部 電流箭矢 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_183",
-                "text": "全部 # 寶石等級 +烙印呼喚",
+                "text": "全部 烙印呼喚 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_48",
-                "text": "全部 # 寶石等級 +冰川盾擊",
+                "text": "全部 冰川盾擊 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -31828,17 +31828,17 @@
             },
             {
                 "id": "explicit.indexable_skill_76",
-                "text": "全部 # 寶石等級 +捕熊陷阱",
+                "text": "全部 捕熊陷阱 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_107",
-                "text": "全部 # 寶石等級 +褻瀆",
+                "text": "全部 褻瀆 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_84",
-                "text": "全部 # 寶石等級 +凍傷",
+                "text": "全部 凍傷 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -31848,17 +31848,17 @@
             },
             {
                 "id": "explicit.indexable_skill_214",
-                "text": "全部 # 寶石等級 +彈片砲塔",
+                "text": "全部 彈片砲塔 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_163",
-                "text": "全部 # 寶石等級 +致命之息",
+                "text": "全部 致命之息 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_3",
-                "text": "全部 # 寶石等級 +躍擊",
+                "text": "全部 躍擊 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -31888,7 +31888,7 @@
             },
             {
                 "id": "explicit.indexable_skill_220",
-                "text": "全部 # 寶石等級 +秘能披風",
+                "text": "全部 秘能披風 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -31898,7 +31898,7 @@
             },
             {
                 "id": "explicit.indexable_skill_153",
-                "text": "全部 # 寶石等級 +寒冰彈",
+                "text": "全部 寒冰彈 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -31913,22 +31913,22 @@
             },
             {
                 "id": "explicit.indexable_skill_92",
-                "text": "全部 # 寶石等級 +煙霧地雷",
+                "text": "全部 煙霧地雷 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_45",
-                "text": "全部 # 寶石等級 +絕望",
+                "text": "全部 絕望 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_66",
-                "text": "全部 # 寶石等級 +優雅",
+                "text": "全部 優雅 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_113",
-                "text": "全部 # 寶石等級 +龍捲射擊",
+                "text": "全部 龍捲射擊 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -31938,12 +31938,12 @@
             },
             {
                 "id": "explicit.indexable_skill_152",
-                "text": "全部 # 寶石等級 +靈魂奉獻",
+                "text": "全部 靈魂奉獻 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_171",
-                "text": "全部 # 寶石等級 +破體之擊",
+                "text": "全部 破體之擊 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -31958,7 +31958,7 @@
             },
             {
                 "id": "explicit.indexable_skill_149",
-                "text": "全部 # 寶石等級 +震地",
+                "text": "全部 震地 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -31983,7 +31983,7 @@
             },
             {
                 "id": "explicit.indexable_skill_266",
-                "text": "全部 # 寶石等級 +連結：吸血",
+                "text": "全部 連結：吸血 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -32008,7 +32008,7 @@
             },
             {
                 "id": "explicit.indexable_skill_236",
-                "text": "全部 # 寶石等級 +水弒界",
+                "text": "全部 水弒界 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -32028,22 +32028,22 @@
             },
             {
                 "id": "explicit.indexable_skill_100",
-                "text": "全部 # 寶石等級 +閃電淨化",
+                "text": "全部 閃電淨化 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_85",
-                "text": "全部 # 寶石等級 +導電",
+                "text": "全部 導電 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_158",
-                "text": "全部 # 寶石等級 +雷霆衝鋒",
+                "text": "全部 雷霆衝鋒 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_278",
-                "text": "全部 # 寶石等級 +力量驟雨",
+                "text": "全部 力量驟雨 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -32053,7 +32053,7 @@
             },
             {
                 "id": "explicit.indexable_skill_235",
-                "text": "全部 # 寶石等級 +寒霜護盾",
+                "text": "全部 寒霜護盾 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -32088,7 +32088,7 @@
             },
             {
                 "id": "explicit.indexable_skill_109",
-                "text": "全部 # 寶石等級 +骸骨奉獻",
+                "text": "全部 骸骨奉獻 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -32113,12 +32113,12 @@
             },
             {
                 "id": "explicit.indexable_skill_207",
-                "text": "全部 # 寶石等級 +凋零之步",
+                "text": "全部 凋零之步 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_82",
-                "text": "全部 # 寶石等級 +神聖火舌圖騰",
+                "text": "全部 神聖火舌圖騰 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -32138,7 +32138,7 @@
             },
             {
                 "id": "explicit.indexable_skill_167",
-                "text": "全部 # 寶石等級 +噴火陷阱",
+                "text": "全部 噴火陷阱 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -32148,7 +32148,7 @@
             },
             {
                 "id": "explicit.indexable_skill_8",
-                "text": "全部 # 寶石等級 +堅決戰吼",
+                "text": "全部 堅決戰吼 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -32173,7 +32173,7 @@
             },
             {
                 "id": "explicit.indexable_skill_177",
-                "text": "全部 # 寶石等級 +天譴之箭",
+                "text": "全部 天譴之箭 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -32218,12 +32218,12 @@
             },
             {
                 "id": "explicit.indexable_skill_282",
-                "text": "全部 # 寶石等級 +力量猛射",
+                "text": "全部 力量猛射 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_271",
-                "text": "全部 # 寶石等級 +戰亂．凍結",
+                "text": "全部 戰亂．凍結 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -32263,12 +32263,12 @@
             },
             {
                 "id": "explicit.indexable_skill_19",
-                "text": "全部 # 寶石等級 +寒霜滲透",
+                "text": "全部 寒霜滲透 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_272",
-                "text": "全部 # 寶石等級 +炎火脈動",
+                "text": "全部 炎火脈動 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -32278,7 +32278,7 @@
             },
             {
                 "id": "explicit.indexable_skill_131",
-                "text": "全部 # 寶石等級 +烈焰衝刺",
+                "text": "全部 烈焰衝刺 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -32293,7 +32293,7 @@
             },
             {
                 "id": "explicit.indexable_skill_103",
-                "text": "全部 # 寶石等級 +彈幕",
+                "text": "全部 彈幕 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -32413,7 +32413,7 @@
             },
             {
                 "id": "explicit.indexable_skill_89",
-                "text": "全部 # 寶石等級 +衝擊波",
+                "text": "全部 衝擊波 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -32463,7 +32463,7 @@
             },
             {
                 "id": "explicit.indexable_skill_204",
-                "text": "全部 # 寶石等級 +血肉骸骨",
+                "text": "全部 血肉骸骨 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -32483,12 +32483,12 @@
             },
             {
                 "id": "explicit.indexable_skill_199",
-                "text": "全部 # 寶石等級 +血腥沙戮",
+                "text": "全部 血腥沙戮 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_265",
-                "text": "全部 # 寶石等級 +連結：保護",
+                "text": "全部 連結：保護 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -32508,7 +32508,7 @@
             },
             {
                 "id": "explicit.indexable_skill_211",
-                "text": "全部 # 寶石等級 +瘟疫打擊",
+                "text": "全部 瘟疫打擊 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -32523,7 +32523,7 @@
             },
             {
                 "id": "explicit.indexable_skill_67",
-                "text": "全部 # 寶石等級 +堅定",
+                "text": "全部 堅定 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -32533,12 +32533,12 @@
             },
             {
                 "id": "explicit.indexable_skill_146",
-                "text": "全部 # 寶石等級 +剔骨",
+                "text": "全部 剔骨 寶石等級 +#",
                 "type": "explicit"
             },
             {
                 "id": "explicit.indexable_skill_259",
-                "text": "全部 # 寶石等級 +時空裂隙",
+                "text": "全部 時空裂隙 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -32588,7 +32588,7 @@
             },
             {
                 "id": "explicit.indexable_skill_133",
-                "text": "全部 # 寶石等級 +野性打擊",
+                "text": "全部 野性打擊 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -32818,7 +32818,7 @@
             },
             {
                 "id": "explicit.indexable_skill_198",
-                "text": "全部 # 寶石等級 +旋天劍舞",
+                "text": "全部 旋天劍舞 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -32878,7 +32878,7 @@
             },
             {
                 "id": "explicit.indexable_skill_42",
-                "text": "全部 # 寶石等級 +衰弱",
+                "text": "全部 衰弱 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -32968,7 +32968,7 @@
             },
             {
                 "id": "explicit.indexable_skill_273",
-                "text": "全部 # 寶石等級 +自動化",
+                "text": "全部 自動化 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -35263,7 +35263,7 @@
             },
             {
                 "id": "explicit.indexable_skill_281",
-                "text": "全部 # 寶石等級 +天雷暴雨",
+                "text": "全部 天雷暴雨 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -35448,7 +35448,7 @@
             },
             {
                 "id": "explicit.indexable_skill_279",
-                "text": "全部 # 寶石等級 +心靈壁壘",
+                "text": "全部 心靈壁壘 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -35538,7 +35538,7 @@
             },
             {
                 "id": "explicit.indexable_skill_280",
-                "text": "全部 # 寶石等級 +力量之壁",
+                "text": "全部 力量之壁 寶石等級 +#",
                 "type": "explicit"
             },
             {
@@ -35608,7 +35608,7 @@
             },
             {
                 "id": "explicit.indexable_skill_277",
-                "text": "全部 # 寶石等級 +力量猛射",
+                "text": "全部 力量猛射 寶石等級 +#",
                 "type": "explicit"
             },
             {
