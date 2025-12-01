@@ -91,7 +91,7 @@ public class RequestBodyBuilder(CacheService cacheService)
         var target = fullMap?[uniqueName + ";" + uniqueBase];
         if (target == null)
         {
-            return (null, null);
+            return (uniqueName, uniqueBase);
         }
 
         var split = target.Split(';');
@@ -125,17 +125,17 @@ public class RequestBodyBuilder(CacheService cacheService)
             }
 
             var content = await File.ReadAllTextAsync(twBaseFile);
-            List<string> twBaseList = content.Replace("\r", "").Split('\n')
+            var twBaseList = content.Replace("\r", "").Split('\n')
                 .Where(x => !x.StartsWith("###") && !string.IsNullOrWhiteSpace(x))
                 .ToList();
             content = await File.ReadAllTextAsync(enBaseFile);
-            List<string> enBaseList = content.Replace("\r", "").Split('\n')
+            var enBaseList = content.Replace("\r", "").Split('\n')
                 .Where(x => !x.StartsWith("###") && !string.IsNullOrWhiteSpace(x))
                 .ToList();
             baseMap = new Dictionary<string, string>();
             if (twBaseList.Count != enBaseList.Count)
             {
-                return null;
+                return name;
             }
 
             for (var i = 0; i < enBaseList.Count; i++)
@@ -146,7 +146,7 @@ public class RequestBodyBuilder(CacheService cacheService)
             cacheService.Set(baseMapCacheKey, baseMap);
         }
 
-        return baseMap![name];
+        return baseMap?.GetValueOrDefault(name, name) ?? name;
     }
 
     private IEnumerable<object> GetStatsQueryParam(SearchRequestBase searchRequest)
