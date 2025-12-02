@@ -212,17 +212,11 @@ internal class EnParser(CacheService cacheService) : ChineseTradParser(cacheServ
             return (false, null);
         }
 
-        var regex = @"\(.*?\)";
-        var realItemStat = Regex.Replace(statText, regex, "").Trim();
+        var realItemStat = ParserHelper.TrimEndOfBraces(statText);
         realItemStat += " (Staves)";
-        regex = stat.Text.Replace("(", "\\(");
-        regex = regex.Replace(")", "\\)");
-        regex = regex.Replace("+#", "([+-][\\d.]+)");
-        regex = regex.Replace("#", "([\\d.]+)");
-        var match = Regex.Match(realItemStat, regex);
-        if (match.Success)
+        if (TryMatchStat(stat, realItemStat, out var value))
         {
-            return (true, int.Parse(match.Groups[1].Value));
+            return (true, value);
         }
 
         return (false, null);

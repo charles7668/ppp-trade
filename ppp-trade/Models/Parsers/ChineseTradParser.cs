@@ -166,7 +166,9 @@ public class ChineseTradParser(CacheService cacheService) : IParser
                     }
 
                     if (parsed)
+                    {
                         break;
+                    }
 
                     parsedItem.ItemName = line.Replace(FoulBornKeyword, "");
                     parsingState = parsedItem.Rarity == Rarity.CURRENCY
@@ -498,49 +500,15 @@ public class ChineseTradParser(CacheService cacheService) : IParser
                         return (entry, value);
                     }
 
-                    foreach (var splitEntry in entry.Text.Split('\n'))
+                    var realItemStat = stat;
+                    if (!matchLocal)
                     {
-                        string regex;
-                        var realItemStat = stat;
-                        if (!matchLocal)
-                        {
-                            regex = @"\(.*?\)";
-                            realItemStat = Regex.Replace(stat, regex, "").Trim();
-                        }
+                        realItemStat = ParserHelper.TrimEndOfBraces(realItemStat);
+                    }
 
-                        regex = splitEntry.Replace("(", "\\(");
-                        regex = regex.Replace(")", "\\)");
-                        regex = regex.Replace("+#", "([+-][\\d.]+)");
-                        regex = regex.Replace("#", "([\\d.]+)");
-                        regex = $"^{regex}$";
-                        try
-                        {
-                            var match = Regex.Match(realItemStat, regex);
-                            if (!match.Success)
-                            {
-                                if (!match.Success)
-                                {
-                                    continue;
-                                }
-                            }
-
-                            int? value = match.Groups.Count switch
-                            {
-                                3 => (int)((double.Parse(match.Groups[2].Value,
-                                                CultureInfo.InvariantCulture) +
-                                            double.Parse(match.Groups[1].Value,
-                                                CultureInfo.InvariantCulture)) / 2),
-                                > 1 => (int)double.Parse(match.Groups[1].Value,
-                                    CultureInfo.InvariantCulture),
-                                _ => null
-                            };
-
-                            return (entry, value);
-                        }
-                        catch (Exception e)
-                        {
-                            Debug.WriteLine(e.Message);
-                        }
+                    if (TryMatchStat(entry, realItemStat, out var matchedValue))
+                    {
+                        return (entry, matchedValue);
                     }
                 }
 
@@ -641,6 +609,50 @@ public class ChineseTradParser(CacheService cacheService) : IParser
         }
     }
 
+    protected static bool TryMatchStat(Stat stat, string statText, out int? outValue)
+    {
+        outValue = null;
+        foreach (var splitEntry in stat.Text.Split('\n'))
+        {
+            var regex = splitEntry.Replace("(", "\\(");
+            regex = regex.Replace(")", "\\)");
+            regex = regex.Replace("+#", "([+-][\\d.]+)");
+            regex = regex.Replace("#", "([\\d.]+)");
+            regex = $"^{regex}$";
+            try
+            {
+                var match = Regex.Match(statText, regex);
+                if (!match.Success)
+                {
+                    if (!match.Success)
+                    {
+                        continue;
+                    }
+                }
+
+                int? value = match.Groups.Count switch
+                {
+                    3 => (int)((double.Parse(match.Groups[2].Value,
+                                    CultureInfo.InvariantCulture) +
+                                double.Parse(match.Groups[1].Value,
+                                    CultureInfo.InvariantCulture)) / 2),
+                    > 1 => (int)double.Parse(match.Groups[1].Value,
+                        CultureInfo.InvariantCulture),
+                    _ => null
+                };
+
+                outValue = value;
+                return true;
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+            }
+        }
+
+        return false;
+    }
+
     protected virtual bool TryParseFlask(Poe1Item parsingItem, string line)
     {
         if (parsingItem is not { ItemType: ItemType.FLASK, Rarity: not (Rarity.NORMAL or Rarity.UNIQUE) })
@@ -664,6 +676,27 @@ public class ChineseTradParser(CacheService cacheService) : IParser
 
         return true;
     }
+
+    private static (bool, int?) TryResolveIncreasedAndDecreased(Stat stat, string statText, ItemBase itemBase)
+    {
+        // try match normal case
+        var regex = stat.Text.Replace("#", "(\\d+)");
+        var match = Regex.Match(statText, regex);
+        if (match.Success)
+        {
+            return (true, int.Parse(match.Groups[1].Value));
+        }
+
+        regex = stat.Text.Replace("增加", "減少").Replace("#", "(\\d+)");
+        match = Regex.Match(statText, regex);
+        if (match.Success)
+        {
+            return (true, int.Parse(match.Groups[1].Value) * -1);
+        }
+
+        return (false, null);
+    }
+
     private static (bool, int?) TryResolveStaffStats(Stat stat, string statText, ItemBase parsingItem)
     {
         if (parsingItem.ItemType != ItemType.STAFF && parsingItem.ItemType != ItemType.WAR_STAFF)
@@ -682,26 +715,6 @@ public class ChineseTradParser(CacheService cacheService) : IParser
         if (match.Success)
         {
             return (true, int.Parse(match.Groups[1].Value));
-        }
-
-        return (false, null);
-    }
-
-    private static (bool, int?) TryResolveIncreasedAndDecreased(Stat stat, string statText, ItemBase itemBase)
-    {
-        // try match normal case
-        var regex = stat.Text.Replace("#", "(\\d+)");
-        var match = Regex.Match(statText, regex);
-        if (match.Success)
-        {
-            return (true, int.Parse(match.Groups[1].Value));
-        }
-
-        regex = stat.Text.Replace("增加", "減少").Replace("#", "(\\d+)");
-        match = Regex.Match(statText, regex);
-        if (match.Success)
-        {
-            return (true, int.Parse(match.Groups[1].Value) * -1);
         }
 
         return (false, null);
