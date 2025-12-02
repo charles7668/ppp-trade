@@ -39,6 +39,7 @@ public enum ItemType
     RING,
     JEWEL,
     ABYSS_JEWEL,
+    CLUSTER_JEWEL,
     TALISMAN,
     QUIVER,
 

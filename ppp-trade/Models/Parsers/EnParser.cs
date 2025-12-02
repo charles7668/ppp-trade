@@ -42,6 +42,8 @@ internal class EnParser(CacheService cacheService) : ChineseTradParser(cacheServ
 
     private static string StatEnCacheKey => "parser:stat_en";
 
+    protected override string ClusterJewelKeyword => "Cluster Jewel";
+
     protected override Dictionary<string, ItemType> ItemTypeMap => new()
     {
         { "Claws", ItemType.CLAW },
@@ -141,6 +143,38 @@ internal class EnParser(CacheService cacheService) : ChineseTradParser(cacheServ
             PropertyNameCaseInsensitive = true
         };
         return JsonSerializer.Deserialize<List<StatGroup>>(json, options) ?? [];
+    }
+
+    protected override bool TryParseClusterJewel(Poe1Item parsingItem, string line)
+    {
+        if (parsingItem is not { ItemType: ItemType.JEWEL, Rarity: Rarity.MAGIC } ||
+            !line.EndsWith(ClusterJewelKeyword))
+        {
+            return false;
+        }
+
+        var removeFoulBorn = line.Replace(FoulBornKeyword, "");
+        var splitWords = removeFoulBorn.Split(' ');
+        if (splitWords.Length > 3)
+        {
+            var tempBaseName = "";
+            for (var x = 1; x < splitWords.Length; x++)
+            {
+                if (splitWords[x] == "of")
+                {
+                    break;
+                }
+
+                tempBaseName += splitWords[x] + " ";
+            }
+
+            parsingItem.ItemName = splitWords[0];
+            parsingItem.ItemBaseName = tempBaseName.Trim();
+            parsingItem.ItemType = ItemType.CLUSTER_JEWEL;
+            return true;
+        }
+
+        return false;
     }
 
     protected override bool TryParseFlask(Poe1Item parsingItem, string line)

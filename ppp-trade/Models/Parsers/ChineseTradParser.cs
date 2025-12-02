@@ -34,7 +34,7 @@ public class ChineseTradParser(CacheService cacheService) : IParser
 
     protected virtual string LocalKeyword => "(部分)";
 
-    private static string[] FlaskSplitKeywords => ["之", "的"];
+    private static string[] FlaskAndClusterJewelSplitKeywords => ["之", "的"];
 
     protected virtual string ReqLevelKeyword => "等級: ";
 
@@ -43,6 +43,8 @@ public class ChineseTradParser(CacheService cacheService) : IParser
     protected virtual string ReqStrKeyword => "力量: ";
 
     protected virtual string ReqDexKeyword => "敏捷: ";
+
+    protected virtual string ClusterJewelKeyword => "星團珠寶";
 
     protected virtual Dictionary<string, ItemType> ItemTypeMap => new()
     {
@@ -156,6 +158,12 @@ public class ChineseTradParser(CacheService cacheService) : IParser
                         break;
                     }
 
+                    if (TryParseClusterJewel(parsedItem, line))
+                    {
+                        parsingState = ParsingState.PARSING_UNKNOW;
+                        break;
+                    }
+
                     parsedItem.ItemName = line.Replace(FoulBornKeyword, "");
                     parsingState = ParsingState.PARSING_ITEM_BASE;
                     break;
@@ -167,6 +175,12 @@ public class ChineseTradParser(CacheService cacheService) : IParser
                     }
                     else
                     {
+                        if (parsedItem.ItemType == ItemType.JEWEL &&
+                            parsedItem.ItemBaseName.EndsWith(ClusterJewelKeyword))
+                        {
+                            parsedItem.ItemType = ItemType.CLUSTER_JEWEL;
+                        }
+
                         parsingState = ParsingState.PARSING_UNKNOW;
                     }
 
@@ -669,6 +683,32 @@ public class ChineseTradParser(CacheService cacheService) : IParser
         return false;
     }
 
+    protected virtual bool TryParseClusterJewel(Poe1Item parsingItem, string line)
+    {
+        if (parsingItem is not { ItemType: ItemType.JEWEL, Rarity: Rarity.MAGIC } ||
+            !line.EndsWith(ClusterJewelKeyword))
+        {
+            return false;
+        }
+
+        foreach (var keyword in FlaskAndClusterJewelSplitKeywords)
+        {
+            var replace = line.Replace(FoulBornKeyword, "");
+            var split = replace.Split(keyword);
+            if (split.Length != 2)
+            {
+                continue;
+            }
+
+            parsingItem.ItemName = split[0] + keyword;
+            parsingItem.ItemBaseName = split[1];
+            parsingItem.ItemType = ItemType.CLUSTER_JEWEL;
+            break;
+        }
+
+        return true;
+    }
+
     protected virtual bool TryParseFlask(Poe1Item parsingItem, string line)
     {
         if (parsingItem is not { ItemType: ItemType.FLASK, Rarity: not (Rarity.NORMAL or Rarity.UNIQUE) })
@@ -676,7 +716,7 @@ public class ChineseTradParser(CacheService cacheService) : IParser
             return false;
         }
 
-        foreach (var flaskSplitKeyword in FlaskSplitKeywords)
+        foreach (var flaskSplitKeyword in FlaskAndClusterJewelSplitKeywords)
         {
             var replace = line.Replace(FoulBornKeyword, "");
             var split = replace.Split(flaskSplitKeyword);
