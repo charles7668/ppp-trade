@@ -306,7 +306,8 @@ public class ChineseTradParser(CacheService cacheService) : IParser
         {
             if (gemInfoText.StartsWith(ReqLevelKeyword))
             {
-                var valueStr = gemInfoText.Substring(ReqLevelKeyword.Length).Trim();
+                var levelText = ParserHelper.TrimEndOfBraces(gemInfoText);
+                var valueStr = levelText.Substring(ReqLevelKeyword.Length).Trim();
                 parsingItem.GemLevel = int.Parse(valueStr);
             }
         }
