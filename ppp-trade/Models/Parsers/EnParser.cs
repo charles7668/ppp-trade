@@ -259,4 +259,53 @@ internal class EnParser(CacheService cacheService) : ChineseTradParser(cacheServ
 
         return (false, null);
     }
+
+    protected override (string, string) ResolveMagicItemName(string nameText)
+    {
+        const string cacheKey = "poe1:item_base:en";
+        if (!_cacheService.TryGet(cacheKey, out HashSet<string>? itemBaseHashSet))
+        {
+            var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "datas\\poe", "items_en.txt");
+            if (!File.Exists(path))
+            {
+                return (nameText, nameText);
+            }
+
+            var contents = File.ReadAllText(path);
+            itemBaseHashSet = [];
+            foreach (var content in contents.Split('\n'))
+            {
+                if (content.StartsWith("###"))
+                {
+                    continue;
+                }
+
+                itemBaseHashSet.Add(content.Trim().TrimEnd('\r').Trim());
+            }
+
+            _cacheService.Set(cacheKey, itemBaseHashSet);
+        }
+
+        var index = nameText.IndexOf(" of ", StringComparison.Ordinal);
+        var tempText = nameText;
+        if (index > 0)
+        {
+            tempText = nameText.Substring(0, index).Trim();
+        }
+
+        index = -1;
+        do
+        {
+            var check = tempText.Substring(index + 1).Trim();
+            if (itemBaseHashSet!.Contains(check))
+            {
+                return (nameText, check);
+            }
+
+            tempText = check;
+            index = tempText.IndexOf(' ');
+        } while (index > 0);
+
+        return (nameText, nameText);
+    }
 }

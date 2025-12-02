@@ -20,6 +20,8 @@ public class ChineseTradParser(CacheService cacheService) : IParser
 
     protected virtual string ItemLevelKeyword => "物品等級: ";
 
+    protected virtual string UnidentifiedKeyword => "Unidentified";
+
     protected virtual string SplitKeyword => "--------";
 
     protected virtual string ImplicitKeyword => "(implicit)";
@@ -137,9 +139,16 @@ public class ChineseTradParser(CacheService cacheService) : IParser
 
         var parsedItem = new Poe1Item();
         var parsingState = ParsingState.PARSING_UNKNOW;
+        List<string> tempItemNames = [];
         for (var i = 0; i < lines.Length; ++i)
         {
             var line = lines[i];
+
+            if (line.Trim() == UnidentifiedKeyword)
+            {
+                parsedItem.Unidentified = true;
+            }
+
             switch (parsingState)
             {
                 case ParsingState.PARSING_RARITY:
@@ -152,37 +161,15 @@ public class ChineseTradParser(CacheService cacheService) : IParser
                         parsedItem.IsFoulBorn = true;
                     }
 
-                    if (TryParseFlask(parsedItem, line))
-                    {
-                        parsingState = ParsingState.PARSING_UNKNOW;
-                        break;
-                    }
-
-                    if (TryParseClusterJewel(parsedItem, line))
-                    {
-                        parsingState = ParsingState.PARSING_UNKNOW;
-                        break;
-                    }
-
-                    parsedItem.ItemName = line.Replace(FoulBornKeyword, "");
+                    tempItemNames.Add(line.Replace(FoulBornKeyword, ""));
                     parsingState = ParsingState.PARSING_ITEM_BASE;
                     break;
                 case ParsingState.PARSING_ITEM_BASE:
-                    parsedItem.ItemBaseName = line == SplitKeyword ? parsedItem.ItemName : line;
-                    if (parsedItem.ItemType is ItemType.ACTIVE_GEM or ItemType.SUPPORT_GEM)
-                    {
-                        parsingState = ParsingState.PARSING_GEM_INFO;
-                    }
-                    else
-                    {
-                        if (parsedItem.ItemType == ItemType.JEWEL &&
-                            parsedItem.ItemBaseName.EndsWith(ClusterJewelKeyword))
-                        {
-                            parsedItem.ItemType = ItemType.CLUSTER_JEWEL;
-                        }
+                    parsingState = parsedItem.ItemType is ItemType.ACTIVE_GEM or ItemType.SUPPORT_GEM
+                        ? ParsingState.PARSING_GEM_INFO
+                        : ParsingState.PARSING_UNKNOW;
 
-                        parsingState = ParsingState.PARSING_UNKNOW;
-                    }
+                    tempItemNames.Add(line.Trim());
 
                     break;
                 case ParsingState.PARSING_GEM_INFO:
@@ -222,6 +209,12 @@ public class ChineseTradParser(CacheService cacheService) : IParser
                     if (line == SplitKeyword)
                     {
                         i++;
+                        if (lines[i] == UnidentifiedKeyword)
+                        {
+                            parsedItem.Unidentified = true;
+                            parsingState = ParsingState.PARSING_UNKNOW;
+                            continue;
+                        }
                         if (lines[i].Contains(ImplicitKeyword))
                         {
                             hasImplicit = true;
@@ -284,7 +277,50 @@ public class ChineseTradParser(CacheService cacheService) : IParser
             }
         }
 
+        ResolveItemName(tempItemNames, parsedItem);
+
         return parsedItem;
+    }
+
+    private void ResolveItemName(IEnumerable<string> itemNameTexts, ItemBase parsingItem)
+    {
+        var itemNameTextList = itemNameTexts.Select(x => x.Trim()).ToList();
+        if (itemNameTextList.Count != 2)
+        {
+            return;
+        }
+
+        if ((parsingItem.Rarity is Rarity.UNIQUE or Rarity.RARE) && !parsingItem.Unidentified)
+        {
+            parsingItem.ItemName = itemNameTextList[0] + " " + itemNameTextList[1];
+            parsingItem.ItemBaseName = itemNameTextList[1];
+            return;
+        }
+
+        if (parsingItem.Rarity is Rarity.MAGIC)
+        {
+            var (itemName, itemBaseName) = ResolveMagicItemName(itemNameTextList[0]);
+            parsingItem.ItemName = itemName;
+            parsingItem.ItemBaseName = itemBaseName;
+            return;
+        }
+
+        parsingItem.ItemName = itemNameTextList[0];
+        parsingItem.ItemBaseName = itemNameTextList[0];
+    }
+
+    protected virtual (string, string) ResolveMagicItemName(string nameText)
+    {
+        var index1 = nameText.IndexOf('之');
+        var index2 = nameText.IndexOf('的');
+        var lastIndex = Math.Max(index1, index2);
+        var baseName = nameText;
+        if (lastIndex != -1)
+        {
+            baseName = nameText.Substring(lastIndex + 1);
+        }
+
+        return (nameText, baseName);
     }
 
     protected virtual List<StatGroup> GetStatGroups()

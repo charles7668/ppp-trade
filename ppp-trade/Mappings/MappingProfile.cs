@@ -21,7 +21,6 @@ public class MappingProfile : Profile
                 opt => opt.MapFrom(src => src.Link == 0 ? null : (int?)src.Link))
             .ForMember(dest => dest.GemLevelMin,
                 opt => opt.MapFrom(src => src.GemLevel))
-            .ForMember(dest => dest.ItemName, opt => opt.MapFrom(src => src.ItemName + " " + src.ItemBaseName))
             .ForMember(dest => dest.StatVMs, opt => opt.MapFrom(src => src.Stats));
 
         CreateMap<Poe2Item, MainWindowViewModel.Poe2ItemVM>()
@@ -29,7 +28,6 @@ public class MappingProfile : Profile
                 opt => opt.MapFrom(src => src.ItemLevel == 0 ? null : (int?)src.ItemLevel))
             .ForMember(dest => dest.RunSocketsMin,
                 opt => opt.MapFrom(src => src.RuneSockets == 0 ? null : (int?)src.RuneSockets))
-            .ForMember(dest => dest.ItemName, opt => opt.MapFrom(src => src.ItemName + " " + src.ItemBaseName))
             .ForMember(dest => dest.StatVMs, opt => opt.MapFrom(src => src.Stats));
 
         CreateMap<MainWindowViewModel.ItemVM, Poe1SearchRequest>()

@@ -372,13 +372,6 @@ public partial class MainWindowViewModel : ObservableObject
         {
             opt.AfterMap((src, dest) =>
             {
-                var itemObj = (Poe1Item)src;
-
-                if (itemObj.ItemBaseName == itemObj.ItemName)
-                {
-                    dest.ItemName = itemObj.ItemName;
-                }
-
                 dest.Rarity = item.Rarity switch
                 {
                     Rarity.MAGIC => _gameStringService.Get(GameString.MAGIC)!,

@@ -22,4 +22,6 @@ public abstract class ItemBase
     public int ItemLevel { get; set; }
 
     public int? GemLevel { get; set; }
+
+    public bool Unidentified { get; set; }
 }
