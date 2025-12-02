@@ -373,20 +373,10 @@ public partial class MainWindowViewModel : ObservableObject
             opt.AfterMap((src, dest) =>
             {
                 var itemObj = (Poe1Item)src;
-                switch (itemObj.ItemType)
-                {
-                    case ItemType.JEWEL:
-                        dest.FilterItemBase = true;
-                        break;
-                    default:
-                        dest.FilterItemBase = false;
-                        break;
-                }
 
                 if (itemObj.ItemBaseName == itemObj.ItemName)
                 {
                     dest.ItemName = itemObj.ItemName;
-                    dest.FilterItemBase = true;
                 }
 
                 dest.Rarity = item.Rarity switch
@@ -673,7 +663,7 @@ public partial class MainWindowViewModel : ObservableObject
 
         public bool FilterGemLevel { get; set; } = false;
 
-        public bool FilterItemBase { get; set; }
+        public bool FilterItemBase { get; set; } = true;
 
         public string? Rarity { get; set; }
 
