@@ -160,6 +160,25 @@ public class ChineseTradParser(CacheService cacheService) : IParser
                     break;
                 case ParsingState.PARSING_ITEM_BASE:
                     parsedItem.ItemBaseName = line == SplitKeyword ? parsedItem.ItemName : line;
+                    if (parsedItem.ItemType == ItemType.ACTIVE_GEM)
+                    {
+                        parsingState = ParsingState.PARSING_GEM_INFO;
+                    }
+                    else
+                    {
+                        parsingState = ParsingState.PARSING_UNKNOW;
+                    }
+
+                    break;
+                case ParsingState.PARSING_GEM_INFO:
+                    List<string> gemInfoTexts = [];
+                    while (i < lines.Length && lines[i] != SplitKeyword)
+                    {
+                        gemInfoTexts.Add(lines[i]);
+                        i++;
+                    }
+
+                    ResolveGemInfo(gemInfoTexts, parsedItem);
                     parsingState = ParsingState.PARSING_UNKNOW;
                     break;
                 case ParsingState.PARSING_ITEM_TYPE:
@@ -278,6 +297,18 @@ public class ChineseTradParser(CacheService cacheService) : IParser
             PropertyNameCaseInsensitive = true
         };
         return JsonSerializer.Deserialize<List<StatGroup>>(json, options) ?? [];
+    }
+
+    private void ResolveGemInfo(IEnumerable<string> gemInfoTexts, ItemBase parsingItem)
+    {
+        foreach (var gemInfoText in gemInfoTexts)
+        {
+            if (gemInfoText.StartsWith(ReqLevelKeyword))
+            {
+                var valueStr = gemInfoText.Substring(ReqLevelKeyword.Length).Trim();
+                parsingItem.GemLevel = int.Parse(valueStr);
+            }
+        }
     }
 
     protected IEnumerable<ItemRequirement> ResolveItemRequirements(IEnumerable<string> reqTexts)
@@ -713,6 +744,7 @@ public class ChineseTradParser(CacheService cacheService) : IParser
         PARSING_REQUIREMENT,
         PARSING_ITEM_LEVEL,
         PARSING_STAT,
-        PARSING_UNKNOW
+        PARSING_UNKNOW,
+        PARSING_GEM_INFO
     }
 }

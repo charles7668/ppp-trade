@@ -20,4 +20,6 @@ public abstract class ItemBase
     public IEnumerable<ItemStat> Stats { get; set; } = [];
 
     public int ItemLevel { get; set; }
+
+    public int? GemLevel { get; set; }
 }
