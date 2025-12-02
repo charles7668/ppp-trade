@@ -40,10 +40,10 @@ public class RequestBodyBuilder(CacheService cacheService)
             ItemType.FLASK => "flask",
             ItemType.WAY_STONE => "map.waystone",
             ItemType.CORPSE => "corpse",
+            ItemType.ACTIVE_GEM => "gem.activegem",
             _ => null
         };
     }
-
 
     private async Task<(string? uniqueName, string? uniqueBase)> MapUniqueNameAsync(string uniqueName,
         string uniqueBase, string forGame)

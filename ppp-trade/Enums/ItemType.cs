@@ -9,6 +9,7 @@ public enum ItemType
     DIVINATION_CARD,
     FLASK,
     CORPSE,
+    ACTIVE_GEM,
 
     #region Equipment
 

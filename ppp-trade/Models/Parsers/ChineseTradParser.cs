@@ -89,7 +89,9 @@ public class ChineseTradParser(CacheService cacheService) : IParser
         { "生命藥劑", ItemType.FLASK },
         { "魔力藥劑", ItemType.FLASK },
 
-        { "屍體", ItemType.CORPSE }
+        { "屍體", ItemType.CORPSE },
+
+        { "技能寶石", ItemType.ACTIVE_GEM }
     };
 
     protected virtual Dictionary<string, Rarity> RarityMap => new()
@@ -99,7 +101,8 @@ public class ChineseTradParser(CacheService cacheService) : IParser
         { "稀有", Rarity.RARE },
         { "傳奇", Rarity.UNIQUE },
         { "通貨", Rarity.CURRENCY },
-        { "命運卡", Rarity.DIVINATION_CARD }
+        { "命運卡", Rarity.DIVINATION_CARD },
+        { "寶石", Rarity.GEM }
     };
 
     protected virtual Dictionary<string, Func<Stat, string, ItemBase, (bool, int?)>> SpecialCaseStat { get; } = new()
@@ -152,31 +155,11 @@ public class ChineseTradParser(CacheService cacheService) : IParser
                         break;
                     }
 
-                    var parsed = true;
-                    switch (parsedItem.ItemType)
-                    {
-                        case ItemType.CORPSE:
-                            parsedItem.ItemName = line.Replace(FoulBornKeyword, "");
-                            parsedItem.ItemBaseName = parsedItem.ItemName;
-                            parsingState = ParsingState.PARSING_UNKNOW;
-                            break;
-                        default:
-                            parsed = false;
-                            break;
-                    }
-
-                    if (parsed)
-                    {
-                        break;
-                    }
-
                     parsedItem.ItemName = line.Replace(FoulBornKeyword, "");
-                    parsingState = parsedItem.Rarity == Rarity.CURRENCY
-                        ? ParsingState.PARSING_UNKNOW
-                        : ParsingState.PARSING_ITEM_BASE;
+                    parsingState = ParsingState.PARSING_ITEM_BASE;
                     break;
                 case ParsingState.PARSING_ITEM_BASE:
-                    parsedItem.ItemBaseName = line;
+                    parsedItem.ItemBaseName = line == SplitKeyword ? parsedItem.ItemName : line;
                     parsingState = ParsingState.PARSING_UNKNOW;
                     break;
                 case ParsingState.PARSING_ITEM_TYPE:

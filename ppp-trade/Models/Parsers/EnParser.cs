@@ -86,7 +86,9 @@ internal class EnParser(CacheService cacheService) : ChineseTradParser(cacheServ
         { "Life Flasks", ItemType.FLASK },
         { "Mana Flasks", ItemType.FLASK },
 
-        { "Corpses", ItemType.CORPSE }
+        { "Corpses", ItemType.CORPSE },
+
+        { "Skill Gems", ItemType.ACTIVE_GEM }
     };
 
     protected override Dictionary<string, Rarity> RarityMap => new()
@@ -96,7 +98,8 @@ internal class EnParser(CacheService cacheService) : ChineseTradParser(cacheServ
         { "Rare", Rarity.RARE },
         { "Unique", Rarity.UNIQUE },
         { "Currency", Rarity.CURRENCY },
-        { "Divination Cards", Rarity.DIVINATION_CARD }
+        { "Divination Cards", Rarity.DIVINATION_CARD },
+        { "Gem", Rarity.GEM }
     };
 
     protected override Dictionary<string, Func<Stat, string, ItemBase, (bool, int?)>> SpecialCaseStat { get; } = new()
