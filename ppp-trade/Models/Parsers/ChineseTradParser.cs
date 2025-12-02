@@ -279,6 +279,12 @@ public class ChineseTradParser(CacheService cacheService) : IParser
 
         ResolveItemName(tempItemNames, parsedItem);
 
+        // Although Cluster Jewels are classified as Jewels, they have their own ID during search, so they are categorized separately here.
+        if (parsedItem.ItemBaseName.EndsWith(ClusterJewelKeyword) && parsedItem.ItemType is ItemType.JEWEL)
+        {
+            parsedItem.ItemType = ItemType.CLUSTER_JEWEL;
+        }
+
         return parsedItem;
     }
 
