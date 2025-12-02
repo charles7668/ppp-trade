@@ -20,7 +20,13 @@ public class SearchRequestBase
 
     public int? ItemLevelMax { get; set; }
 
+    public int? GemLevelMin { get; set; }
+
+    public int? GemLevelMax { get; set; }
+
     public bool FilterItemLevel { get; set; } = true;
+
+    public bool FilterGemLevel { get; set; }
 
     public bool FilterRarity { get; set; } = true;
 
@@ -37,11 +43,9 @@ public class Poe1SearchRequest : SearchRequestBase
 {
     public bool FilterLink { get; set; } = true;
 
-
     public int? LinkCountMin { get; set; }
 
     public int? LinkCountMax { get; set; }
-
 
     public YesNoAnyOption FoulBorn { get; set; } = YesNoAnyOption.ANY;
 }

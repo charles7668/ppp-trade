@@ -275,7 +275,14 @@ public class RequestBodyBuilder(CacheService cacheService)
                                 option = searchRequest.CorruptedState == CorruptedState.YES ? "yes" : "no"
                             }
                         },
-                        foulborn_item = foulBornFilter
+                        foulborn_item = foulBornFilter,
+                        gem_level = !searchRequest.FilterGemLevel
+                            ? null
+                            : new
+                            {
+                                min = searchRequest.GemLevelMin,
+                                max = searchRequest.GemLevelMax
+                            }
                     }
                 },
                 trade_filters = new

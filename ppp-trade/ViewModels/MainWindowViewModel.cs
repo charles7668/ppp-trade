@@ -660,6 +660,8 @@ public partial class MainWindowViewModel : ObservableObject
 
         public bool FilterLink { get; set; } = true;
 
+        public bool FilterGemLevel { get; set; } = false;
+
         public bool FilterItemBase { get; set; }
 
         public string? Rarity { get; set; }
@@ -667,6 +669,10 @@ public partial class MainWindowViewModel : ObservableObject
         public int? LinkCountMin { get; set; }
 
         public int? LinkCountMax { get; set; }
+
+        public int? GemLevelMin { get; set; }
+
+        public int? GemLevelMax { get; set; }
 
         public string? ItemBaseName { get; set; }
 

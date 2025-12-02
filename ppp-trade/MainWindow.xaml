@@ -110,6 +110,13 @@
                                              Text="{Binding ParsedPoe1ItemVM.ItemBaseName}" />
                                 </hc:SimpleStackPanel>
                                 <hc:SimpleStackPanel Orientation="Horizontal" Width="200">
+                                    <CheckBox IsChecked="{Binding ParsedPoe1ItemVM.FilterGemLevel,Mode=TwoWay}">寶石等級</CheckBox>
+                                    <TextBox Margin="2" Width="50"
+                                             Text="{Binding ParsedPoe1ItemVM.GemLevelMin,UpdateSourceTrigger=PropertyChanged}" />
+                                    <TextBox Margin="2" Width="50"
+                                             Text="{Binding ParsedPoe1ItemVM.GemLevelMax,UpdateSourceTrigger=PropertyChanged}" />
+                                </hc:SimpleStackPanel>
+                                <hc:SimpleStackPanel Orientation="Horizontal" Width="200">
                                     <TextBlock FontSize="12">穢生</TextBlock>
                                     <hc:ComboBox Margin="2" Width="80"
                                                  ItemsSource="{Binding Source={StaticResource YesNoAnyOptionEnumKey}}"
