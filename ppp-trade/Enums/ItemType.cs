@@ -10,6 +10,7 @@ public enum ItemType
     FLASK,
     CORPSE,
     ACTIVE_GEM,
+    SUPPORT_GEM,
 
     #region Equipment
 

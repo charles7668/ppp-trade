@@ -88,7 +88,8 @@ internal class EnParser(CacheService cacheService) : ChineseTradParser(cacheServ
 
         { "Corpses", ItemType.CORPSE },
 
-        { "Skill Gems", ItemType.ACTIVE_GEM }
+        { "Skill Gems", ItemType.ACTIVE_GEM },
+        { "Support Gems", ItemType.SUPPORT_GEM }
     };
 
     protected override Dictionary<string, Rarity> RarityMap => new()

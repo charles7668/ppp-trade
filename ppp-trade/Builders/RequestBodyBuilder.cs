@@ -41,6 +41,7 @@ public class RequestBodyBuilder(CacheService cacheService)
             ItemType.WAY_STONE => "map.waystone",
             ItemType.CORPSE => "corpse",
             ItemType.ACTIVE_GEM => "gem.activegem",
+            ItemType.SUPPORT_GEM => "gem.supportgem",
             _ => null
         };
     }

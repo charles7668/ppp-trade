@@ -91,7 +91,8 @@ public class ChineseTradParser(CacheService cacheService) : IParser
 
         { "屍體", ItemType.CORPSE },
 
-        { "技能寶石", ItemType.ACTIVE_GEM }
+        { "技能寶石", ItemType.ACTIVE_GEM },
+        { "輔助寶石", ItemType.SUPPORT_GEM }
     };
 
     protected virtual Dictionary<string, Rarity> RarityMap => new()
@@ -160,7 +161,7 @@ public class ChineseTradParser(CacheService cacheService) : IParser
                     break;
                 case ParsingState.PARSING_ITEM_BASE:
                     parsedItem.ItemBaseName = line == SplitKeyword ? parsedItem.ItemName : line;
-                    if (parsedItem.ItemType == ItemType.ACTIVE_GEM)
+                    if (parsedItem.ItemType is ItemType.ACTIVE_GEM or ItemType.SUPPORT_GEM)
                     {
                         parsingState = ParsingState.PARSING_GEM_INFO;
                     }
