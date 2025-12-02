@@ -9,6 +9,7 @@ using CommunityToolkit.Mvvm.Input;
 using HandyControl.Controls;
 using HandyControl.Data;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Xaml.Behaviors.Core;
 using ppp_trade.Builders;
 using ppp_trade.Enums;
 using ppp_trade.Models;
@@ -372,6 +373,16 @@ public partial class MainWindowViewModel : ObservableObject
             opt.AfterMap((src, dest) =>
             {
                 var itemObj = (Poe1Item)src;
+                switch (itemObj.ItemType)
+                {
+                    case ItemType.JEWEL:
+                        dest.FilterItemBase = true;
+                        break;
+                    default:
+                        dest.FilterItemBase = false;
+                        break;
+                }
+
                 if (itemObj.ItemBaseName == itemObj.ItemName)
                 {
                     dest.ItemName = itemObj.ItemName;

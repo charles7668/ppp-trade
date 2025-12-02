@@ -79,7 +79,7 @@ internal class EnParser(CacheService cacheService) : ChineseTradParser(cacheServ
         { "Blueprints", ItemType.BLUEPRINT },
         { "Stackable Currency", ItemType.STACKABLE_CURRENCY },
         { "Divination Cards", ItemType.DIVINATION_CARD },
-        { "Jewels ", ItemType.JEWEL },
+        { "Jewels", ItemType.JEWEL },
         { "Abyss Jewels", ItemType.ABYSS_JEWEL },
 
         { "Utility Flasks", ItemType.FLASK },
