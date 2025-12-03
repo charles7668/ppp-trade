@@ -2169,3 +2169,12 @@ Omen of Putrefaction
 Omen of Light
 Omen of Sinistral Necromancy
 Omen of Dextral Necromancy
+
+### Map Fragments
+Simulacrum
+An Audience with the King
+Kulemak's Invitation
+Idol of Estazunti
+Cowardly Fate
+Deadly Fate
+Victorious Fate
