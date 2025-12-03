@@ -1083,3 +1083,31 @@ Fanatic Greathammer
 Ruination Maul
 Massive Greathammer
 Tawhoan Greatclub
+
+### Quarter Staves
+Wrapped Quarterstaff
+Long Quarterstaff
+Gothic Quarterstaff
+Crackling Quarterstaff
+Crescent Quarterstaff
+Steelpoint Quarterstaff
+Slicing Quarterstaff
+Barrier Quarterstaff
+Hefty Quarterstaff
+Smooth Quarterstaff
+Anima Quarterstaff
+Graceful Quarterstaff
+Wyrm Quarterstaff
+Reaching Quarterstaff
+Barbarous Quarterstaff
+Arcing Quarterstaff
+Waxing Quarterstaff
+Bladed Quarterstaff
+Guardian Quarterstaff
+Sinister Quarterstaff
+Lunar Quarterstaff
+Striking Quarterstaff
+Bolting Quarterstaff
+Aegis Quarterstaff
+Razor Quarterstaff
+Dreaming Quarterstaff
