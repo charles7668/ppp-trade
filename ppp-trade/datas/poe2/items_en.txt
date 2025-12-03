@@ -856,3 +856,21 @@ Torture Wand
 Critical Wand
 Primordial Wand
 Dueling Wand
+
+### One Hand Swords
+Golden Blade
+Energy Blade
+Shortsword
+Broadsword
+Vampiric Blade
+Scimitar
+Charred Shortsword
+Sickle Sword
+Falchion
+Treasured Blade
+Cutlass
+Runic Shortsword
+Messer
+Commander Sword
+Dark Blade
+Golden Blade
