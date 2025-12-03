@@ -9,7 +9,6 @@ using CommunityToolkit.Mvvm.Input;
 using HandyControl.Controls;
 using HandyControl.Data;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Xaml.Behaviors.Core;
 using ppp_trade.Builders;
 using ppp_trade.Enums;
 using ppp_trade.Models;
@@ -280,7 +279,7 @@ public partial class MainWindowViewModel : ObservableObject
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
             foreach (var group in groups)
             {
-                Currency? currency = JudgeCurrency(group.Key.currency);
+                var currency = JudgeCurrency(group.Key.currency);
                 analysis.Add(new PriceAnalysisVM
                 {
                     Count = group.Count(),
@@ -310,6 +309,16 @@ public partial class MainWindowViewModel : ObservableObject
         return matchItem;
     }
 
+    private void ClearParsedData()
+    {
+        _clipboardMonitorService.ClearClipboard();
+        Poe1ItemInfoVisibility = Visibility.Collapsed;
+        Poe2ItemInfoVisibility = Visibility.Collapsed;
+        ParsedPoe1ItemVM = null;
+        ParsedPoe2ItemVM = null;
+        _parsedItem = null;
+    }
+
     private Currency? JudgeCurrency(string currencyText)
     {
         if (string.IsNullOrWhiteSpace(currencyText))
@@ -333,7 +342,7 @@ public partial class MainWindowViewModel : ObservableObject
     {
         try
         {
-            List<LeagueInfo> leagues = await _poeApiService.GetLeaguesAsync();
+            var leagues = await _poeApiService.GetLeaguesAsync();
             LeagueList = SelectedGame == "POE1"
                 ? leagues.Where(l => l.Realm == "pc").Select(l => l.Text).ToList()
                 : leagues.Select(l => l.Text).ToList();
@@ -347,23 +356,6 @@ public partial class MainWindowViewModel : ObservableObject
         {
             // todo show error message
         }
-    }
-
-    private Poe2ItemVM MapPoe2ItemToView(Poe2Item item)
-    {
-        return _mapper.Map<Poe2ItemVM>(item, opt =>
-        {
-            opt.AfterMap((_, dest) =>
-            {
-                dest.Rarity = item.Rarity switch
-                {
-                    Rarity.MAGIC => _gameStringService.Get(GameString.MAGIC)!,
-                    Rarity.RARE => _gameStringService.Get(GameString.RARE)!,
-                    Rarity.UNIQUE => _gameStringService.Get(GameString.UNIQUE)!,
-                    _ => _gameStringService.Get(GameString.NORMAL)!
-                };
-            });
-        });
     }
 
     private ItemVM MapPoe1ItemToView(Poe1Item item)
@@ -380,6 +372,23 @@ public partial class MainWindowViewModel : ObservableObject
                     _ => _gameStringService.Get(GameString.NORMAL)!
                 };
                 dest.FoulBorn = item.IsFoulBorn ? YesNoAnyOption.YES : YesNoAnyOption.NO;
+            });
+        });
+    }
+
+    private Poe2ItemVM MapPoe2ItemToView(Poe2Item item)
+    {
+        return _mapper.Map<Poe2ItemVM>(item, opt =>
+        {
+            opt.AfterMap((_, dest) =>
+            {
+                dest.Rarity = item.Rarity switch
+                {
+                    Rarity.MAGIC => _gameStringService.Get(GameString.MAGIC)!,
+                    Rarity.RARE => _gameStringService.Get(GameString.RARE)!,
+                    Rarity.UNIQUE => _gameStringService.Get(GameString.UNIQUE)!,
+                    _ => _gameStringService.Get(GameString.NORMAL)!
+                };
             });
         });
     }
@@ -430,23 +439,19 @@ public partial class MainWindowViewModel : ObservableObject
         }
     }
 
+    partial void OnSelectedGameChanged(string? value)
+    {
+        _poeApiService.SwitchGame(value ?? "POE1");
+        LoadLeagues().ConfigureAwait(false);
+        ClearParsedData();
+    }
+
     partial void OnSelectedServerChanged(string? value)
     {
         var domain = value == "台服" ? "https://pathofexile.tw/" : "https://www.pathofexile.com/";
         _poeApiService.SwitchDomain(domain);
         LoadLeagues().ConfigureAwait(false);
-    }
-
-    partial void OnSelectedGameChanged(string? value)
-    {
-        _poeApiService.SwitchGame(value ?? "POE1");
-        LoadLeagues().ConfigureAwait(false);
-        _clipboardMonitorService.ClearClipboard();
-        Poe1ItemInfoVisibility = Visibility.Collapsed;
-        Poe2ItemInfoVisibility = Visibility.Collapsed;
-        ParsedPoe1ItemVM = null;
-        ParsedPoe2ItemVM = null;
-        _parsedItem = null;
+        ClearParsedData();
     }
 
     [RelayCommand]
