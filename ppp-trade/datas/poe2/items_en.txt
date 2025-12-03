@@ -2184,3 +2184,11 @@ Expedition Logbook
 
 ### Inscribed Ultimatums
 Inscribed Ultimatum
+
+### Tablet
+Breach Precursor Tablet
+Expedition Precursor Tablet
+Delirium Precursor Tablet
+Ritual Precursor Tablet
+Precursor Tablet
+Overseer Precursor Tablet
