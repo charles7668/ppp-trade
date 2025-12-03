@@ -1111,3 +1111,6 @@ Bolting Quarterstaff
 Aegis Quarterstaff
 Razor Quarterstaff
 Dreaming Quarterstaff
+
+### Fishing Rods
+Fishing Rod
