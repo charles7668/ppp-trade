@@ -630,7 +630,7 @@ public partial class MainWindowViewModel : ObservableObject
 
         public bool FilterRarity { get; set; } = true;
 
-        public bool FilterItemBase { get; set; }
+        public bool FilterItemBase { get; set; } = true;
 
         public string? Rarity { get; set; }
 
