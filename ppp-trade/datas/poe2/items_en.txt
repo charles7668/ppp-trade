@@ -2178,3 +2178,6 @@ Idol of Estazunti
 Cowardly Fate
 Deadly Fate
 Victorious Fate
+
+### Expedition Logbooks
+Expedition Logbook

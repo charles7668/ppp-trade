@@ -2178,3 +2178,6 @@
 怯懦之運
 致命之運
 勝利之運
+
+### Expedition Logbooks
+探險日誌
