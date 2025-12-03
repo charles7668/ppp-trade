@@ -1040,3 +1040,46 @@ Ancient Greatblade
 Flanged Greatblade
 Regalia Longsword
 Ultra Greatsword
+
+### Two Hand Axes
+Splitting Greataxe
+Light Halberd
+Executioner Greataxe
+Arched Greataxe
+Elegant Glaive
+Savage Greataxe
+Rending Halberd
+Jagged Greataxe
+Reaver Glaive
+Ember Greataxe
+Ceremonial Halberd
+Monument Greataxe
+Vile Greataxe
+
+### Two Hand Maces
+Felled Greatclub
+Oak Greathammer
+Forge Maul
+Studded Greatclub
+Cultist Greathammer
+Temple Maul
+Leaden Greathammer
+Crumbling Maul
+Pointed Maul
+Totemic Greatclub
+Greatmace
+Precise Greathammer
+Giant Maul
+Snakewood Greathammer
+Blacksmith Maul
+Zealot Greathammer
+Solemn Maul
+Heavy Greathammer
+Disintegrating Maul
+Anvil Maul
+Sacred Maul
+Ironwood Greathammer
+Fanatic Greathammer
+Ruination Maul
+Massive Greathammer
+Tawhoan Greatclub
