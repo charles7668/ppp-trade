@@ -964,3 +964,18 @@ Flying Spear
 Grand Spear
 Spiked Spear
 Akoyan Spear
+
+### Flails
+Splintered Flail
+Chain Flail
+Holy Flail
+Iron Flail
+Twin Flail
+Slender Flail
+Stone Flail
+Ring Flail
+Guarded Flail
+Icicle Flail
+Tearing Flail
+Great Flail
+Abyssal Flail
