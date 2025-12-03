@@ -2199,3 +2199,11 @@ Test of Strength Barya
 Test of Will Barya
 Test of Cunning Barya
 Test of Time Barya
+
+### Pinnacle Keys
+Ancient Crisis Fragment
+Faded Crisis Fragment
+Weathered Crisis Fragment
+Primary Calamity Fragment
+Secondary Calamity Fragment
+Tertiary Calamity Fragment
