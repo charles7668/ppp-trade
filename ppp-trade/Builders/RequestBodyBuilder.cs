@@ -250,8 +250,8 @@ public class RequestBodyBuilder(CacheService cacheService)
         string uniqueBase, string forGame)
     {
         var dataFolder = forGame == "POE2" ? "datas\\poe2" : "datas\\poe";
-        var fullNameMapCacheKey = forGame == "POE2" ? "unique:tw2en:full" : "unique:poe2:tw2en:full";
-        if (!cacheService.TryGet(fullNameMapCacheKey, out Dictionary<string, string>? fullMap))
+        var uniqueNameCacheKey = forGame == "POE2" ? "unique:tw2en:unique" : "unique:poe2:tw2en:unique";
+        if (!cacheService.TryGet(uniqueNameCacheKey, out Dictionary<(string, string), (string, string)>? uniqueNameMap))
         {
             var enNameFile = Path.Combine(dataFolder, "unique_item_names_eng.json");
             var twNameFile = Path.Combine(dataFolder, "unique_item_names_tw.json");
@@ -281,25 +281,20 @@ public class RequestBodyBuilder(CacheService cacheService)
             }
 
             var count = twNameList.Count;
-            fullMap = new Dictionary<string, string>();
+            uniqueNameMap = new Dictionary<(string, string), (string, string)>();
 
             for (var i = 0; i < count; i++)
             {
-                fullMap.Add(twNameList[i] + ";" + twBaseList[i], enNameList[i] + ";" + enBaseList[i]);
+                uniqueNameMap.Add((twNameList[i] + " " + twBaseList[i], twBaseList[i]),
+                    (enNameList[i] + " " + enBaseList[i], enBaseList[i]));
             }
 
-            cacheService.Set(fullNameMapCacheKey, fullMap);
+            cacheService.Set(uniqueNameCacheKey, uniqueNameMap);
         }
 
-        string? target = null;
-        fullMap?.TryGetValue(uniqueName + ";" + uniqueBase, out target);
-        if (target == null)
-        {
-            return (uniqueName, uniqueBase);
-        }
-
-        var split = target.Split(';');
-        return (split[0], split[1]);
+        return uniqueNameMap?.TryGetValue((uniqueName, uniqueBase), out var target) is true
+            ? (target.Item1, target.Item2)
+            : (uniqueName, uniqueBase);
     }
 
     private string? RarityToString(Rarity rarity)
