@@ -2002,3 +2002,124 @@ Reaver Catalyst
 Sibilant Catalyst
 Skittering Catalyst
 Adaptive Catalyst
+
+### Socketable
+Desert Rune
+Glacial Rune
+Storm Rune
+Iron Rune
+Body Rune
+Mind Rune
+Rebirth Rune
+Inspiration Rune
+Stone Rune
+Vision Rune
+Lesser Desert Rune
+Lesser Glacial Rune
+Lesser Storm Rune
+Lesser Iron Rune
+Lesser Body Rune
+Lesser Mind Rune
+Lesser Rebirth Rune
+Lesser Inspiration Rune
+Lesser Stone Rune
+Lesser Vision Rune
+Greater Desert Rune
+Greater Glacial Rune
+Greater Storm Rune
+Greater Iron Rune
+Greater Body Rune
+Greater Mind Rune
+Greater Rebirth Rune
+Greater Inspiration Rune
+Greater Stone Rune
+Greater Vision Rune
+Lesser Robust Rune
+Robust Rune
+Greater Robust Rune
+Lesser Adept Rune
+Adept Rune
+Greater Adept Rune
+Lesser Resolve Rune
+Resolve Rune
+Greater Resolve Rune
+Lesser Tempered Rune
+Tempered Rune
+Greater Tempered Rune
+Greater Rune of Leadership
+Greater Rune of Tithing
+Greater Rune of Alacrity
+Greater Rune of Nobility
+Hedgewitch Assandra's Rune of Wisdom
+Saqawal's Rune of the Sky
+Fenumus' Rune of Agony
+Farrul's Rune of Grace
+Farrul's Rune of the Chase
+Craiceann's Rune of Warding
+Saqawal's Rune of Memory
+Saqawal's Rune of Erosion
+Farrul's Rune of the Hunt
+Craiceann's Rune of Recovery
+Courtesan Mannan's Rune of Cruelty
+Thane Grannell's Rune of Mastery
+Fenumus' Rune of Spinning
+Countess Seske's Rune of Archery
+Thane Girt's Rune of Wildness
+Fenumus' Rune of Draining
+Thane Myrk's Rune of Summer
+Lady Hestra's Rune of Winter
+Thane Leld's Rune of Spring
+The Greatwolf's Rune of Claws
+The Greatwolf's Rune of Willpower
+Talisman of Sirrius
+Talisman of Thruldana
+Talisman of Grold
+Talisman of Eeshta
+Talisman of Egrin
+Talisman of Maxarius
+Talisman of Ralakesh
+Hayoxi's Soul Core of Heatproofing
+Zalatl's Soul Core of Insulation
+Topotante's Soul Core of Dampening
+Atmohua's Soul Core of Retreat
+Quipolatl's Soul Core of Flow
+Tzamoto's Soul Core of Ferocity
+Uromoti's Soul Core of Attenuation
+Opiloti's Soul Core of Assault
+Guatelitzi's Soul Core of Endurance
+Xopec's Soul Core of Power
+Estazunti's Soul Core of Convalescence
+Tacati's Soul Core of Affliction
+Cholotl's Soul Core of War
+Citaqualotl's Soul Core of Foulness
+Xipocado's Soul Core of Dominion
+Soul Core of Tacati
+Soul Core of Opiloti
+Soul Core of Jiquani
+Soul Core of Zalatl
+Soul Core of Citaqualotl
+Soul Core of Puhuarte
+Soul Core of Tzamoto
+Soul Core of Xopec
+Soul Core of Azcapa
+Soul Core of Topotante
+Soul Core of Quipolatl
+Soul Core of Ticaba
+Soul Core of Atmohua
+Soul Core of Cholotl
+Soul Core of Zantipi
+Serpent Talisman
+Primate Talisman
+Owl Talisman
+Cat Talisman
+Wolf Talisman
+Stag Talisman
+Boar Talisman
+Bear Talisman
+Ox Talisman
+Rabbit Talisman
+Fox Talisman
+Amanamu's Gaze
+Tecrod's Gaze
+Kurgal's Gaze
+Ulaman's Gaze
