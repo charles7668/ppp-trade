@@ -810,3 +810,18 @@ Physical Mastery
 Profanity II
 Rapid Casting III
 Wildshards II
+
+### Claws
+Crude Claw
+Pict Claw
+Wolfbone Claw
+Forked Claw
+Plated Claw
+Edged Claw
+Arced Claw
+Hooked Claw
+Razorglass Claw
+Sharktooth Claw
+Armoured Claw
+Piercing Claw
+Talon Claw
