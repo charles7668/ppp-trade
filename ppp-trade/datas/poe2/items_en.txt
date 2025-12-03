@@ -2245,3 +2245,12 @@ Zarokh's Reliquary Key: Blessed Bonds
 Zarokh's Reliquary Key: Sekhema's Resolve
 Zarokh's Reliquary Key: Temporalis
 Azmeri Reliquary Key
+
+### Relics
+Urn Relic
+Amphora Relic
+Vase Relic
+Seal Relic
+Coffer Relic
+Tapestry Relic
+Incense Relic
