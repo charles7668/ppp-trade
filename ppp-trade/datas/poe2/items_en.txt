@@ -918,3 +918,21 @@ Strife Pick
 Fortified Hammer
 Marauding Mace
 Akoyan Club
+
+### Sceptres
+Rattling Sceptre
+Stoic Sceptre
+Lupine Sceptre
+Omen Sceptre
+Ochre Sceptre
+Shrine Sceptre
+Shrine Sceptre
+Shrine Sceptre
+Devouring Sceptre
+Clasped Sceptre
+Devotional Sceptre
+Wrath Sceptre
+Aromatic Sceptre
+Pious Sceptre
+Hallowed Sceptre
+Shrine Sceptre
