@@ -1762,3 +1762,24 @@ Gloam Amulet
 Penumbra Amulet
 Tenebrous Amulet
 Distorted Amulet
+
+### Rings
+Golden Hoop
+Iron Ring
+Lazuli Ring
+Ruby Ring
+Sapphire Ring
+Topaz Ring
+Amethyst Ring
+Emerald Ring
+Pearl Ring
+Prismatic Ring
+Gold Ring
+Unset Ring
+Abyssal Signet
+Ring
+Dusk Ring
+Gloam Ring
+Penumbra Ring
+Tenebrous Ring
+Breach Ring
