@@ -841,3 +841,18 @@ Kris Knife
 Parrying Dagger
 Arcane Dirk
 Cinquedea
+
+### Wands
+Withered Wand
+Bone Wand
+Attuned Wand
+Siphoning Wand
+Volatile Wand
+Galvanic Wand
+Acrid Wand
+Offering Wand
+Frigid Wand
+Torture Wand
+Critical Wand
+Primordial Wand
+Dueling Wand
