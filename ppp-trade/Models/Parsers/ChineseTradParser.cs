@@ -20,13 +20,13 @@ public class ChineseTradParser(CacheService cacheService) : IParser
 
     protected virtual string ItemLevelKeyword => "物品等級: ";
 
-    protected virtual string UnidentifiedKeyword => "Unidentified";
+    protected string UnidentifiedKeyword => "Unidentified";
 
     protected virtual string SplitKeyword => "--------";
 
     protected virtual string ImplicitKeyword => "(implicit)";
 
-    protected virtual string EnchantKeyword => "(enchant)";
+    protected string EnchantKeyword => "(enchant)";
 
     protected virtual string CraftedKeyword => "(crafted)";
 
@@ -37,8 +37,6 @@ public class ChineseTradParser(CacheService cacheService) : IParser
     protected virtual string FoulBornKeyword => "穢生 ";
 
     protected virtual string LocalKeyword => "(部分)";
-
-    private static string[] FlaskAndClusterJewelSplitKeywords => ["之", "的"];
 
     protected virtual string ReqLevelKeyword => "等級: ";
 
@@ -207,7 +205,7 @@ public class ChineseTradParser(CacheService cacheService) : IParser
                     parsingState = ParsingState.PARSING_STAT;
                     break;
                 case ParsingState.PARSING_STAT:
-                    var hasNextStatArea = false;
+                    bool hasNextStatArea;
                     List<string> statTexts = [];
                     if (line != SplitKeyword)
                     {
@@ -287,47 +285,6 @@ public class ChineseTradParser(CacheService cacheService) : IParser
         return parsedItem;
     }
 
-    private void ResolveItemName(IEnumerable<string> itemNameTexts, ItemBase parsingItem)
-    {
-        var itemNameTextList = itemNameTexts.Select(x => x.Trim()).ToList();
-        if (itemNameTextList.Count != 2)
-        {
-            return;
-        }
-
-        if ((parsingItem.Rarity is Rarity.UNIQUE or Rarity.RARE) && !parsingItem.Unidentified)
-        {
-            parsingItem.ItemName = itemNameTextList[0] + " " + itemNameTextList[1];
-            parsingItem.ItemBaseName = itemNameTextList[1];
-            return;
-        }
-
-        if (parsingItem.Rarity is Rarity.MAGIC)
-        {
-            var (itemName, itemBaseName) = ResolveMagicItemName(itemNameTextList[0]);
-            parsingItem.ItemName = itemName;
-            parsingItem.ItemBaseName = itemBaseName;
-            return;
-        }
-
-        parsingItem.ItemName = itemNameTextList[0];
-        parsingItem.ItemBaseName = itemNameTextList[0];
-    }
-
-    protected virtual (string, string) ResolveMagicItemName(string nameText)
-    {
-        var index1 = nameText.IndexOf('之');
-        var index2 = nameText.IndexOf('的');
-        var lastIndex = Math.Max(index1, index2);
-        var baseName = nameText;
-        if (lastIndex != -1)
-        {
-            baseName = nameText.Substring(lastIndex + 1);
-        }
-
-        return (nameText, baseName);
-    }
-
     protected virtual List<StatGroup> GetStatGroups()
     {
         if (!cacheService.TryGet(StatTwCacheKey, out List<StatGroup>? statTw))
@@ -366,6 +323,33 @@ public class ChineseTradParser(CacheService cacheService) : IParser
                 parsingItem.GemLevel = int.Parse(valueStr);
             }
         }
+    }
+
+    private void ResolveItemName(IEnumerable<string> itemNameTexts, ItemBase parsingItem)
+    {
+        var itemNameTextList = itemNameTexts.Select(x => x.Trim()).ToList();
+        if (itemNameTextList.Count != 2)
+        {
+            return;
+        }
+
+        if (parsingItem.Rarity is Rarity.UNIQUE or Rarity.RARE && !parsingItem.Unidentified)
+        {
+            parsingItem.ItemName = itemNameTextList[0] + " " + itemNameTextList[1];
+            parsingItem.ItemBaseName = itemNameTextList[1];
+            return;
+        }
+
+        if (parsingItem.Rarity is Rarity.MAGIC)
+        {
+            var (itemName, itemBaseName) = ResolveMagicItemName(itemNameTextList[0]);
+            parsingItem.ItemName = itemName;
+            parsingItem.ItemBaseName = itemBaseName;
+            return;
+        }
+
+        parsingItem.ItemName = itemNameTextList[0];
+        parsingItem.ItemBaseName = itemNameTextList[0];
     }
 
     protected IEnumerable<ItemRequirement> ResolveItemRequirements(IEnumerable<string> reqTexts)
@@ -421,6 +405,20 @@ public class ChineseTradParser(CacheService cacheService) : IParser
         socketInfoText = Regex.Replace(socketInfoText, "[A-Z]", "");
         var split = socketInfoText.Split(' ');
         return split.Select(linkText => linkText.Length).Prepend(0).Max() + 1;
+    }
+
+    protected virtual (string, string) ResolveMagicItemName(string nameText)
+    {
+        var index1 = nameText.IndexOf('之');
+        var index2 = nameText.IndexOf('的');
+        var lastIndex = Math.Max(index1, index2);
+        var baseName = nameText;
+        if (lastIndex != -1)
+        {
+            baseName = nameText.Substring(lastIndex + 1);
+        }
+
+        return (nameText, baseName);
     }
 
     private static List<ItemStat> ResolvePseudoStats(IEnumerable<ItemStat> itemStats, StatGroup pseudoStatGroup)
@@ -722,56 +720,6 @@ public class ChineseTradParser(CacheService cacheService) : IParser
         }
 
         return false;
-    }
-
-    protected virtual bool TryParseClusterJewel(Poe1Item parsingItem, string line)
-    {
-        if (parsingItem is not { ItemType: ItemType.JEWEL, Rarity: Rarity.MAGIC } ||
-            !line.EndsWith(ClusterJewelKeyword))
-        {
-            return false;
-        }
-
-        foreach (var keyword in FlaskAndClusterJewelSplitKeywords)
-        {
-            var replace = line.Replace(FoulBornKeyword, "");
-            var split = replace.Split(keyword);
-            if (split.Length != 2)
-            {
-                continue;
-            }
-
-            parsingItem.ItemName = split[0] + keyword;
-            parsingItem.ItemBaseName = split[1];
-            parsingItem.ItemType = ItemType.CLUSTER_JEWEL;
-            break;
-        }
-
-        return true;
-    }
-
-    protected virtual bool TryParseFlask(Poe1Item parsingItem, string line)
-    {
-        if (parsingItem is not { ItemType: ItemType.FLASK, Rarity: not (Rarity.NORMAL or Rarity.UNIQUE) })
-        {
-            return false;
-        }
-
-        foreach (var flaskSplitKeyword in FlaskAndClusterJewelSplitKeywords)
-        {
-            var replace = line.Replace(FoulBornKeyword, "");
-            var split = replace.Split(flaskSplitKeyword);
-            if (split.Length != 2)
-            {
-                continue;
-            }
-
-            parsingItem.ItemName = replace;
-            parsingItem.ItemBaseName = split[1];
-            break;
-        }
-
-        return true;
     }
 
     private static (bool, int?, int?) TryResolveIncreasedAndDecreased(Stat stat, string statText, ItemBase itemBase)
