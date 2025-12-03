@@ -1157,3 +1157,16 @@ Lead Trap
 Medallion Trap
 Intricate Trap
 Refined Trap
+
+### Quivers
+Broadhead Quiver
+Fire Quiver
+Sacral Quiver
+Two-Point Quiver
+Blunt Quiver
+Toxic Quiver
+Serrated Quiver
+Primed Quiver
+Penetrating Quiver
+Volant Quiver
+Visceral Quiver
