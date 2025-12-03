@@ -1114,3 +1114,31 @@ Dreaming Quarterstaff
 
 ### Fishing Rods
 Fishing Rod
+
+### Crossbows
+Makeshift Crossbow
+Tense Crossbow
+Sturdy Crossbow
+Varnished Crossbow
+Dyad Crossbow
+Alloy Crossbow
+Bombard Crossbow
+Construct Crossbow
+Blackfire Crossbow
+Piercing Crossbow
+Cumbrous Crossbow
+Dedalian Crossbow
+Esoteric Crossbow
+Taut Crossbow
+Robust Crossbow
+Painted Crossbow
+Twin Crossbow
+Cannonade Crossbow
+Bleak Crossbow
+Stout Crossbow
+Engraved Crossbow
+Flexed Crossbow
+Gemini Crossbow
+Siege Crossbow
+Desolate Crossbow
+Elegant Crossbow
