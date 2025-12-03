@@ -1007,3 +1007,20 @@ Gemini Bow
 Fanatic Bow
 Warmonger Bow
 Obliterator Bow
+
+### Staves
+Ashen Staff
+Gelid Staff
+Voltaic Staff
+Spriggan Staff
+Pyrophyte Staff
+Chiming Staff
+Rending Staff
+Reaping Staff
+Icicle Staff
+Roaring Staff
+Paralysing Staff
+Sanctified Staff
+Dark Staff
+Ravenous Staff
+Permafrost Staff
