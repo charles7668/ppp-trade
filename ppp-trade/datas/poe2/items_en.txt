@@ -1783,3 +1783,17 @@ Gloam Ring
 Penumbra Ring
 Tenebrous Ring
 Breach Ring
+
+### Belts
+Golden Obi
+Rawhide Belt
+Linen Belt
+Wide Belt
+Long Belt
+Plate Belt
+Ornate Belt
+Mail Belt
+Double Belt
+Heavy Belt
+Utility Belt
+Fine Belt
