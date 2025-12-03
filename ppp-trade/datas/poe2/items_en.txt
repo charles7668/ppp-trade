@@ -1142,3 +1142,18 @@ Gemini Crossbow
 Siege Crossbow
 Desolate Crossbow
 Elegant Crossbow
+
+### Traps
+Clay Trap
+Clamping Trap
+Shrapnel Trap
+Urn Trap
+Incense Trap
+Bladed Trap
+Dart Trap
+Spike Trap
+Coiled Trap
+Lead Trap
+Medallion Trap
+Intricate Trap
+Refined Trap
