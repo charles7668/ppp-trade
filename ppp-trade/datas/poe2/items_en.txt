@@ -15,3 +15,798 @@ Waystone (Tier 13)
 Waystone (Tier 14)
 Waystone (Tier 15)
 Waystone (Tier 16)
+
+### GEM RED
+Herald of Ash
+Boneshatter
+Earthquake
+Rolling Slam
+Armour Breaker
+Infernal Cry
+Shield Charge
+Shockwave Totem
+Herald of Ash
+Iron Ward
+Magma Barrier
+Scavenged Plating
+Molten Blast
+Perfect Strike
+Resonating Shield
+Earthshatter
+Leap Slam
+Shield Wall
+Volcanic Fissure
+Overwhelming Presence
+Time of Need
+Forge Hammer
+Fortifying Cry
+Sunder
+Seismic Cry
+Stampede
+Supercharged Slam
+Ancestral Cry
+Ancestral Warrior Totem
+Hammer of the Gods
+Berserk
+
+### GEM Green
+Companion
+Herald of Thunder
+Disengage
+Escape Shot
+Explosive Spear
+Lightning Arrow
+Lightning Rod
+Poisonburst Arrow
+Twister
+Whirling Slash
+Cull The Weak
+Fangs of Frost
+Ice-Tipped Arrows
+Lightning Spear
+Rake
+Snipe
+Stormcaller Arrow
+Vine Arrow
+Herald of Thunder
+Plague Bearer
+Wind Dancer
+Barrage
+Electrocuting Arrow
+Freezing Salvo
+Rapid Assault
+Spearfield
+Storm Lance
+Toxic Growth
+Blood Hunt
+Gas Arrow
+Glacial Lance
+Primal Strikes
+Sniper's Mark
+Voltaic Mark
+Combat Frenzy
+Herald of Plague
+Mirage Archer
+Trail of Caltrops
+Bloodhound's Mark
+Detonating Arrow
+Ice Shot
+Rain of Arrows
+Tame Beast
+Thunderous Leap
+Elemental Sundering
+Shockchain Arrow
+Tornado Shot
+Whirlwind Lance
+Magnetic Salvo
+Spear of Solaris
+Spiral Volley
+Toxic Domain
+Wind Serpent's Fury
+Alchemist's Boon
+Rhoa Mount
+
+### GEM Blue
+Bone Blast
+Cast on Freeze
+Cast on Ignite
+Cast on Shock
+Chaos Bolt
+Conductivity
+Decompose
+Dark Pact
+Discipline
+Enervating Nova
+Exsanguinate
+Feast of Flesh
+Firebolt
+Flammability
+Freezing Shards
+Fulmination
+Galvanic Field
+Heart of Ice
+Hypothermia
+Impurity
+Lightning Bolt
+Malice
+Mana Drain
+Power Siphon
+Purity of Fire
+Purity of Ice
+Purity of Lightning
+Reap
+Sigil of Power
+Skeletal Sniper
+Skeletal Warrior
+Solar Orb
+Soulrend
+Spellslinger
+Lightning Bolt
+Ember Fusillade
+Spark
+Withering Presence
+Unleash
+Volatile Dead
+Wither
+Contagion
+Flame Wall
+Frost Bomb
+Ice Nova
+Skeletal Sniper
+Spark
+Unearth
+Bone Cage
+Enfeeble
+Essence Drain
+Fireball
+Frost Darts
+Living Bomb
+Orb of Storms
+Skeletal Arsonist
+Arctic Armour
+Convalescence
+Mana Remnants
+Raging Spirits
+Ravenous Swarm
+Withering Presence
+Arc
+Bonestorm
+Ember Fusillade
+Frostbolt
+Pain Offering
+Raise Zombie
+Skeletal Frost Mage
+Snap
+Bind Spectre
+Detonate Dead
+Elemental Weakness
+Mana Tempest
+Profane Ritual
+Temporal Chains
+Vulnerability
+Blasphemy
+Blink
+Cast on Minion Death
+Siphon Elements
+Dark Effigy
+Despair
+Frost Wall
+Incinerate
+Lightning Warp
+Skeletal Reaver
+Ball Lightning
+Bone Offering
+Comet
+Firestorm
+Hexblast
+Skeletal Storm Mage
+Eye of Winter
+Flameblast
+Lightning Conduit
+Skeletal Brute
+Skeletal Cleric
+Soul Offering
+Archmage
+Cast on Critical
+Cast on Elemental Ailment
+Elemental Conflux
+Sacrifice
+
+### GEM Item
+Ancestral Spirits
+Bleeding Concoction
+Elemental Expression
+Elemental Storm
+Encase in Jade
+Explosive Concoction
+Fulminating Concoction
+Life Remnants
+Meditate
+Acidic Concoction
+Shattering Concoction
+Summon Infernal Hound
+Elemental Surge
+Unbound Avatar
+Unleash
+Blink
+Blood Boil
+Fire Spell on Hit
+Cast on Block
+Decompose
+Demon Form
+Future-Past
+Inevitable Agony
+Into the Breach
+Manifest Weapon
+Called Shots
+Parry
+Axe Slash
+Mace Strike
+Sword Slash
+Axe Slash
+Mace Strike
+Sword Slash
+Axe Slash
+Bow Shot
+Claw Stab
+Claw Stab
+Crossbow Shot
+Dagger Stab
+Dagger Stab
+Flail Strike
+Mace Strike
+Quarterstaff Strike
+Spear Stab
+Spear Stab
+Spear Throw
+Sword Slash
+Punch
+Ritual Sacrifice
+Raise Shield
+Sorcery Ward
+Consecrate
+Supporting Fire
+Temper Weapon
+Temporal Rift
+Time Freeze
+Time Snap
+Herald of Ice
+Void Illusion
+Armour Piercing Rounds
+Explosive Grenade
+Falling Thunder
+Fragmentation Rounds
+Frozen Locus
+Glacial Cascade
+Killing Palm
+Permafrost Bolts
+Flash Grenade
+High Velocity Rounds
+Incendiary Shot
+Staggering Palm
+Tempest Bell
+Vaulting Impact
+Ghost Dance
+Herald of Blood
+Herald of Ice
+War Banner
+Galvanic Shards
+Ice Shards
+Ice Strike
+Rapid Shot
+Tempest Flurry
+Gas Grenade
+Wind Blast
+Artillery Ballista
+Explosive Shot
+Freezing Mark
+Glacial Bolt
+Voltaic Grenade
+Siphoning Strike
+Storm Wave
+Wave of Frost
+Barrier Invocation
+Defiance Banner
+Elemental Invocation
+Lingering Illusion
+Shard Scavenger
+Charged Staff
+Hand of Chayula
+Mantra of Destruction
+Oil Grenade
+Siege Ballista
+Stormblast Bolts
+Emergency Reload
+Hailstorm Rounds
+Mortar Cannon
+Shattering Palm
+Shockburst Rounds
+Whirling Assault
+Cluster Grenade
+Flicker Strike
+Gathering Storm
+Plasma Blast
+Siege Cascade
+Attrition
+Cast on Dodge
+Charge Regulation
+Dread Banner
+Reaper's Invocation
+Trinity
+
+### Support GEM Red
+Amanamu's Tithe
+Atalui's Bloodletting
+Auto Reload
+Bloodlust
+Brutus' Brain
+Paquate's Pact
+Daresso's Passion
+Dauntless
+Einhar's Beastrite
+Flamepierce
+Tawhoa's Tending
+Kaom's Madness
+Rusted Spikes
+Spar
+Uhtred's Augury
+Uhtred's Exodus
+Uhtred's Omen
+Uruk's Smelting
+Uul-Netol's Embrace
+Xoph's Pyre
+Fire Attunement
+Armour Demolisher I
+Armour Explosion
+Battershout
+Bleed I
+Brutality I
+Compressed Duration I
+Double Barrel I
+Efficiency I
+Elemental Armament I
+Execute I
+Fist of War I
+Enduring Impact I
+Eternal Flame I
+Ignite I
+Impact Shockwave
+Meat Shield I
+Prolonged Duration I
+Rage I
+Steadfast I
+Stomping Ground
+Tireless
+Upheaval I
+Vanguard I
+Vitality I
+Aftershock I
+Armour Break I
+Behead I
+Font of Blood
+Lifetap
+Brink I
+Brutality II
+Concoct I
+Crater
+Defy I
+Direstrike I
+Double Barrel II
+Elemental Armament II
+Exploit Weakness
+Fire Penetration I
+Fresh Clip I
+Hardy Totems I
+Herbalism I
+Infernal Legion I
+Jagged Ground I
+Life Leech I
+Persistent Ground I
+Raging Cry
+Refraction I
+Remnant Potency I
+Retaliate I
+Selfless Remnants
+Short Fuse I
+Skittering Stone I
+Stun I
+Thornskin I
+Urgent Totems I
+Vanguard II
+Volcanic Eruption
+Armour Break II
+Armour Demolisher II
+Barbs I
+Behead II
+Bleed II
+Branching Fissures I
+Brink II
+Cannibalism I
+Clash
+Compressed Duration II
+Cool Headed
+Corrupting Cry I
+Searing Flame I
+Deep Cuts I
+Fist of War II
+Greatwood I
+Haemocrystals
+Eternal Flame II
+Ignite II
+Immolate
+Knockback
+Life Leech II
+Meat Shield II
+Persistent Ground II
+Prolonged Duration II
+Quill Burst
+Font of Rage
+Refraction II
+Reinforced Totems I
+Remnant Potency II
+Rip
+Rupture
+Steadfast II
+Stoicism I
+Tear
+Urgent Totems II
+Aftershock II
+Ancestral Call I
+Armour Break III
+Cannibalism II
+Concoct II
+Searing Flame II
+Direstrike II
+Efficiency II
+Enraged Warcry I
+Execute II
+Fire Exposure
+Fresh Clip II
+Greatwood II
+Hardy Totems II
+Enduring Impact II
+Herbalism II
+Eternal Flame III
+Incision
+Infernal Legion II
+Long Fuse I
+Heavy Swing
+Rage II
+Rageforged I
+Remnant Potency III
+Retaliate II
+Short Fuse II
+Skittering Stone II
+Stun II
+Syzygy
+Thornskin II
+Urgent Totems III
+Vitality II
+Ancestral Call II
+Barbs III
+Barbs II
+Bleed IV
+Bleed III
+Branching Fissures II
+Brutality III
+Corrupting Cry II
+Deep Cuts II
+Defy II
+Double Barrel III
+Elemental Armament III
+Enraged Warcry II
+Execute III
+Fire Penetration II
+Fist of War III
+Heft
+Holy Descent
+Ignite III
+Infernal Legion III
+Jagged Ground II
+Life Leech III
+Long Fuse II
+Persistent Ground III
+Rage III
+Rageforged II
+Refraction III
+Reinforced Totems II
+Stoicism II
+Stun III
+Upheaval II
+
+### GEM Green
+Ailith's Chimes
+Arjun's Medal
+Arakaali's Lust
+Ratha's Assault
+Murderous Intent
+Ferocity
+Garukhan's Resolve
+Overabundance III
+Life Bounty
+Lockdown
+Malady
+Mana Bounty
+Piety's Mercy
+Rakiata's Flow
+Rigwald's Ferocity
+Stormchain
+Tacati's Ire
+Tul's Stillness
+Lightning Attunement
+Blindside
+Chain I
+Charge Profusion I
+Combo Finisher I
+Corrosion
+Crescendo I
+Escalating Poison
+Heightened Accuracy I
+Overabundance I
+Innervate
+Life Drain
+Multishot I
+Perpetual Charge
+Pierce I
+Pin I
+Poison I
+Precision I
+Projectile Acceleration I
+Projectile Deceleration I
+Pursuit I
+Rapid Attacks I
+Retreat I
+Shock
+Slow Potency
+Swift Affliction I
+Window of Opportunity I
+Adhesive Grenades I
+Admixture
+Ammo Conservation I
+Blind I
+Bounty I
+Cadence
+Chain II
+Inhibitor
+Commiserate
+Deadly Poison I
+Delayed Gratification
+Durability
+Electrocute
+Longshot I
+Frenzied Riposte
+Frozen Spite
+Heightened Charges
+Lasting Shock
+Lightning Penetration
+Maim
+Mark for Death
+Momentum
+Multishot II
+Overextend
+Overreach
+Pin II
+Second Wind I
+Shocking Leap
+Bursting Plague
+Ricochet I
+Volt
+Adhesive Grenades II
+Alignment I
+Caltrops
+Charged Shots I
+Close Combat I
+Combo Finisher II
+Cooldown Recovery I
+Culmination I
+Deadly Herald
+Deliberation
+Longshot II
+Fork
+Gambleshot
+Heightened Accuracy II
+Soul Drain
+Mobility
+Neural Overload
+Pierce II
+Poison II
+Practiced Combo
+Projectile Deceleration II
+Punch Through
+Pursuit II
+Rearm I
+Retreat II
+Salvo
+Streamlined Rounds
+Swift Affliction II
+Warm Blooded
+Alignment II
+Ammo Conservation II
+Bounty II
+Cooldown Recovery II
+Crescendo II
+Culling Strike I
+Deadly Poison II
+Delayed Reaction
+Hit and Run
+Impale
+Overabundance II
+Lightning Exposure
+Nimble Reload
+Nova Projectiles
+Overcharge
+Payload
+Perfected Endurance
+Perfection
+Precision II
+Projectile Acceleration II
+Rapid Attacks II
+Second Wind II
+Spectral Volley
+Ricochet II
+Alignment III
+Ammo Conservation III
+Blind II
+Brambleslam
+Chain III
+Charge Profusion II
+Charged Shots II
+Close Combat II
+Crescendo III
+Culling Strike II
+Culmination II
+Pierce III
+Pin III
+Poison III
+Projectile Acceleration III
+Pursuit III
+Rapid Attacks III
+Rearm II
+Retreat III
+Second Wind III
+Swift Affliction III
+Ricochet III
+Window of Opportunity II
+
+### GEM Blue
+Ahn's Citadel
+Arbiter's Ignition
+Atziri's Allure
+Commandment
+Dialla's Desire
+Doedre's Undoing
+Shock Siphon
+Esh's Radiance
+Ixchel's Torment
+Freezefork
+Kalisa's Crescendo
+Kulemak's Dominion
+Kurgal's Leash
+Romira's Requital
+Tecrod's Revenge
+Varashta's Blessing
+Vilenta's Propulsion
+Sione's Temper
+Zarokh's Refrain
+Cold Attunement
+Ambush
+Arcane Surge
+Burgeon I
+Clarity I
+Concentrated Area
+Controlled Destruction
+Crystalline Shards
+Heightened Curse
+Elemental Army
+Expanse
+Hourglass
+Ice Bite
+Impending Doom
+Last Gasp
+Deep Freeze
+Magnified Area I
+Minion Pact I
+Profanity I
+Rapid Casting I
+Sacrificial Lamb I
+Spell Cascade
+Unleash
+Fortress I
+Withering Touch
+Zenith I
+Abiding Hex
+Acrimony
+Bidding I
+Bone Shrapnel
+Boundless Energy I
+Catharsis
+Frost Nexus
+Cold Penetration
+Considered Casting
+Crackling Barrier
+Danse Macabre
+Deathmarch
+Embitter
+Encroaching Ground
+Excise
+Fiery Death
+Harmonic Remnants I
+Focused Curse
+Freeze
+Glacier
+Icicle
+Intense Agony
+Living Lightning
+Loyalty
+Mana Flare
+Font of Mana
+Mana Leech
+Minion Instability
+Mysticism I
+Pinpoint Critical
+Potent Exposure
+Shock Conduction
+Spell Echo
+Rising Tempest
+Upwelling I
+Wildfire
+Chaos Attunement
+Ambrosia
+Astral Projection
+Biting Frost
+Chaotic Freeze
+Corpse Conservation
+Cursed Ground
+Decaying Hex
+Drain Ailments
+Elemental Discharge
+Elemental Focus
+Energy Capacitor
+Energy Retention
+Essence Harvest
+Execrate
+Extraction
+Feeding Frenzy I
+Harmonic Remnants II
+Fluke
+Frostfire
+Hex Bloom
+Supercritical
+Inevitable Critical
+Magnified Area II
+Muster
+Ritualistic Curse
+Sacrificial Lamb II
+Sacrificial Offering
+Stormfire
+Strong Hearted
+Verglas
+Volatility
+Fortress II
+Wildshards I
+Zenith II
+Bidding II
+Boundless Energy II
+Burgeon II
+Burning Inscription
+Clarity II
+Cold Exposure
+Crazed Minions
+Derange
+Feeding Frenzy II
+Hulking Minions
+Living Lightning II
+Minion Pact II
+Mysticism II
+Rapid Casting II
+Upwelling II
+Bidding III
+Chaos Mastery
+Cold Mastery
+Fire Mastery
+Lightning Mastery
+Minion Mastery
+Physical Mastery
+Profanity II
+Rapid Casting III
+Wildshards II
