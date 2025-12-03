@@ -979,3 +979,31 @@ Icicle Flail
 Tearing Flail
 Great Flail
 Abyssal Flail
+
+### Bows
+Crude Bow
+Shortbow
+Warden Bow
+Recurve Bow
+Composite Bow
+Dualstring Bow
+Cultist Bow
+Zealot Bow
+Artillery Bow
+Tribal Bow
+Greatbow
+Double Limb Bow
+Heavy Bow
+Snakewood Shortbow
+Protector Bow
+Rider Bow
+Twin Bow
+Adherent Bow
+Militant Bow
+Ironwood Shortbow
+Cavalry Bow
+Guardian Bow
+Gemini Bow
+Fanatic Bow
+Warmonger Bow
+Obliterator Bow
