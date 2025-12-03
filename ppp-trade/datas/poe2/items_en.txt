@@ -1239,3 +1239,28 @@ Intricate Crest Shield
 Sekheman Crest Shield
 Vaal Crest Shield
 Blacksteel Crest Shield
+
+### Bucklers
+Leather Buckler
+Wooden Buckler
+Plated Buckler
+Iron Buckler
+Ridged Buckler
+Spiked Buckler
+Ringed Buckler
+Edged Buckler
+Laminate Buckler
+Pearl Buckler
+Ornate Buckler
+Array Buckler
+Aegis Buckler
+Oak Buckler
+Painted Buckler
+Coiled Buckler
+Spikeward Buckler
+Jingling Buckler
+Bladeguard Buckler
+Ornate Buckler
+Gutspike Buckler
+Ancient Buckler
+Desert Buckler
