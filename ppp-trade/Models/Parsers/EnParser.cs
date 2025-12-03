@@ -105,13 +105,14 @@ internal class EnParser(CacheService cacheService) : ChineseTradParser(cacheServ
         { "Gem", Rarity.GEM }
     };
 
-    protected override Dictionary<string, Func<Stat, string, ItemBase, (bool, int?)>> SpecialCaseStat { get; } = new()
-    {
-        { "stat_700317374", TryResolveIncreasedAndDecreased },
-        { "stat_3338298622", TryResolveIncreasedAndDecreased },
-        { "stat_4016885052", TryResolveAdditionalProjectile },
-        { "stat_1001829678", TryResolveStaffStats }
-    };
+    protected override Dictionary<string, Func<Stat, string, ItemBase, (bool, int?, int?)>> SpecialCaseStat { get; } =
+        new()
+        {
+            { "stat_700317374", TryResolveIncreasedAndDecreased },
+            { "stat_3338298622", TryResolveIncreasedAndDecreased },
+            { "stat_4016885052", TryResolveAdditionalProjectile },
+            { "stat_1001829678", TryResolveStaffStats }
+        };
 
     protected override List<StatGroup> GetStatGroups()
     {
@@ -211,53 +212,53 @@ internal class EnParser(CacheService cacheService) : ChineseTradParser(cacheServ
         return false;
     }
 
-    private static (bool, int?) TryResolveAdditionalProjectile(Stat stat, string statText, ItemBase parsingItem)
+    private static (bool, int?, int?) TryResolveAdditionalProjectile(Stat stat, string statText, ItemBase parsingItem)
     {
         var regex = stat.Text.Replace(" an ", " (\\d+) ");
         var match = Regex.Match(statText, regex);
         if (match.Success)
         {
-            return (true, int.Parse(match.Groups[1].Value));
+            return (true, int.Parse(match.Groups[1].Value), null);
         }
 
-        return (false, null);
+        return (false, null, null);
     }
 
-    private static (bool, int?) TryResolveIncreasedAndDecreased(Stat stat, string statText, ItemBase parsingItem)
+    private static (bool, int?, int?) TryResolveIncreasedAndDecreased(Stat stat, string statText, ItemBase parsingItem)
     {
         // try match normal case
         var regex = stat.Text.Replace("#", "(\\d+)");
         var match = Regex.Match(statText, regex);
         if (match.Success)
         {
-            return (true, int.Parse(match.Groups[1].Value));
+            return (true, int.Parse(match.Groups[1].Value), null);
         }
 
         regex = stat.Text.Replace("increased", "reduced").Replace("#", "(\\d+)");
         match = Regex.Match(statText, regex);
         if (match.Success)
         {
-            return (true, int.Parse(match.Groups[1].Value) * -1);
+            return (true, int.Parse(match.Groups[1].Value) * -1, null);
         }
 
-        return (false, null);
+        return (false, null, null);
     }
 
-    private static (bool, int?) TryResolveStaffStats(Stat stat, string statText, ItemBase parsingItem)
+    private static (bool, int?, int?) TryResolveStaffStats(Stat stat, string statText, ItemBase parsingItem)
     {
         if (parsingItem.ItemType != ItemType.STAFF && parsingItem.ItemType != ItemType.WAR_STAFF)
         {
-            return (false, null);
+            return (false, null, null);
         }
 
         var realItemStat = ParserHelper.TrimEndOfBraces(statText);
         realItemStat += " (Staves)";
-        if (TryMatchStat(stat, realItemStat, out var value))
+        if (TryMatchStat(stat, realItemStat, out var value, out var optionId))
         {
-            return (true, value);
+            return (true, value, optionId);
         }
 
-        return (false, null);
+        return (false, null, null);
     }
 
     protected override (string, string) ResolveMagicItemName(string nameText)

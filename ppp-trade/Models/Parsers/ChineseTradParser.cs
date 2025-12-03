@@ -26,6 +26,8 @@ public class ChineseTradParser(CacheService cacheService) : IParser
 
     protected virtual string ImplicitKeyword => "(implicit)";
 
+    protected virtual string EnchantKeyword => "(enchant)";
+
     protected virtual string CraftedKeyword => "(crafted)";
 
     protected virtual string AugmentedKeyword => "(augmented)";
@@ -110,12 +112,13 @@ public class ChineseTradParser(CacheService cacheService) : IParser
         { "寶石", Rarity.GEM }
     };
 
-    protected virtual Dictionary<string, Func<Stat, string, ItemBase, (bool, int?)>> SpecialCaseStat { get; } = new()
-    {
-        { "stat_700317374", TryResolveIncreasedAndDecreased },
-        { "stat_3338298622", TryResolveIncreasedAndDecreased },
-        { "stat_1001829678", TryResolveStaffStats }
-    };
+    protected virtual Dictionary<string, Func<Stat, string, ItemBase, (bool, int?, int?)>> SpecialCaseStat { get; } =
+        new()
+        {
+            { "stat_700317374", TryResolveIncreasedAndDecreased },
+            { "stat_3338298622", TryResolveIncreasedAndDecreased },
+            { "stat_1001829678", TryResolveStaffStats }
+        };
 
     public virtual bool IsMatch(string text, string game)
     {
@@ -204,20 +207,27 @@ public class ChineseTradParser(CacheService cacheService) : IParser
                     parsingState = ParsingState.PARSING_STAT;
                     break;
                 case ParsingState.PARSING_STAT:
-                    var hasImplicit = false;
+                    var hasNextStatArea = false;
                     List<string> statTexts = [];
-                    if (line == SplitKeyword)
+                    if (line != SplitKeyword)
                     {
+                        parsingState = ParsingState.PARSING_UNKNOW;
+                        break;
+                    }
+
+                    do
+                    {
+                        hasNextStatArea = false;
                         i++;
                         if (lines[i] == UnidentifiedKeyword)
                         {
                             parsedItem.Unidentified = true;
-                            parsingState = ParsingState.PARSING_UNKNOW;
-                            continue;
+                            break;
                         }
-                        if (lines[i].Contains(ImplicitKeyword))
+
+                        if (lines[i].Contains(ImplicitKeyword) || lines[i].Contains(EnchantKeyword))
                         {
-                            hasImplicit = true;
+                            hasNextStatArea = true;
                         }
 
                         while (i < lines.Length && lines[i] != SplitKeyword)
@@ -225,18 +235,7 @@ public class ChineseTradParser(CacheService cacheService) : IParser
                             statTexts.Add(lines[i]);
                             i++;
                         }
-                    }
-
-                    if (hasImplicit && i < lines.Length && lines[i] == SplitKeyword)
-                    {
-                        i++;
-
-                        while (i < lines.Length && lines[i] != SplitKeyword)
-                        {
-                            statTexts.Add(lines[i]);
-                            i++;
-                        }
-                    }
+                    } while (hasNextStatArea);
 
                     var stats = ResolveStats(statTexts, statGroups, parsedItem);
                     parsedItem.Stats = TryMapLocalAndGlobal(parsedItem.ItemType, stats, statGroups);
@@ -496,44 +495,33 @@ public class ChineseTradParser(CacheService cacheService) : IParser
         List<ItemStat> result = [];
         foreach (var statText in statTexts)
         {
+            StatGroup group;
             if (statText.Trim().EndsWith(ImplicitKeyword))
             {
-                var group = stats.First(s => s.Id == "implicit");
-                var (statEng, value) = FindState(group, statText);
-                if (statEng != null)
-                {
-                    result.Add(new ItemStat
-                    {
-                        Stat = statEng,
-                        Value = value
-                    });
-                }
+                group = stats.First(s => s.Id == "implicit");
             }
             else if (statText.Trim().EndsWith(CraftedKeyword))
             {
-                var group = stats.First(s => s.Id == "crafted");
-                var (state, value) = FindState(group, statText);
-                if (state != null)
-                {
-                    result.Add(new ItemStat
-                    {
-                        Stat = state,
-                        Value = value
-                    });
-                }
+                group = stats.First(s => s.Id == "crafted");
+            }
+            else if (statText.Trim().EndsWith(EnchantKeyword))
+            {
+                group = stats.First(s => s.Id == "enchant");
             }
             else
             {
-                var group = stats.First(s => s.Id == "explicit");
-                var (state, value) = FindState(group, statText);
-                if (state != null)
+                group = stats.First(s => s.Id == "explicit");
+            }
+
+            var (stat, value, optionId) = FindState(group, statText);
+            if (stat != null)
+            {
+                result.Add(new ItemStat
                 {
-                    result.Add(new ItemStat
-                    {
-                        Stat = state,
-                        Value = value
-                    });
-                }
+                    Stat = stat,
+                    Value = value,
+                    OptionId = optionId
+                });
             }
         }
 
@@ -545,10 +533,10 @@ public class ChineseTradParser(CacheService cacheService) : IParser
 
         return result;
 
-        (Stat?, int?) FindState(StatGroup group, string stat)
+        (Stat?, int?, int?) FindState(StatGroup group, string stat)
         {
             var matchResult = TryMatch();
-            if (matchResult is (null, null))
+            if (matchResult is (null, null, null))
             {
                 stat = $"{stat} {LocalKeyword}";
                 matchResult = TryMatch(true);
@@ -556,20 +544,20 @@ public class ChineseTradParser(CacheService cacheService) : IParser
 
             return matchResult;
 
-            (Stat?, int?) TryMatch(bool matchLocal = false)
+            (Stat?, int?, int? ) TryMatch(bool matchLocal = false)
             {
                 foreach (var entry in group.Entries)
                 {
                     var statId = entry.Id.Split('.')[1];
                     if (SpecialCaseStat.TryGetValue(statId, out var specialFunc))
                     {
-                        var (matched, value) = specialFunc(entry, stat, parsingItem);
+                        var (matched, value, optionId) = specialFunc(entry, stat, parsingItem);
                         if (!matched)
                         {
                             continue;
                         }
 
-                        return (entry, value);
+                        return (entry, value, optionId);
                     }
 
                     var realItemStat = stat;
@@ -578,13 +566,13 @@ public class ChineseTradParser(CacheService cacheService) : IParser
                         realItemStat = ParserHelper.TrimEndOfBraces(realItemStat);
                     }
 
-                    if (TryMatchStat(entry, realItemStat, out var matchedValue))
+                    if (TryMatchStat(entry, realItemStat, out var matchedValue, out var matchedOptionId))
                     {
-                        return (entry, matchedValue);
+                        return (entry, matchedValue, matchedOptionId);
                     }
                 }
 
-                return (null, null);
+                return (null, null, null);
             }
         }
     }
@@ -681,44 +669,55 @@ public class ChineseTradParser(CacheService cacheService) : IParser
         }
     }
 
-    protected static bool TryMatchStat(Stat stat, string statText, out int? outValue)
+    protected static bool TryMatchStat(Stat stat, string statText, out int? outValue, out int? outOptionId)
     {
         outValue = null;
-        foreach (var splitEntry in stat.Text.Split('\n'))
+        List<(string, int?)> statTexts = [(stat.Text, null)];
+        outOptionId = null;
+        if (stat.Option is { Options.Count: > 0 })
         {
-            var regex = splitEntry.Replace("(", "\\(");
-            regex = regex.Replace(")", "\\)");
-            regex = regex.Replace("+#", "([+-][\\d.]+)");
-            regex = regex.Replace("#", "([\\d.]+)");
-            regex = $"^{regex}$";
-            try
+            statTexts = stat.Option.Options.Select(x => (stat.Text.Replace("#", x.Text), (int?)x.Id)).ToList();
+        }
+
+        foreach (var tryStatOption in statTexts)
+        {
+            foreach (var splitEntry in tryStatOption.Item1.Split('\n'))
             {
-                var match = Regex.Match(statText, regex);
-                if (!match.Success)
+                var regex = splitEntry.Replace("(", "\\(");
+                regex = regex.Replace(")", "\\)");
+                regex = regex.Replace("+#", "([+-][\\d.]+)");
+                regex = regex.Replace("#", "([\\d.]+)");
+                regex = $"^{regex}$";
+                try
                 {
+                    var match = Regex.Match(statText, regex);
                     if (!match.Success)
                     {
-                        continue;
+                        if (!match.Success)
+                        {
+                            continue;
+                        }
                     }
+
+                    int? value = match.Groups.Count switch
+                    {
+                        3 => (int)((double.Parse(match.Groups[2].Value,
+                                        CultureInfo.InvariantCulture) +
+                                    double.Parse(match.Groups[1].Value,
+                                        CultureInfo.InvariantCulture)) / 2),
+                        > 1 => (int)double.Parse(match.Groups[1].Value,
+                            CultureInfo.InvariantCulture),
+                        _ => null
+                    };
+
+                    outValue = value;
+                    outOptionId = tryStatOption.Item2;
+                    return true;
                 }
-
-                int? value = match.Groups.Count switch
+                catch (Exception e)
                 {
-                    3 => (int)((double.Parse(match.Groups[2].Value,
-                                    CultureInfo.InvariantCulture) +
-                                double.Parse(match.Groups[1].Value,
-                                    CultureInfo.InvariantCulture)) / 2),
-                    > 1 => (int)double.Parse(match.Groups[1].Value,
-                        CultureInfo.InvariantCulture),
-                    _ => null
-                };
-
-                outValue = value;
-                return true;
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e.Message);
+                    Debug.WriteLine(e.Message);
+                }
             }
         }
 
@@ -775,31 +774,31 @@ public class ChineseTradParser(CacheService cacheService) : IParser
         return true;
     }
 
-    private static (bool, int?) TryResolveIncreasedAndDecreased(Stat stat, string statText, ItemBase itemBase)
+    private static (bool, int?, int?) TryResolveIncreasedAndDecreased(Stat stat, string statText, ItemBase itemBase)
     {
         // try match normal case
         var regex = stat.Text.Replace("#", "(\\d+)");
         var match = Regex.Match(statText, regex);
         if (match.Success)
         {
-            return (true, int.Parse(match.Groups[1].Value));
+            return (true, int.Parse(match.Groups[1].Value), null);
         }
 
         regex = stat.Text.Replace("增加", "減少").Replace("#", "(\\d+)");
         match = Regex.Match(statText, regex);
         if (match.Success)
         {
-            return (true, int.Parse(match.Groups[1].Value) * -1);
+            return (true, int.Parse(match.Groups[1].Value) * -1, null);
         }
 
-        return (false, null);
+        return (false, null, null);
     }
 
-    private static (bool, int?) TryResolveStaffStats(Stat stat, string statText, ItemBase parsingItem)
+    private static (bool, int?, int?) TryResolveStaffStats(Stat stat, string statText, ItemBase parsingItem)
     {
         if (parsingItem.ItemType != ItemType.STAFF && parsingItem.ItemType != ItemType.WAR_STAFF)
         {
-            return (false, null);
+            return (false, null, null);
         }
 
         var regex = @"\(.*?\)";
@@ -812,10 +811,10 @@ public class ChineseTradParser(CacheService cacheService) : IParser
         var match = Regex.Match(realItemStat, regex);
         if (match.Success)
         {
-            return (true, int.Parse(match.Groups[1].Value));
+            return (true, int.Parse(match.Groups[1].Value), null);
         }
 
-        return (false, null);
+        return (false, null, null);
     }
 
     private enum ParsingState
