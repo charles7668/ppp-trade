@@ -874,3 +874,47 @@ Messer
 Commander Sword
 Dark Blade
 Golden Blade
+
+### One Hand Axes
+Dull Hatchet
+Hook Axe
+Bearded Axe
+Extended Cleaver
+Bandit Hatchet
+Crescent Axe
+Carving Hatchet
+Sacrificial Axe
+Boarding Hatchet
+Fury Cleaver
+Battle Axe
+Profane Cleaver
+Dread Hatchet
+
+### One Hand Maces
+Wooden Club
+Smithing Hammer
+Slim Mace
+Spiked Club
+Warpick
+Plated Mace
+Brigand Mace
+Construct Hammer
+Morning Star
+Jade Club
+Lumen Mace
+Execratus Hammer
+Torment Club
+Kalguuran Forgehammer
+Calescent Hammer
+Flared Mace
+Battle Pick
+Marching Mace
+Bandit Mace
+Structured Hammer
+Flanged Mace
+Crown Mace
+Molten Hammer
+Strife Pick
+Fortified Hammer
+Marauding Mace
+Akoyan Club
