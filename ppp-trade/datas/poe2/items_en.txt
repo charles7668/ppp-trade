@@ -1744,3 +1744,21 @@ Brigand Mask
 Faridun Mask
 Soaring Mask
 Grinning Mask
+
+### Amulets
+Crimson Amulet
+Azure Amulet
+Amber Amulet
+Jade Amulet
+Lapis Amulet
+Lunar Amulet
+Bloodstone Amulet
+Stellar Amulet
+Solar Amulet
+Gold Amulet
+Pearlescent Amulet
+Dusk Amulet
+Gloam Amulet
+Penumbra Amulet
+Tenebrous Amulet
+Distorted Amulet
