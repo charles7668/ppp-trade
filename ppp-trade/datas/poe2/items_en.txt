@@ -2192,3 +2192,10 @@ Delirium Precursor Tablet
 Ritual Precursor Tablet
 Precursor Tablet
 Overseer Precursor Tablet
+
+### Trial Coins
+Djinn Barya
+Test of Strength Barya
+Test of Will Barya
+Test of Cunning Barya
+Test of Time Barya
