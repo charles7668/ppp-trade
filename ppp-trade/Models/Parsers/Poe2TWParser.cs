@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Text.Json;
 using System.Text.RegularExpressions;
@@ -9,45 +10,67 @@ namespace ppp_trade.Models.Parsers;
 
 public class Poe2TWParser(CacheService cacheService) : IParser
 {
-    private const string ITEM_RARITY_KEYWORD = "稀有度: ";
-    private const string ITEM_TYPE_KEYWORD = "物品種類: ";
-    private const string ITEM_REQUIREMENT_KEYWORD = "需求:";
-    private const string ITEM_SOCKET_KEYWORD = "插槽: ";
-    private const string ITEM_LEVEL_KEYWORD = "物品等級: ";
-    private const string ITEM_GRANTS_SKILL_KEYWORD = "賦予技能: ";
-    private const string ITEM_SPIRIT_KEYWORD = "精魂: ";
-    private const string SPLIT_KEYWORD = "--------";
-    private const string IMPLICIT_KEYWORD = "(implicit)";
-    private const string RUNE_KEYWORD = "(rune)";
-    private const string DESECRATED_KEYWORD = "(desecrated)";
-    private const string AUGMENTED_KEYWORD = "(augmented)";
-    private const string STAT_TW_CACHE_KEY = "parser:poe2:stat_zh_tw";
-    private const string LOCAL_KEYWORD = "(部分)";
-    private const string REQ_LEVEL_KEYWORD = "等級";
-    private const string REQ_INT_KEYWORD = "智慧";
-    private const string REQ_DEX_KEYWORD = "敏捷";
-    private const string REQ_STR_KEYWORD = "力量";
-    private readonly string[] _flaskSplitKeywords = ["之", "的"];
+    protected virtual string ItemRarityKeyword => "稀有度: ";
 
-    public bool IsMatch(string text, string game)
+    protected virtual string ItemTypeKeyword => "物品種類: ";
+
+    protected virtual string ItemRequirementKeyword => "需求:";
+
+    protected virtual string ItemSocketKeyword => "插槽: ";
+
+    protected virtual string ItemLevelKeyword => "物品等級: ";
+
+    protected virtual string ItemGrantsSkillKeyword => "賦予技能: ";
+
+    protected virtual string ItemSpiritKeyword => "精魂: ";
+
+    protected virtual string SplitKeyword => "--------";
+
+    protected virtual string ImplicitKeyword => "(implicit)";
+
+    protected virtual string RuneKeyword => "(rune)";
+
+    protected virtual string DesecratedKeyword => "(desecrated)";
+
+    protected virtual string AugmentedKeyword => "(augmented)";
+
+    private string EnchantKeyword => "(enchant)";
+
+    protected virtual string StatTwCacheKey => "parser:poe2:stat_zh_tw";
+
+    protected virtual string LocalKeyword => "(部分)";
+
+    protected virtual string ReqLevelKeyword => "等級";
+
+    protected virtual string ReqIntKeyword => "智慧";
+
+    protected virtual string ReqDexKeyword => "敏捷";
+
+    protected virtual string ReqStrKeyword => "力量";
+
+    protected virtual Dictionary<string, Func<Stat, string, ItemBase, (bool, int?, int?)>> SpecialCaseStat { get; } =
+        new()
+        {
+            { "stat_3639275092", TryResolveIncreasedAndDecreased }
+        };
+
+    private string UnidentifiedKeyword => "Unidentified";
+
+    public virtual bool IsMatch(string text, string game)
     {
-        return game == "POE2" && text.Contains(ITEM_RARITY_KEYWORD);
+        return game == "POE2" && text.Contains(ItemRarityKeyword);
     }
 
-    public ItemBase? Parse(string text)
+    public virtual ItemBase? Parse(string text)
     {
         #region Get stat data
 
-        if (!cacheService.TryGet(STAT_TW_CACHE_KEY, out List<StatGroup>? statTw))
-        {
-            statTw = LoadStats("stats_tw.json");
-            cacheService.Set(STAT_TW_CACHE_KEY, statTw);
-        }
+        var statGroups = GetStatGroups();
 
         #endregion
 
-        var lines = text.Split("\r\n");
-        var indexOfRarity = Array.FindIndex(lines, l => l.StartsWith(ITEM_RARITY_KEYWORD));
+        var lines = text.Replace("\r", "").Split("\n");
+        var indexOfRarity = Array.FindIndex(lines, l => l.StartsWith(ItemRarityKeyword));
         if (indexOfRarity == -1)
         {
             return null;
@@ -55,9 +78,15 @@ public class Poe2TWParser(CacheService cacheService) : IParser
 
         var parsedItem = new Poe2Item();
         var parsingState = ParsingState.PARSING_UNKNOW;
+        List<string> tempItemNames = [];
         for (var i = 0; i < lines.Length; ++i)
         {
             var line = lines[i];
+            if (line.Trim() == UnidentifiedKeyword)
+            {
+                parsedItem.Unidentified = true;
+            }
+
             switch (parsingState)
             {
                 case ParsingState.PARSING_RARITY:
@@ -65,33 +94,11 @@ public class Poe2TWParser(CacheService cacheService) : IParser
                     parsingState = ParsingState.PARSING_ITEM_NAME;
                     break;
                 case ParsingState.PARSING_ITEM_NAME:
-                    if (parsedItem.ItemType == ItemType.FLASK &&
-                        (parsedItem.Rarity != Rarity.NORMAL || parsedItem.Rarity != Rarity.UNIQUE))
-                    {
-                        foreach (var flaskSplitKeyword in _flaskSplitKeywords)
-                        {
-                            var split = line.Split(flaskSplitKeyword);
-                            if (split.Length != 2)
-                            {
-                                continue;
-                            }
-
-                            parsedItem.ItemName = split[0] + flaskSplitKeyword;
-                            parsedItem.ItemBaseName = split[1];
-                            break;
-                        }
-
-                        parsingState = ParsingState.PARSING_UNKNOW;
-                        break;
-                    }
-
-                    parsedItem.ItemName = line;
-                    parsingState = parsedItem.Rarity == Rarity.CURRENCY
-                        ? ParsingState.PARSING_UNKNOW
-                        : ParsingState.PARSING_ITEM_BASE;
+                    tempItemNames.Add(line);
+                    parsingState = ParsingState.PARSING_ITEM_BASE;
                     break;
                 case ParsingState.PARSING_ITEM_BASE:
-                    parsedItem.ItemBaseName = line;
+                    tempItemNames.Add(line.Trim());
                     parsingState = ParsingState.PARSING_UNKNOW;
                     break;
                 case ParsingState.PARSING_ITEM_TYPE:
@@ -103,21 +110,21 @@ public class Poe2TWParser(CacheService cacheService) : IParser
                     parsingState = ParsingState.PARSING_UNKNOW;
                     break;
                 case ParsingState.PARSING_ITEM_LEVEL:
-                    parsedItem.ItemLevel = int.Parse(line.Substring(ITEM_LEVEL_KEYWORD.Length,
-                        line.Length - ITEM_LEVEL_KEYWORD.Length));
+                    parsedItem.ItemLevel = int.Parse(line.Substring(ItemLevelKeyword.Length,
+                        line.Length - ItemLevelKeyword.Length));
                     parsingState = ParsingState.PARSING_RUNE_STAT;
                     break;
                 case ParsingState.PARSING_RUNE_STAT:
-                    if (line == SPLIT_KEYWORD)
+                    if (line == SplitKeyword)
                     {
                         i++;
-                        if (i < lines.Length && !lines[i].Contains(RUNE_KEYWORD))
+                        if (i < lines.Length && !lines[i].Contains(RuneKeyword))
                         {
                             i -= 2;
                         }
                         else
                         {
-                            while (i < lines.Length && lines[i] != SPLIT_KEYWORD)
+                            while (i < lines.Length && lines[i] != SplitKeyword)
                                 i++;
 
                             i--;
@@ -132,17 +139,17 @@ public class Poe2TWParser(CacheService cacheService) : IParser
 
                     break;
                 case ParsingState.PARSING_GRANTS_SKILL:
-                    if (line == SPLIT_KEYWORD)
+                    if (line == SplitKeyword)
                     {
                         i++;
-                        if (i < lines.Length && !lines[i].StartsWith(ITEM_GRANTS_SKILL_KEYWORD))
+                        if (i < lines.Length && !lines[i].StartsWith(ItemGrantsSkillKeyword))
                         {
                             i -= 2;
                         }
                         else
                         {
-                            parsedItem.GrantsSkill = lines[i].AsSpan(ITEM_GRANTS_SKILL_KEYWORD.Length).ToString();
-                            while (i < lines.Length && lines[i] != SPLIT_KEYWORD)
+                            parsedItem.GrantsSkill = lines[i].AsSpan(ItemGrantsSkillKeyword.Length).ToString();
+                            while (i < lines.Length && lines[i] != SplitKeyword)
                                 i++;
 
                             i--;
@@ -157,42 +164,54 @@ public class Poe2TWParser(CacheService cacheService) : IParser
 
                     break;
                 case ParsingState.PARSING_STAT:
-                    var hasImplicit = false;
+                    bool hasNextStatArea;
                     List<string> statTexts = [];
-                    if (line == SPLIT_KEYWORD)
+                    if (line != SplitKeyword)
                     {
-                        i++;
-                        if (lines[i].Contains(IMPLICIT_KEYWORD))
-                        {
-                            hasImplicit = true;
-                        }
-
-
-                        while (i < lines.Length && lines[i] != SPLIT_KEYWORD)
-                        {
-                            statTexts.Add(lines[i]);
-                            i++;
-                        }
+                        parsingState = ParsingState.PARSING_UNKNOW;
+                        break;
                     }
 
-                    if (hasImplicit && i < lines.Length && lines[i] == SPLIT_KEYWORD)
+                    do
                     {
+                        hasNextStatArea = false;
+                        var needSkip = false;
                         i++;
-
-                        while (i < lines.Length && lines[i] != SPLIT_KEYWORD)
+                        if (lines[i] == UnidentifiedKeyword)
                         {
-                            statTexts.Add(lines[i]);
+                            parsedItem.Unidentified = true;
+                            break;
+                        }
+
+                        if (lines[i].Contains(ImplicitKeyword) || lines[i].Contains(EnchantKeyword))
+                        {
+                            hasNextStatArea = true;
+                        }
+                        else if (lines[i].StartsWith(ItemGrantsSkillKeyword))
+                        {
+                            parsedItem.GrantsSkill = lines[i].AsSpan(ItemGrantsSkillKeyword.Length).ToString();
+                            needSkip = true;
+                            hasNextStatArea = true;
+                        }
+
+                        while (i < lines.Length && lines[i] != SplitKeyword)
+                        {
+                            if (!needSkip)
+                            {
+                                statTexts.Add(lines[i]);
+                            }
+
                             i++;
                         }
-                    }
+                    } while (hasNextStatArea);
 
-                    List<ItemStat> stats = ResolveStats(statTexts, statTw!);
-                    parsedItem.Stats = TryMapLocalAndGlobal(parsedItem.ItemType, stats, statTw!);
+                    var stats = ResolveStats(statTexts, statGroups, parsedItem);
+                    parsedItem.Stats = TryMapLocalAndGlobal(parsedItem.ItemType, stats, statGroups);
                     parsingState = ParsingState.PARSING_UNKNOW;
                     break;
                 case ParsingState.PARSING_SPIRIT:
                     parsedItem.Spirit =
-                        int.Parse(line.Replace(AUGMENTED_KEYWORD, "").AsSpan(ITEM_SPIRIT_KEYWORD.Length));
+                        int.Parse(line.Replace(AugmentedKeyword, "").AsSpan(ItemSpiritKeyword.Length));
                     parsingState = ParsingState.PARSING_UNKNOW;
                     break;
                 case ParsingState.PARSING_SOCKETS:
@@ -207,27 +226,27 @@ public class Poe2TWParser(CacheService cacheService) : IParser
                         i--;
                         parsingState = ParsingState.PARSING_RARITY;
                     }
-                    else if (line.StartsWith(ITEM_TYPE_KEYWORD))
+                    else if (line.StartsWith(ItemTypeKeyword))
                     {
                         i--;
                         parsingState = ParsingState.PARSING_ITEM_TYPE;
                     }
-                    else if (line.StartsWith(ITEM_REQUIREMENT_KEYWORD))
+                    else if (line.StartsWith(ItemRequirementKeyword))
                     {
                         i--;
                         parsingState = ParsingState.PARSING_REQUIREMENT;
                     }
-                    else if (line.StartsWith(ITEM_LEVEL_KEYWORD))
+                    else if (line.StartsWith(ItemLevelKeyword))
                     {
                         i--;
                         parsingState = ParsingState.PARSING_ITEM_LEVEL;
                     }
-                    else if (line.StartsWith(ITEM_SPIRIT_KEYWORD))
+                    else if (line.StartsWith(ItemSpiritKeyword))
                     {
                         i--;
                         parsingState = ParsingState.PARSING_SPIRIT;
                     }
-                    else if (line.StartsWith(ITEM_SOCKET_KEYWORD))
+                    else if (line.StartsWith(ItemSocketKeyword))
                     {
                         i--;
                         parsingState = ParsingState.PARSING_SOCKETS;
@@ -237,22 +256,20 @@ public class Poe2TWParser(CacheService cacheService) : IParser
             }
         }
 
+        ResolveItemName(tempItemNames, parsedItem);
+
         return parsedItem;
     }
 
-    private static int ResolveRuneSockets(string line)
+    protected virtual List<StatGroup> GetStatGroups()
     {
-        ReadOnlySpan<char> span = line.AsSpan(ITEM_SOCKET_KEYWORD.Length);
-        var count = 0;
-        foreach (var s in span)
+        if (!cacheService.TryGet(StatTwCacheKey, out List<StatGroup>? statTw))
         {
-            if (s == 'S')
-            {
-                count++;
-            }
+            statTw = LoadStats("stats_tw.json");
+            cacheService.Set(StatTwCacheKey, statTw);
         }
 
-        return count;
+        return statTw ?? [];
     }
 
     private List<StatGroup> LoadStats(string fileName)
@@ -271,10 +288,37 @@ public class Poe2TWParser(CacheService cacheService) : IParser
         return JsonSerializer.Deserialize<List<StatGroup>>(json, options) ?? [];
     }
 
-    private static IEnumerable<ItemRequirement> ResolveItemRequirements(string line)
+    private void ResolveItemName(IEnumerable<string> itemNameTexts, ItemBase parsingItem)
     {
-        ReadOnlySpan<char> replaceAugmented =
-            line.Replace(AUGMENTED_KEYWORD, "").AsSpan(ITEM_REQUIREMENT_KEYWORD.Length);
+        var itemNameTextList = itemNameTexts.Select(x => x.Trim()).ToList();
+        if (itemNameTextList.Count != 2)
+        {
+            return;
+        }
+
+        if (parsingItem.Rarity is Rarity.UNIQUE or Rarity.RARE && !parsingItem.Unidentified)
+        {
+            parsingItem.ItemName = itemNameTextList[0] + " " + itemNameTextList[1];
+            parsingItem.ItemBaseName = itemNameTextList[1];
+            return;
+        }
+
+        if (parsingItem.Rarity is Rarity.MAGIC)
+        {
+            var (itemName, itemBaseName) = ResolveMagicItemName(itemNameTextList[0]);
+            parsingItem.ItemName = itemName;
+            parsingItem.ItemBaseName = itemBaseName;
+            return;
+        }
+
+        parsingItem.ItemName = itemNameTextList[0];
+        parsingItem.ItemBaseName = itemNameTextList[0];
+    }
+
+    protected virtual IEnumerable<ItemRequirement> ResolveItemRequirements(string line)
+    {
+        var replaceAugmented =
+            line.Replace(AugmentedKeyword, "").AsSpan(ItemRequirementKeyword.Length);
         Span<Range> reqList = stackalloc Range[6];
         replaceAugmented.Split(reqList, ',');
         List<ItemRequirement> itemRequirements = [];
@@ -282,7 +326,7 @@ public class Poe2TWParser(CacheService cacheService) : IParser
         {
             var req = replaceAugmented.Slice(range.Start.Value, range.End.Value - range.Start.Value)
                 .ToString();
-            string[] keywords = [REQ_LEVEL_KEYWORD, REQ_INT_KEYWORD, REQ_DEX_KEYWORD, REQ_STR_KEYWORD];
+            string[] keywords = [ReqLevelKeyword, ReqIntKeyword, ReqDexKeyword, ReqStrKeyword];
             foreach (var keyword in keywords)
             {
                 if (req.Contains(keyword))
@@ -292,10 +336,10 @@ public class Poe2TWParser(CacheService cacheService) : IParser
                     {
                         ItemRequirementType = keyword switch
                         {
-                            REQ_LEVEL_KEYWORD => ItemRequirementType.LEVEL,
-                            REQ_INT_KEYWORD => ItemRequirementType.INT,
-                            REQ_DEX_KEYWORD => ItemRequirementType.DEX,
-                            REQ_STR_KEYWORD => ItemRequirementType.STR,
+                            _ when keyword == ReqLevelKeyword => ItemRequirementType.LEVEL,
+                            _ when keyword == ReqIntKeyword => ItemRequirementType.INT,
+                            _ when keyword == ReqDexKeyword => ItemRequirementType.DEX,
+                            _ when keyword == ReqStrKeyword => ItemRequirementType.STR,
                             _ => throw new ArgumentOutOfRangeException()
                         },
                         Value = int.Parse(realReq)
@@ -307,9 +351,9 @@ public class Poe2TWParser(CacheService cacheService) : IParser
         return itemRequirements;
     }
 
-    private static ItemType ResolveItemType(string lineText)
+    protected virtual ItemType ResolveItemType(string lineText)
     {
-        var substr = lineText.Substring(ITEM_TYPE_KEYWORD.Length, lineText.Length - ITEM_TYPE_KEYWORD.Length)
+        var substr = lineText.Substring(ItemTypeKeyword.Length, lineText.Length - ItemTypeKeyword.Length)
             .Trim();
         var typeMap = new Dictionary<string, ItemType>
         {
@@ -320,18 +364,24 @@ public class Poe2TWParser(CacheService cacheService) : IParser
             { "單手斧", ItemType.ONE_HAND_AXE },
             { "單手錘", ItemType.ONE_HAND_MACE },
             { "權杖", ItemType.SCEPTRE },
-            { "符紋匕首", ItemType.RUNE_DAGGER },
+            { "長矛", ItemType.SPEAR },
+            { "鏈錘", ItemType.FLAIL },
 
             { "弓", ItemType.BOW },
             { "長杖", ItemType.STAFF },
             { "雙手劍", ItemType.TWO_HAND_SWORD },
             { "雙手斧", ItemType.TWO_HAND_AXE },
             { "雙手錘", ItemType.TWO_HAND_MACE },
+            { "細杖", ItemType.QUARTERSTAFF },
             { "魚竿", ItemType.FISHING_ROD },
+            { "十字弓", ItemType.CROSSBOW },
+            { "陷阱", ItemType.TRAP },
 
             { "箭袋", ItemType.QUIVER },
             { "盾牌", ItemType.SHIELD },
             { "盾", ItemType.SHIELD },
+            { "輕盾", ItemType.BUCKLER },
+            { "法器", ItemType.FOCI },
 
             { "頭部", ItemType.HELMET },
             { "胸甲", ItemType.BODY_ARMOUR },
@@ -342,17 +392,14 @@ public class Poe2TWParser(CacheService cacheService) : IParser
             { "項鍊", ItemType.AMULET },
             { "戒指", ItemType.RING },
 
-            { "異界地圖", ItemType.MAP },
-            { "契約書", ItemType.CONTRACT },
-            { "藍圖", ItemType.BLUEPRINT },
             { "可堆疊通貨", ItemType.STACKABLE_CURRENCY },
-            { "命運卡", ItemType.DIVINATION_CARD },
+            { "可鑲嵌", ItemType.SOCKETABLE },
+            { "碑牌", ItemType.TABLET },
             { "珠寶", ItemType.JEWEL },
-            { "大型珠寶", ItemType.ABYSS_JEWEL },
-            { "護身符", ItemType.TALISMAN },
+            { "護符", ItemType.CHARMS },
 
-            { "功能藥劑", ItemType.FLASK },
             { "生命藥劑", ItemType.FLASK },
+            { "魔力藥劑", ItemType.FLASK },
 
             { "換界石", ItemType.WAY_STONE }
         };
@@ -360,35 +407,56 @@ public class Poe2TWParser(CacheService cacheService) : IParser
         return typeMap.GetValueOrDefault(substr, ItemType.OTHER);
     }
 
-    private static List<ItemStat> ResolvePseudoStats(IEnumerable<ItemStat> itemStats, StatGroup pseudoStatGroup)
+    protected virtual (string, string) ResolveMagicItemName(string nameText)
     {
-        var mapping = new Dictionary<string, List<string>>
+        var index1 = nameText.IndexOf('之');
+        var index2 = nameText.IndexOf('的');
+        var lastIndex = Math.Max(index1, index2);
+        var baseName = nameText;
+        if (lastIndex != -1)
         {
+            baseName = nameText.Substring(lastIndex + 1);
+        }
+
+        return (nameText, baseName);
+    }
+
+    protected virtual List<ItemStat> ResolvePseudoStats(IEnumerable<ItemStat> itemStats, StatGroup pseudoStatGroup)
+    {
+        var mapping = new Dictionary<string, List<(string mapTo, double ratio)>>
+        {
+            // cold resistance
             {
-                // cold resistance
-                "explicit.stat_4220027924",
-                [
-                    "pseudo.pseudo_total_cold_resistance",
-                    "pseudo.pseudo_total_elemental_resistance",
-                    "pseudo.pseudo_total_resistance"
+                "stat_4220027924", [
+                    ("pseudo.pseudo_total_cold_resistance", 1),
+                    ("pseudo.pseudo_total_elemental_resistance", 1),
+                    ("pseudo.pseudo_total_resistance", 1)
                 ]
             },
+            // lightning resistance
             {
-                // fire resistance
-                "explicit.stat_3372524247",
-                [
-                    "pseudo.pseudo_total_fire_resistance",
-                    "pseudo.pseudo_total_elemental_resistance",
-                    "pseudo.pseudo_total_resistance"
+                "stat_1671376347", [
+                    ("pseudo.pseudo_total_lightning_resistance", 1),
+                    ("pseudo.pseudo_total_elemental_resistance", 1),
+                    ("pseudo.pseudo_total_resistance", 1)
                 ]
             },
+            // fire resistance
             {
-                // lightning resistance
-                "explicit.stat_1671376347",
-                [
-                    "pseudo.pseudo_total_lightning_resistance",
-                    "pseudo.pseudo_total_elemental_resistance",
-                    "pseudo.pseudo_total_resistance"
+                "stat_3372524247", [
+                    ("pseudo.pseudo_total_fire_resistance", 1),
+                    ("pseudo.pseudo_total_elemental_resistance", 1),
+                    ("pseudo.pseudo_total_resistance", 1)
+                ]
+            },
+            // all element resistance
+            {
+                "stat_2901986750", [
+                    ("pseudo.pseudo_total_cold_resistance", 1),
+                    ("pseudo.pseudo_total_lightning_resistance", 1),
+                    ("pseudo.pseudo_total_fire_resistance", 1),
+                    ("pseudo.pseudo_total_elemental_resistance", 3),
+                    ("pseudo.pseudo_total_resistance", 3)
                 ]
             }
         };
@@ -397,19 +465,19 @@ public class Poe2TWParser(CacheService cacheService) : IParser
 
         foreach (var stat in itemStats)
         {
-            var statId = stat.Stat.Id;
-            if (!mapping.TryGetValue(statId, out List<string>? value))
+            var statId = stat.Stat.Id.Split('.')[1];
+            if (!mapping.TryGetValue(statId, out var value))
             {
                 continue;
             }
 
             foreach (var pseudoId in value)
             {
-                pseudoDict.TryAdd(pseudoId, 0);
+                pseudoDict.TryAdd(pseudoId.mapTo, 0);
 
                 if (stat.Value != null)
                 {
-                    pseudoDict[pseudoId] += (int)stat.Value;
+                    pseudoDict[pseudoId.mapTo] += (int)(stat.Value * pseudoId.ratio);
                 }
             }
         }
@@ -421,25 +489,125 @@ public class Poe2TWParser(CacheService cacheService) : IParser
         }).ToList();
     }
 
-    private static Rarity ResolveRarity(string lineText)
+    protected virtual Rarity ResolveRarity(string lineText)
     {
-        var rarityStr = lineText.Substring(ITEM_RARITY_KEYWORD.Length, lineText.Length - ITEM_RARITY_KEYWORD.Length)
-            .Trim();
-        var result = rarityStr switch
+        var rarityStr = lineText.Substring(ItemRarityKeyword.Length).Trim();
+        return rarityStr switch
         {
             "普通" => Rarity.NORMAL,
             "魔法" => Rarity.MAGIC,
             "稀有" => Rarity.RARE,
             "傳奇" => Rarity.UNIQUE,
             "通貨" => Rarity.CURRENCY,
-            "命運卡" => Rarity.DIVINATION_CARD,
             _ => Rarity.NORMAL
         };
-
-        return result;
     }
 
-    private static IEnumerable<ItemStat> TryMapLocalAndGlobal(ItemType itemType, IEnumerable<ItemStat> stats,
+    protected virtual int ResolveRuneSockets(string line)
+    {
+        var span = line.AsSpan(ItemSocketKeyword.Length);
+        var count = 0;
+        foreach (var s in span)
+        {
+            if (s == 'S')
+            {
+                count++;
+            }
+        }
+
+        return count;
+    }
+
+    protected virtual List<ItemStat> ResolveStats(IEnumerable<string> statTexts, List<StatGroup> stats,
+        ItemBase parsingItem)
+    {
+        List<ItemStat> result = [];
+        foreach (var statText in statTexts)
+        {
+            StatGroup group;
+            var trimText = statText.Trim();
+            if (trimText.EndsWith(ImplicitKeyword))
+            {
+                group = stats.First(s => s.Id == "implicit");
+            }
+            else if (trimText.EndsWith(EnchantKeyword))
+            {
+                group = stats.First(s => s.Id == "enchant");
+            }
+            else if (trimText.EndsWith(DesecratedKeyword))
+            {
+                group = stats.First(s => s.Id == "desecrated");
+            }
+            else
+            {
+                group = stats.First(s => s.Id == "explicit");
+            }
+
+            var (stat, value, optionId) = FindState(group, statText);
+            if (stat != null)
+            {
+                result.Add(new ItemStat
+                {
+                    Stat = stat,
+                    Value = value,
+                    OptionId = optionId
+                });
+            }
+        }
+
+        result = result.DistinctBy(x => x.Stat.Id).ToList();
+
+        var pseudoStats = ResolvePseudoStats(result, stats.First(s => s.Id == "pseudo"));
+
+        result.InsertRange(0, pseudoStats);
+
+        return result;
+
+        (Stat?, int?, int?) FindState(StatGroup group, string stat)
+        {
+            var matchResult = TryMatch();
+            if (matchResult is (null, null, null))
+            {
+                stat = $"{stat} {LocalKeyword}";
+                matchResult = TryMatch(true);
+            }
+
+            return matchResult;
+
+            (Stat?, int?, int? ) TryMatch(bool matchLocal = false)
+            {
+                foreach (var entry in group.Entries)
+                {
+                    var statId = entry.Id.Split('.')[1];
+                    if (SpecialCaseStat.TryGetValue(statId, out var specialFunc))
+                    {
+                        var (matched, value, optionId) = specialFunc(entry, stat, parsingItem);
+                        if (!matched)
+                        {
+                            continue;
+                        }
+
+                        return (entry, value, optionId);
+                    }
+
+                    var realItemStat = stat;
+                    if (!matchLocal)
+                    {
+                        realItemStat = ParserHelper.TrimEndOfBraces(realItemStat);
+                    }
+
+                    if (TryMatchStat(entry, realItemStat, out var matchedValue, out var matchedOptionId))
+                    {
+                        return (entry, matchedValue, matchedOptionId);
+                    }
+                }
+
+                return (null, null, null);
+            }
+        }
+    }
+
+    protected virtual IEnumerable<ItemStat> TryMapLocalAndGlobal(ItemType itemType, IEnumerable<ItemStat> stats,
         List<StatGroup> statGroups)
     {
         var genre = GetGenre(itemType);
@@ -451,14 +619,10 @@ public class Poe2TWParser(CacheService cacheService) : IParser
         var map = new Dictionary<string, Dictionary<string, string>>
         {
             {
-                "weapon", new Dictionary<string, string>
-                {
-                }
+                "weapon", new Dictionary<string, string>()
             },
             {
-                "armour", new Dictionary<string, string>
-                {
-                }
+                "armour", new Dictionary<string, string>()
             }
         };
         var result = new List<ItemStat>();
@@ -502,7 +666,11 @@ public class Poe2TWParser(CacheService cacheService) : IParser
                 ItemType.ONE_HAND_AXE => "weapon",
                 ItemType.ONE_HAND_MACE => "weapon",
                 ItemType.SCEPTRE => "weapon",
-                ItemType.RUNE_DAGGER => "weapon",
+                ItemType.QUARTERSTAFF => "weapon",
+                ItemType.SPEAR => "weapon",
+                ItemType.FLAIL => "weapon",
+                ItemType.CROSSBOW => "weapon",
+                ItemType.TRAP => "weapon",
                 ItemType.BOW => "weapon",
                 ItemType.STAFF => "weapon",
                 ItemType.TWO_HAND_SWORD => "weapon",
@@ -518,121 +686,79 @@ public class Poe2TWParser(CacheService cacheService) : IParser
         }
     }
 
-    private static List<ItemStat> ResolveStats(IEnumerable<string> statTexts, List<StatGroup> stats)
+    protected static bool TryMatchStat(Stat stat, string statText, out int? outValue, out int? outOptionId)
     {
-        List<ItemStat> result = [];
-
-        foreach (var statText in statTexts)
+        outValue = null;
+        List<(string, int?)> statTexts = [(stat.Text, null)];
+        outOptionId = null;
+        if (stat.Option is { Options.Count: > 0 })
         {
-            if (statText.Trim().EndsWith(IMPLICIT_KEYWORD))
-            {
-                var group = stats.First(s => s.Id == "implicit");
-                var (statEng, value) = FindState(group, statText);
-                if (statEng != null)
-                {
-                    result.Add(new ItemStat
-                    {
-                        Stat = statEng,
-                        Value = value
-                    });
-                }
-            }
-            else if (statText.Trim().EndsWith(DESECRATED_KEYWORD))
-            {
-                var group = stats.First(s => s.Id == "desecrated");
-                var (state, value) = FindState(group, statText);
-                if (state != null)
-                {
-                    result.Add(new ItemStat
-                    {
-                        Stat = state,
-                        Value = value
-                    });
-                }
-            }
-            else
-            {
-                var group = stats.First(s => s.Id == "explicit");
-                var (state, value) = FindState(group, statText);
-                if (state != null)
-                {
-                    result.Add(new ItemStat
-                    {
-                        Stat = state,
-                        Value = value
-                    });
-                }
-            }
+            statTexts = stat.Option.Options.Select(x => (stat.Text.Replace("#", x.Text), (int?)x.Id)).ToList();
         }
 
-        result = result.DistinctBy(x => x.Stat.Id).ToList();
-
-        List<ItemStat> pseudoStats = ResolvePseudoStats(result, stats.First(s => s.Id == "pseudo"));
-
-        result.InsertRange(0, pseudoStats);
-
-        return result;
-
-        (Stat?, int?) FindState(StatGroup group, string stat)
+        foreach (var tryStatOption in statTexts)
         {
-            (Stat?, int?) matchResult = TryMatch();
-            if (matchResult is (null, null))
+            foreach (var splitEntry in tryStatOption.Item1.Split('\n'))
             {
-                stat = $"{stat} {LOCAL_KEYWORD}";
-                matchResult = TryMatch(true);
-            }
-
-            return matchResult;
-
-            (Stat?, int?) TryMatch(bool matchLocal = false)
-            {
-                foreach (var entry in group.Entries)
+                var regex = splitEntry.Replace("(", "\\(");
+                regex = regex.Replace(")", "\\)");
+                regex = regex.Replace("+#", "([+-][\\d.]+)");
+                regex = regex.Replace("#", "([+-]?[\\d.]+)");
+                regex = $"^{regex}$";
+                try
                 {
-                    foreach (var splitEntry in entry.Text.Split('\n'))
+                    var match = Regex.Match(statText, regex);
+                    if (!match.Success)
                     {
-                        string regex;
-                        var realItemStat = stat;
-                        if (!matchLocal)
+                        if (!match.Success)
                         {
-                            regex = @"\(.*?\)";
-                            realItemStat = Regex.Replace(stat, regex, "").Trim();
-                        }
-
-                        regex = splitEntry.Replace("(", "\\(");
-                        regex = regex.Replace(")", "\\)");
-                        regex = regex.Replace("+#", "([+-]\\d+)");
-                        regex = regex.Replace("#", "(\\d+)");
-                        regex = $"^{regex}$";
-                        try
-                        {
-                            var match = Regex.Match(realItemStat, regex);
-                            if (!match.Success)
-                            {
-                                if (!match.Success)
-                                {
-                                    continue;
-                                }
-                            }
-
-                            int? value = match.Groups.Count switch
-                            {
-                                3 => int.Parse(match.Groups[2].Value) + int.Parse(match.Groups[1].Value),
-                                > 1 => int.Parse(match.Groups[1].Value),
-                                _ => null
-                            };
-
-                            return (entry, value);
-                        }
-                        catch (Exception e)
-                        {
-                            Debug.WriteLine(e.Message);
+                            continue;
                         }
                     }
-                }
 
-                return (null, null);
+                    int? value = match.Groups.Count switch
+                    {
+                        3 => (int)((double.Parse(match.Groups[2].Value,
+                                        CultureInfo.InvariantCulture) +
+                                    double.Parse(match.Groups[1].Value,
+                                        CultureInfo.InvariantCulture)) / 2),
+                        > 1 => (int)double.Parse(match.Groups[1].Value,
+                            CultureInfo.InvariantCulture),
+                        _ => null
+                    };
+
+                    outValue = value;
+                    outOptionId = tryStatOption.Item2;
+                    return true;
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine(e.Message);
+                }
             }
         }
+
+        return false;
+    }
+
+    private static (bool, int?, int?) TryResolveIncreasedAndDecreased(Stat stat, string statText, ItemBase itemBase)
+    {
+        // try match normal case
+        var regex = stat.Text.Replace("#", "(\\d+)");
+        var match = Regex.Match(statText, regex);
+        if (match.Success)
+        {
+            return (true, int.Parse(match.Groups[1].Value), null);
+        }
+
+        regex = stat.Text.Replace("增加", "減少").Replace("#", "(\\d+)");
+        match = Regex.Match(statText, regex);
+        if (match.Success)
+        {
+            return (true, int.Parse(match.Groups[1].Value) * -1, null);
+        }
+
+        return (false, null, null);
     }
 
     private enum ParsingState

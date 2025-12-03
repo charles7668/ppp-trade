@@ -40,7 +40,6 @@ public enum ItemType
     JEWEL,
     ABYSS_JEWEL,
     CLUSTER_JEWEL,
-    TALISMAN,
     QUIVER,
 
     #endregion
@@ -48,6 +47,20 @@ public enum ItemType
     #region poe2
 
     WAY_STONE,
+
+    SPEAR,
+    FLAIL,
+    QUARTERSTAFF,
+    CROSSBOW,
+    TRAP,
+
+    BUCKLER,
+    FOCI,
+
+    CHARMS,
+
+    SOCKETABLE,
+    TABLET,
 
     #endregion
 

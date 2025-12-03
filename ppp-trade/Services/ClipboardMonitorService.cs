@@ -15,7 +15,7 @@ public class ClipboardMonitorService
         {
             try
             {
-                Clipboard.SetText("");
+                Clipboard.Clear();
             }
             catch
             {
