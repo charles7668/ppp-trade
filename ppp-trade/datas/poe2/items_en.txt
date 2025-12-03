@@ -825,3 +825,19 @@ Sharktooth Claw
 Armoured Claw
 Piercing Claw
 Talon Claw
+
+### Daggers
+Ethereal Blade
+Glass Shank
+Crone Knife
+Simple Dagger
+Skinning Knife
+Moon Dagger
+Engraved Knife
+Obsidian Dagger
+Bloodletting Dagger
+Mail Breaker
+Kris Knife
+Parrying Dagger
+Arcane Dirk
+Cinquedea
