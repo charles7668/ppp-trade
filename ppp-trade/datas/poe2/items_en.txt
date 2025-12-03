@@ -1170,3 +1170,72 @@ Primed Quiver
 Penetrating Quiver
 Volant Quiver
 Visceral Quiver
+
+### Shields
+Golden Flame
+Splintered Tower Shield
+Painted Tower Shield
+Braced Tower Shield
+Barricade Tower Shield
+Effigial Tower Shield
+Rampart Tower Shield
+Heraldric Tower Shield
+Stone Tower Shield
+Crucible Tower Shield
+Ancestor Tower Shield
+Phalanx Tower Shield
+Defiant Tower Shield
+Blacksteel Tower Shield
+Hardwood Targe
+Pelage Targe
+Studded Targe
+Crescent Targe
+Chiseled Targe
+Feathered Targe
+Stratified Targe
+Carved Targe
+Mosaic Targe
+Aureate Targe
+Grand Targe
+Blazon Crest Shield
+Sigil Crest Shield
+Emblem Crest Shield
+Jingling Crest Shield
+Sectarian Crest Shield
+Omen Crest Shield
+Wayward Crest Shield
+Seer Crest Shield
+Stoic Crest Shield
+Empyreal Crest Shield
+Deified Crest Shield
+Golden Shield
+Aged Tower Shield
+Metalworked Tower Shield
+Cultist Tower Shield
+Bulwark Tower Shield
+Noble Tower Shield
+Goldworked Tower Shield
+Ironwood Targe
+Fur-lined Targe
+Mercenary Targe
+Polished Targe
+Stone Targe
+Avian Targe
+Painted Crest Shield
+Engraved Crest Shield
+Descry Crest Shield
+Dekharan Crest Shield
+Quartered Crest Shield
+Glowering Crest Shield
+Royal Tower Shield
+Fortress Tower Shield
+Vaal Tower Shield
+Tawhoan Tower Shield
+Mammoth Targe
+Baroque Targe
+Soaring Targe
+Golden Targe
+Intricate Crest Shield
+Sekheman Crest Shield
+Vaal Crest Shield
+Blacksteel Crest Shield
