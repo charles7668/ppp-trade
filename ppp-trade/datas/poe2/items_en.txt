@@ -1024,3 +1024,19 @@ Sanctified Staff
 Dark Staff
 Ravenous Staff
 Permafrost Staff
+
+### Two Hand Swords
+Energy Blade
+Corroded Longsword
+Iron Greatsword
+Blessed Claymore
+Broad Greatsword
+Rippled Greatsword
+Arced Longsword
+Stone Greatsword
+Obsidian Greatsword
+Keen Greatsword
+Ancient Greatblade
+Flanged Greatblade
+Regalia Longsword
+Ultra Greatsword
