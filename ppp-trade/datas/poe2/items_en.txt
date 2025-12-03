@@ -1817,3 +1817,18 @@ Colossal Mana Flask
 Gargantuan Mana Flask
 Transcendent Mana Flask
 Ultimate Mana Flask
+
+### Charms
+Thawing Charm
+Staunching Charm
+Antidote Charm
+Dousing Charm
+Grounding Charm
+Stone Charm
+Silver Charm
+Ruby Charm
+Sapphire Charm
+Topaz Charm
+Amethyst Charm
+Golden Charm
+Cleansing Charm
