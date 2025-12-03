@@ -2181,3 +2181,6 @@
 
 ### Expedition Logbooks
 探險日誌
+
+### Inscribed Ultimatums
+最後通牒雕刻

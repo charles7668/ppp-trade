@@ -2181,3 +2181,6 @@ Victorious Fate
 
 ### Expedition Logbooks
 Expedition Logbook
+
+### Inscribed Ultimatums
+Inscribed Ultimatum
