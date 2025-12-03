@@ -1797,3 +1797,23 @@ Double Belt
 Heavy Belt
 Utility Belt
 Fine Belt
+
+### Flasks
+Lesser Life Flask
+Medium Life Flask
+Greater Life Flask
+Grand Life Flask
+Giant Life Flask
+Colossal Life Flask
+Gargantuan Life Flask
+Transcendent Life Flask
+Ultimate Life Flask
+Lesser Mana Flask
+Medium Mana Flask
+Greater Mana Flask
+Grand Mana Flask
+Giant Mana Flask
+Colossal Mana Flask
+Gargantuan Mana Flask
+Transcendent Mana Flask
+Ultimate Mana Flask
