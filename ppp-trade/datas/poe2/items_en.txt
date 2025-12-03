@@ -1982,3 +1982,9 @@ Lesser Essence of Command
 Essence of Command
 Greater Essence of Command
 Perfect Essence of Command
+
+### Splinter Item
+Breach Splinter
+Simulacrum Splinter
+Petition Splinter
+Runic Splinter
