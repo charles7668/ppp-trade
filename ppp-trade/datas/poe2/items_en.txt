@@ -2207,3 +2207,14 @@ Weathered Crisis Fragment
 Primary Calamity Fragment
 Secondary Calamity Fragment
 Tertiary Calamity Fragment
+
+### Jewels
+Timeless Jewel
+Ruby
+Emerald
+Sapphire
+Diamond
+Time-Lost Ruby
+Time-Lost Emerald
+Time-Lost Sapphire
+Time-Lost Diamond
