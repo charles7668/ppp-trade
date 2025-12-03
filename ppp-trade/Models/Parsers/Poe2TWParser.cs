@@ -51,7 +51,7 @@ public class Poe2TWParser(CacheService cacheService) : IParser
     protected virtual Dictionary<string, Func<Stat, string, ItemBase, (bool, int?, int?)>> SpecialCaseStat { get; } =
         new()
         {
-            { "stat_3639275092", TryResolveIncreasedAndDecreased }
+            { "stat_3639275092", ParserHelper.TryResolveIncreasedAndDecreased }
         };
 
     private string UnidentifiedKeyword => "Unidentified";
@@ -739,26 +739,6 @@ public class Poe2TWParser(CacheService cacheService) : IParser
         }
 
         return false;
-    }
-
-    private static (bool, int?, int?) TryResolveIncreasedAndDecreased(Stat stat, string statText, ItemBase itemBase)
-    {
-        // try match normal case
-        var regex = stat.Text.Replace("#", "(\\d+)");
-        var match = Regex.Match(statText, regex);
-        if (match.Success)
-        {
-            return (true, int.Parse(match.Groups[1].Value), null);
-        }
-
-        regex = stat.Text.Replace("增加", "減少").Replace("#", "(\\d+)");
-        match = Regex.Match(statText, regex);
-        if (match.Success)
-        {
-            return (true, int.Parse(match.Groups[1].Value) * -1, null);
-        }
-
-        return (false, null, null);
     }
 
     private enum ParsingState

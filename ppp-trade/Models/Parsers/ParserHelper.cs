@@ -9,4 +9,24 @@ internal static class ParserHelper
         const string regex = @"\(.*?\)";
         return Regex.Replace(input, regex, "").Trim();
     }
+
+    public static (bool, int?, int?) TryResolveIncreasedAndDecreased(Stat stat, string statText, ItemBase itemBase)
+    {
+        // try match normal case
+        var regex = stat.Text.Replace("#", "(\\d+)");
+        var match = Regex.Match(statText, regex);
+        if (match.Success)
+        {
+            return (true, int.Parse(match.Groups[1].Value), null);
+        }
+
+        regex = stat.Text.Replace("增加", "減少").Replace("#", "(\\d+)");
+        match = Regex.Match(statText, regex);
+        if (match.Success)
+        {
+            return (true, int.Parse(match.Groups[1].Value) * -1, null);
+        }
+
+        return (false, null, null);
+    }
 }

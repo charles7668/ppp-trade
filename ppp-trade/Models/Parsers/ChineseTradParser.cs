@@ -112,8 +112,8 @@ public class ChineseTradParser(CacheService cacheService) : IParser
     protected virtual Dictionary<string, Func<Stat, string, ItemBase, (bool, int?, int?)>> SpecialCaseStat { get; } =
         new()
         {
-            { "stat_700317374", TryResolveIncreasedAndDecreased },
-            { "stat_3338298622", TryResolveIncreasedAndDecreased },
+            { "stat_700317374", ParserHelper.TryResolveIncreasedAndDecreased },
+            { "stat_3338298622", ParserHelper.TryResolveIncreasedAndDecreased },
             { "stat_1001829678", TryResolveStaffStats }
         };
 
@@ -719,26 +719,6 @@ public class ChineseTradParser(CacheService cacheService) : IParser
         }
 
         return false;
-    }
-
-    private static (bool, int?, int?) TryResolveIncreasedAndDecreased(Stat stat, string statText, ItemBase itemBase)
-    {
-        // try match normal case
-        var regex = stat.Text.Replace("#", "(\\d+)");
-        var match = Regex.Match(statText, regex);
-        if (match.Success)
-        {
-            return (true, int.Parse(match.Groups[1].Value), null);
-        }
-
-        regex = stat.Text.Replace("增加", "減少").Replace("#", "(\\d+)");
-        match = Regex.Match(statText, regex);
-        if (match.Success)
-        {
-            return (true, int.Parse(match.Groups[1].Value) * -1, null);
-        }
-
-        return (false, null, null);
     }
 
     private static (bool, int?, int?) TryResolveStaffStats(Stat stat, string statText, ItemBase parsingItem)
