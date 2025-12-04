@@ -42,7 +42,6 @@ public class RequestBodyBuilder(CacheService cacheService)
         }
 
         var statsParam = GetStatsQueryParam(searchRequest).ToList();
-        object? corruptedFilter = null;
         object? foulBornFilter = null;
         switch (forGame)
         {
