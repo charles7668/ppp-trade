@@ -202,6 +202,13 @@ public class RequestBodyBuilder(CacheService cacheService)
             ItemType.ACTIVE_GEM => "gem.activegem",
             ItemType.SUPPORT_GEM => "gem.supportgem",
             ItemType.CLUSTER_JEWEL => "jewel.cluster",
+            ItemType.SPEAR => "weapon.spear",
+            ItemType.FLAIL => "weapon.flail",
+            ItemType.QUARTERSTAFF => "weapon.warstaff",
+            ItemType.CROSSBOW => "weapon.crossbow",
+            ItemType.FOCI => "armour.focus",
+            ItemType.BUCKLER => "armour.buckler",
+            ItemType.TABLET => "map.tablet",
             _ => null
         };
     }
