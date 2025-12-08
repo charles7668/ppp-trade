@@ -6,7 +6,7 @@ using ppp_trade.Services;
 
 namespace ppp_trade.Models.Parsers;
 
-internal class EnParser(CacheService cacheService) : ChineseTradParser(cacheService)
+internal class Poe1ENParser(CacheService cacheService) : Poe1TWParser(cacheService)
 {
     private readonly CacheService _cacheService = cacheService;
 

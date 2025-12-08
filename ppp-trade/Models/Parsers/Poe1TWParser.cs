@@ -8,7 +8,7 @@ using ppp_trade.Services;
 
 namespace ppp_trade.Models.Parsers;
 
-public class ChineseTradParser(CacheService cacheService) : IParser
+public class Poe1TWParser(CacheService cacheService) : IParser
 {
     protected virtual string RarityKeyword => "稀有度: ";
 

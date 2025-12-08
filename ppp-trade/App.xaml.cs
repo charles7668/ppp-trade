@@ -25,8 +25,8 @@ public partial class App
         services.AddSingleton<IconService>();
         services.AddSingleton<NameMappingService>();
         services.AddTransient<RequestBodyBuilder>();
-        services.AddScoped<IParser, EnParser>();
-        services.AddScoped<IParser, ChineseTradParser>();
+        services.AddScoped<IParser, Poe1ENParser>();
+        services.AddScoped<IParser, Poe1TWParser>();
         services.AddScoped<IParser, Poe2TWParser>();
         services.AddSingleton<ParserFactory>();
         services.AddAutoMapper(_ => { }, typeof(MappingProfile));
