@@ -6,7 +6,7 @@ using ppp_trade.Models;
 
 namespace ppp_trade.Services;
 
-public class PoeApiService
+public class PoeApiService(CacheService cacheService)
 {
     private string _domain = "http://localhost";
     private string _game = "POE1";
@@ -31,6 +31,32 @@ public class PoeApiService
         var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
         return JsonSerializer.Deserialize<JsonObject>(content, options) ??
                throw new InvalidOperationException("Empty response");
+    }
+
+    public async Task<JsonObject> GetCurrencyExchangeRate(string queryCurrencyName, string league, string forGame)
+    {
+        var cacheKey = $"{queryCurrencyName}:{league}:{forGame}";
+        if (cacheService.TryGet(cacheKey, out JsonObject? value))
+        {
+            return value ?? new JsonObject();
+        }
+
+        var gameString = forGame == "POE2" ? "poe2" : "poe1";
+        var normalizedCurrencyName = queryCurrencyName.Replace("'", "").Replace(" ", "-").ToLower();
+        var reqUrl =
+            $"https://poe.ninja/{gameString}/api/economy/exchange/current/details?league={league}&type=Currency&id={normalizedCurrencyName}";
+        using var client = new HttpClient();
+        client.DefaultRequestHeaders.Add("User-Agent", "ppp-trade/1.0");
+        client.DefaultRequestHeaders.Add("Accept", "*/*");
+        var response = await client.GetAsync(reqUrl);
+        response.EnsureSuccessStatusCode();
+        var content = await response.Content.ReadAsStringAsync();
+
+        var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+        var result = JsonSerializer.Deserialize<JsonObject>(content, options) ??
+                     throw new InvalidOperationException("Empty response");
+        cacheService.Set(cacheKey, result, TimeSpan.FromHours(1));
+        return result;
     }
 
     public async Task<List<LeagueInfo>> GetLeaguesAsync()
@@ -103,13 +129,13 @@ public class PoeApiService
                throw new InvalidOperationException("Empty response");
     }
 
-    public void SwitchGame(string game)
-    {
-        _game = game;
-    }
-
     public void SwitchDomain(string domain)
     {
         _domain = domain;
+    }
+
+    public void SwitchGame(string game)
+    {
+        _game = game;
     }
 }

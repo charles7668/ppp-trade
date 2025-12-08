@@ -638,6 +638,33 @@
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
                     </StackPanel>
+                    <StackPanel Visibility="{Binding MatchedCurrencyVisibility}">
+                        <Image Width="100" Height="100" Margin="5"
+                               Source="{Binding MatchedCurrency.MatchedCurrencyImage}">
+                            <Image.Style>
+                                <Style TargetType="Image">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding MatchedCurrency.MatchedCurrencyImage}"
+                                                     Value="{x:Null}">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Image.Style>
+                        </Image>
+                        <ItemsControl ItemsSource="{Binding MatchedCurrency.ExchangeRateList}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" Margin="5" HorizontalAlignment="Center">
+                                        <TextBlock Text="匯率: " VerticalAlignment="Center" FontSize="16" />
+                                        <TextBlock Text="{Binding Value}" VerticalAlignment="Center" FontSize="16" />
+                                        <TextBlock Text=" x " VerticalAlignment="Center" FontSize="16" />
+                                        <Image Source="{Binding CurrencyImageUrl}" Width="30" Height="30" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
                 </StackPanel>
             </ScrollViewer>
             <ScrollViewer VerticalScrollBarVisibility="Hidden" HorizontalAlignment="Right">

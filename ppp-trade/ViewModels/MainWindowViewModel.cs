@@ -30,6 +30,7 @@ public partial class MainWindowViewModel : ObservableObject
             _poe1ItemInfoVisibility = Visibility.Visible;
             _poe2ItemInfoVisibility = Visibility.Visible;
             _matchedItemVisibility = Visibility.Visible;
+            _matchedCurrencyVisibility = Visibility.Visible;
             _parsedPoe1ItemVM = new ItemVM
             {
                 ItemName = "Design Time Item Name",
@@ -141,10 +142,16 @@ public partial class MainWindowViewModel : ObservableObject
     private IList<string> _leagueList = [];
 
     [ObservableProperty]
+    private MatchedCurrencyVM? _matchedCurrency;
+
+    [ObservableProperty]
+    private Visibility _matchedCurrencyVisibility = Visibility.Collapsed;
+
+    [ObservableProperty]
     private MatchedItemVM? _matchedItem;
 
     [ObservableProperty]
-    private Visibility _matchedItemVisibility = Visibility.Hidden;
+    private Visibility _matchedItemVisibility = Visibility.Collapsed;
 
     private ItemBase? _parsedItem;
 
@@ -483,6 +490,16 @@ public partial class MainWindowViewModel : ObservableObject
     }
 
     [RelayCommand]
+    private void OpenAbout()
+    {
+        Process.Start(new ProcessStartInfo
+        {
+            FileName = "https://github.com/charles7668/ppp-trade",
+            UseShellExecute = true
+        });
+    }
+
+    [RelayCommand]
     private void OpenTradeSite()
     {
         Process.Start(new ProcessStartInfo
@@ -497,7 +514,8 @@ public partial class MainWindowViewModel : ObservableObject
     {
         try
         {
-            MatchedItemVisibility = Visibility.Hidden;
+            MatchedItemVisibility = Visibility.Collapsed;
+            MatchedCurrencyVisibility = Visibility.Collapsed;
             CanQuery = false;
             Debug.Assert(SelectedGame != null);
 
@@ -512,87 +530,32 @@ public partial class MainWindowViewModel : ObservableObject
                 return;
             }
 
-            // todo complete method
-            var tradeTypeIndex = TradeTypeList.IndexOf(SelectedTradeType!);
-            var tradeType = tradeTypeIndex switch
-            {
-                0 => "available",
-                1 => "securable",
-                2 => "online",
-                _ => "any"
-            };
-            SearchRequestBase searchRequest;
-            if (SelectedGame == "POE1")
-            {
-                searchRequest = _mapper.Map<Poe1SearchRequest>(ParsedPoe1ItemVM, opt =>
-                {
-                    opt.AfterMap((_, dest) =>
-                    {
-                        dest.ServerOption = SelectedServer == "台服"
-                            ? ServerOption.TAIWAN_SERVER
-                            : ServerOption.INTERNATIONAL_SERVER;
-                        dest.TradeType = tradeType;
-                        dest.CorruptedState = SelectedCorruptedState;
-                        dest.CollapseByAccount = SelectedCollapseState;
-                        dest.Item = _parsedItem;
-                    });
-                });
-            }
-            else
-            {
-                searchRequest = _mapper.Map<Poe2SearchRequest>(ParsedPoe2ItemVM, opt =>
-                {
-                    opt.AfterMap((_, dest) =>
-                    {
-                        dest.ServerOption = SelectedServer == "台服"
-                            ? ServerOption.TAIWAN_SERVER
-                            : ServerOption.INTERNATIONAL_SERVER;
-                        dest.TradeType = tradeType;
-                        dest.CorruptedState = SelectedCorruptedState;
-                        dest.CollapseByAccount = SelectedCollapseState;
-                        dest.Item = _parsedItem;
-                    });
-                });
-            }
-
-            var builder = App.ServiceProvider.GetRequiredService<RequestBodyBuilder>();
-            var searchBody = await builder.BuildSearchBodyAsync(searchRequest, SelectedGame!);
-            if (searchBody == null)
+            ItemType? checkItemType = null;
+            checkItemType ??= _parsedItem?.ItemType;
+            if (checkItemType == null)
             {
                 Growl.Warning(new GrowlInfo
                 {
-                    Message = "無法建立搜尋參數",
+                    Message = "尚未解析道具",
                     Token = "LogMsg",
                     WaitTime = 2
                 });
                 return;
             }
 
-            try
+            switch (checkItemType)
             {
-                MatchedItem = await AnalysisPriceAsync(searchBody, SelectedLeague!);
+                case ItemType.STACKABLE_CURRENCY:
+                    await QueryCurrency();
+                    break;
+                default:
+                    await QueryItem();
+                    break;
             }
-            catch (TaskCanceledException)
-            {
-                return;
-            }
-
-            MatchedItemVisibility = Visibility.Visible;
-
-            var itemName = SelectedGame == "POE1" ? ParsedPoe1ItemVM?.ItemName : ParsedPoe2ItemVM?.ItemName;
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                QueryHistory.Insert(0, new QueryHistoryItem
-                {
-                    ItemName = itemName,
-                    ItemImage = MatchedItem?.MatchedItemImage,
-                    QueryTime = DateTime.Now,
-                    Game = SelectedGame,
-                    League = SelectedLeague,
-                    ResultCount = MatchedItem?.Count ?? 0,
-                    MatchedItem = MatchedItem
-                });
-            });
+        }
+        catch (Exception ex)
+        {
+            ShowWarning(ex.Message);
         }
         finally
         {
@@ -600,13 +563,149 @@ public partial class MainWindowViewModel : ObservableObject
         }
     }
 
-    [RelayCommand]
-    private void OpenAbout()
+    private async Task QueryCurrency()
     {
-        Process.Start(new ProcessStartInfo
+        // todo complete
+        Debug.Assert(_parsedItem != null);
+        if (SelectedServer != "國際服")
         {
-            FileName = "https://github.com/charles7668/ppp-trade",
-            UseShellExecute = true
+            ShowWarning("通貨匯率查詢只支援國際服");
+            return;
+        }
+
+        var nameMappingService = App.ServiceProvider.GetRequiredService<NameMappingService>();
+        var currencyName = await nameMappingService.MapBaseItemNameAsync(_parsedItem.ItemBaseName, SelectedGame!);
+        if (currencyName == null)
+        {
+            ShowWarning("無法解析通貨名");
+            return;
+        }
+
+        var response = await _poeApiService.GetCurrencyExchangeRate(currencyName, SelectedLeague!, SelectedGame!);
+        var imgUrl = response["item"]?["image"]?.ToString();
+        var matchedCurrency = new MatchedCurrencyVM
+        {
+            MatchedCurrencyImage = "https://web.poecdn.com" + imgUrl
+        };
+        var exchangeList = response["pairs"]?.AsArray();
+        if (exchangeList == null)
+        {
+            ShowWarning("沒有此通貨匯率資料");
+            return;
+        }
+
+        var cores = response["core"]?["items"]?.AsArray()!;
+
+        foreach (var exchange in exchangeList)
+        {
+            imgUrl = (from core in cores
+                where core?["id"]?.ToString() == exchange?["id"]?.ToString()
+                select core?["image"]?.ToString()).FirstOrDefault();
+
+            var rate = exchange?["rate"]!.ToString();
+            matchedCurrency.ExchangeRateList.Add(new ExchangeRate
+            {
+                CurrencyImageUrl = "https://web.poecdn.com" + imgUrl,
+                Value = double.Parse(rate!)
+            });
+        }
+
+        MatchedCurrency = matchedCurrency;
+        MatchedCurrencyVisibility = Visibility.Visible;
+    }
+
+    private async Task QueryItem()
+    {
+        // todo complete method
+        var tradeTypeIndex = TradeTypeList.IndexOf(SelectedTradeType!);
+        var tradeType = tradeTypeIndex switch
+        {
+            0 => "available",
+            1 => "securable",
+            2 => "online",
+            _ => "any"
+        };
+        SearchRequestBase searchRequest;
+        if (SelectedGame == "POE1")
+        {
+            searchRequest = _mapper.Map<Poe1SearchRequest>(ParsedPoe1ItemVM, opt =>
+            {
+                opt.AfterMap((_, dest) =>
+                {
+                    dest.ServerOption = SelectedServer == "台服"
+                        ? ServerOption.TAIWAN_SERVER
+                        : ServerOption.INTERNATIONAL_SERVER;
+                    dest.TradeType = tradeType;
+                    dest.CorruptedState = SelectedCorruptedState;
+                    dest.CollapseByAccount = SelectedCollapseState;
+                    dest.Item = _parsedItem;
+                });
+            });
+        }
+        else
+        {
+            searchRequest = _mapper.Map<Poe2SearchRequest>(ParsedPoe2ItemVM, opt =>
+            {
+                opt.AfterMap((_, dest) =>
+                {
+                    dest.ServerOption = SelectedServer == "台服"
+                        ? ServerOption.TAIWAN_SERVER
+                        : ServerOption.INTERNATIONAL_SERVER;
+                    dest.TradeType = tradeType;
+                    dest.CorruptedState = SelectedCorruptedState;
+                    dest.CollapseByAccount = SelectedCollapseState;
+                    dest.Item = _parsedItem;
+                });
+            });
+        }
+
+        var builder = App.ServiceProvider.GetRequiredService<RequestBodyBuilder>();
+        var searchBody = await builder.BuildSearchBodyAsync(searchRequest, SelectedGame!);
+        if (searchBody == null)
+        {
+            Growl.Warning(new GrowlInfo
+            {
+                Message = "無法建立搜尋參數",
+                Token = "LogMsg",
+                WaitTime = 2
+            });
+            return;
+        }
+
+        try
+        {
+            MatchedItem = await AnalysisPriceAsync(searchBody, SelectedLeague!);
+        }
+        catch (TaskCanceledException)
+        {
+            return;
+        }
+
+        MatchedItemVisibility = Visibility.Visible;
+
+        var itemName = SelectedGame == "POE1" ? ParsedPoe1ItemVM?.ItemName : ParsedPoe2ItemVM?.ItemName;
+        Application.Current.Dispatcher.Invoke(() =>
+        {
+            QueryHistory.Insert(0, new QueryHistoryItem
+            {
+                ItemName = itemName,
+                ItemImage = MatchedItem?.MatchedItemImage,
+                QueryTime = DateTime.Now,
+                Game = SelectedGame,
+                League = SelectedLeague,
+                ResultCount = MatchedItem?.Count ?? 0,
+                MatchedItem = MatchedItem
+            });
+        });
+    }
+
+    private void ShowWarning(string msg)
+    {
+        Growl.Warning(new GrowlInfo
+        {
+            Message = msg,
+            Token = "LogMsg",
+            WaitTime = 2
         });
     }
 
@@ -647,6 +746,20 @@ public partial class MainWindowViewModel : ObservableObject
         await LoadLeagues();
         _clipboardMonitorService.ClipboardChanged += OnClipboardChanged;
         _clipboardMonitorService.StartMonitoring();
+    }
+
+    public class ExchangeRate
+    {
+        public string? CurrencyImageUrl { get; set; }
+
+        public double Value { get; set; }
+    }
+
+    public class MatchedCurrencyVM
+    {
+        public string? MatchedCurrencyImage { get; set; }
+
+        public List<ExchangeRate> ExchangeRateList { get; set; } = [];
     }
 
     public class MatchedItemVM

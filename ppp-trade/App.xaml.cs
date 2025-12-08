@@ -23,6 +23,7 @@ public partial class App
         services.AddSingleton<GameStringService>();
         services.AddSingleton<RateLimitParser>();
         services.AddSingleton<IconService>();
+        services.AddSingleton<NameMappingService>();
         services.AddTransient<RequestBodyBuilder>();
         services.AddScoped<IParser, EnParser>();
         services.AddScoped<IParser, ChineseTradParser>();
