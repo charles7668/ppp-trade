@@ -9,6 +9,8 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using HandyControl.Controls;
 using HandyControl.Data;
+using LiveCharts;
+using LiveCharts.Wpf;
 using Microsoft.Extensions.DependencyInjection;
 using ppp_trade.Builders;
 using ppp_trade.Enums;
@@ -565,7 +567,6 @@ public partial class MainWindowViewModel : ObservableObject
 
     private async Task QueryCurrency()
     {
-        // todo complete
         Debug.Assert(_parsedItem != null);
         if (SelectedServer != "國際服")
         {
@@ -585,7 +586,8 @@ public partial class MainWindowViewModel : ObservableObject
         var imgUrl = response["item"]?["image"]?.ToString();
         var matchedCurrency = new MatchedCurrencyVM
         {
-            MatchedCurrencyImage = "https://web.poecdn.com" + imgUrl
+            MatchedCurrencyImage = "https://web.poecdn.com" + imgUrl,
+            YFormatter = value => value.ToString("F4")
         };
         var exchangeList = response["pairs"]?.AsArray();
         if (exchangeList == null)
@@ -608,6 +610,37 @@ public partial class MainWindowViewModel : ObservableObject
                 CurrencyImageUrl = "https://web.poecdn.com" + imgUrl,
                 Value = double.Parse(rate!)
             });
+        }
+        
+        if (matchedCurrency.ExchangeRateList.Count > 0)
+        {
+            matchedCurrency.PayCurrencyImage = matchedCurrency.ExchangeRateList[0].CurrencyImageUrl;
+        }
+
+        var history = exchangeList.First()?["history"]?.AsArray();
+        if (history != null)
+        {
+            var rateHistories = history.Select(x => double.Parse(x?["rate"]!.ToString()!)).Reverse().ToList();
+            var dateHistories = history
+                .Select(x => DateTime.Parse(x?["timestamp"]!.ToString()!).ToString("MM/dd")).Reverse().ToList();
+
+            if (rateHistories.Count > 0)
+            {
+                var values = new ChartValues<double>();
+                values.AddRange(rateHistories);
+
+                matchedCurrency.SeriesCollection.Add(new LineSeries
+                {
+                    Title = "Rate",
+                    Values = values,
+                    PointGeometry = null
+                });
+
+                foreach (var date in dateHistories)
+                {
+                    matchedCurrency.Labels.Add(date);
+                }
+            }
         }
 
         MatchedCurrency = matchedCurrency;
@@ -759,7 +792,15 @@ public partial class MainWindowViewModel : ObservableObject
     {
         public string? MatchedCurrencyImage { get; set; }
 
+        public string? PayCurrencyImage { get; set; }
+
         public List<ExchangeRate> ExchangeRateList { get; set; } = [];
+
+        public SeriesCollection SeriesCollection { get; set; } = [];
+
+        public ObservableCollection<string> Labels { get; set; } = [];
+
+        public Func<double, string>? YFormatter { get; set; }
     }
 
     public class MatchedItemVM

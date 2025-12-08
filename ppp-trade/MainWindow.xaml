@@ -8,6 +8,7 @@
         xmlns:system="clr-namespace:System;assembly=mscorlib"
         xmlns:converters="clr-namespace:ppp_trade.Converters"
         xmlns:enums="clr-namespace:ppp_trade.Enums"
+        xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance Type=viewModels:MainWindowViewModel, IsDesignTimeCreatable=True}"
@@ -664,6 +665,27 @@
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
+
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,15,0,5">
+                            <TextBlock Text="匯率走勢" FontSize="24" VerticalAlignment="Center" Margin="5,0"
+                                       Foreground="#666" />
+                            <Image Source="{Binding MatchedCurrency.MatchedCurrencyImage}" Width="24" Height="24"
+                                   Margin="5,0" />
+                            <TextBlock Text="⇆" FontSize="24" VerticalAlignment="Center" Margin="5,0" Foreground="#666" />
+                            <Image Source="{Binding MatchedCurrency.PayCurrencyImage}" Width="24" Height="24"
+                                   Margin="5,0" />
+                        </StackPanel>
+
+                        <lvc:CartesianChart Series="{Binding MatchedCurrency.SeriesCollection}" Height="200"
+                                            Margin="10,0,10,0" LegendLocation="None">
+                            <lvc:CartesianChart.AxisX>
+                                <lvc:Axis Labels="{Binding MatchedCurrency.Labels}"
+                                          Separator="{x:Static lvc:DefaultAxes.CleanSeparator}" />
+                            </lvc:CartesianChart.AxisX>
+                            <lvc:CartesianChart.AxisY>
+                                <lvc:Axis Title="Value" LabelFormatter="{Binding MatchedCurrency.YFormatter}" />
+                            </lvc:CartesianChart.AxisY>
+                        </lvc:CartesianChart>
                     </StackPanel>
                 </StackPanel>
             </ScrollViewer>
