@@ -111,7 +111,10 @@ internal class EnParser(CacheService cacheService) : ChineseTradParser(cacheServ
             { "stat_700317374", ParserHelper.TryResolveIncreasedAndDecreasedEn },
             { "stat_3338298622", ParserHelper.TryResolveIncreasedAndDecreasedEn },
             { "stat_4016885052", TryResolveAdditionalProjectile },
-            { "stat_1001829678", TryResolveStaffStats }
+            { "stat_1001829678", TryResolveStaffStats },
+            { "stat_687813731", ParserHelper.TryResolveMonsterGainChargeEn },
+            { "stat_406353061", ParserHelper.TryResolveMonsterGainChargeEn },
+            { "stat_962720646", ParserHelper.TryResolveMonsterGainChargeEn }
         };
 
     protected override List<StatGroup> GetStatGroups()

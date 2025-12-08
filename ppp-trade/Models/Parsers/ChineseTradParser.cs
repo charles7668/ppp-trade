@@ -20,6 +20,8 @@ public class ChineseTradParser(CacheService cacheService) : IParser
 
     protected virtual string ItemLevelKeyword => "物品等級: ";
 
+    protected virtual string MonsterLevelKeyword => "怪物等級：";
+
     private string UnidentifiedKeyword => "Unidentified";
 
     protected virtual string SplitKeyword => "--------";
@@ -114,7 +116,10 @@ public class ChineseTradParser(CacheService cacheService) : IParser
         {
             { "stat_700317374", ParserHelper.TryResolveIncreasedAndDecreased },
             { "stat_3338298622", ParserHelper.TryResolveIncreasedAndDecreased },
-            { "stat_1001829678", TryResolveStaffStats }
+            { "stat_1001829678", TryResolveStaffStats },
+            { "stat_687813731", ParserHelper.TryResolveMonsterGainCharge },
+            { "stat_406353061", ParserHelper.TryResolveMonsterGainCharge },
+            { "stat_962720646", ParserHelper.TryResolveMonsterGainCharge },
         };
 
     public virtual bool IsMatch(string text, string game)
@@ -202,6 +207,14 @@ public class ChineseTradParser(CacheService cacheService) : IParser
                 case ParsingState.PARSING_ITEM_LEVEL:
                     parsedItem.ItemLevel = int.Parse(line.Substring(ItemLevelKeyword.Length));
                     parsingState = ParsingState.PARSING_STAT;
+                    if (parsedItem.ItemType == ItemType.MAP)
+                    {
+                        parsingState = ParsingState.PARSING_UNKNOW;
+                    }
+
+                    break;
+                case ParsingState.PARSING_MONSTER_LEVEL:
+                    parsingState = ParsingState.PARSING_STAT;
                     break;
                 case ParsingState.PARSING_STAT:
                     bool hasNextStatArea;
@@ -267,6 +280,11 @@ public class ChineseTradParser(CacheService cacheService) : IParser
                     {
                         i--;
                         parsingState = ParsingState.PARSING_LINK;
+                    }
+                    else if (line.StartsWith(MonsterLevelKeyword))
+                    {
+                        i--;
+                        parsingState = ParsingState.PARSING_MONSTER_LEVEL;
                     }
 
                     break;
@@ -668,57 +686,7 @@ public class ChineseTradParser(CacheService cacheService) : IParser
 
     protected static bool TryMatchStat(Stat stat, string statText, out int? outValue, out int? outOptionId)
     {
-        outValue = null;
-        List<(string, int?)> statTexts = [(stat.Text, null)];
-        outOptionId = null;
-        if (stat.Option is { Options.Count: > 0 })
-        {
-            statTexts = stat.Option.Options.Select(x => (stat.Text.Replace("#", x.Text), (int?)x.Id)).ToList();
-        }
-
-        foreach (var tryStatOption in statTexts)
-        {
-            foreach (var splitEntry in tryStatOption.Item1.Split('\n'))
-            {
-                var regex = splitEntry.Replace("(", "\\(");
-                regex = regex.Replace(")", "\\)");
-                regex = regex.Replace("+#", "([+-][\\d.]+)");
-                regex = regex.Replace("#", "([\\d.]+)");
-                regex = $"^{regex}$";
-                try
-                {
-                    var match = Regex.Match(statText, regex);
-                    if (!match.Success)
-                    {
-                        if (!match.Success)
-                        {
-                            continue;
-                        }
-                    }
-
-                    int? value = match.Groups.Count switch
-                    {
-                        3 => (int)((double.Parse(match.Groups[2].Value,
-                                        CultureInfo.InvariantCulture) +
-                                    double.Parse(match.Groups[1].Value,
-                                        CultureInfo.InvariantCulture)) / 2),
-                        > 1 => (int)double.Parse(match.Groups[1].Value,
-                            CultureInfo.InvariantCulture),
-                        _ => null
-                    };
-
-                    outValue = value;
-                    outOptionId = tryStatOption.Item2;
-                    return true;
-                }
-                catch (Exception e)
-                {
-                    Debug.WriteLine(e.Message);
-                }
-            }
-        }
-
-        return false;
+        return ParserHelper.TryMatchStat(stat, statText, out outValue, out outOptionId);
     }
 
     private static (bool, int?, int?) TryResolveStaffStats(Stat stat, string statText, ItemBase parsingItem)
@@ -754,6 +722,7 @@ public class ChineseTradParser(CacheService cacheService) : IParser
         PARSING_REQUIREMENT,
         PARSING_ITEM_LEVEL,
         PARSING_STAT,
+        PARSING_MONSTER_LEVEL,
         PARSING_UNKNOW,
         PARSING_GEM_INFO
     }
