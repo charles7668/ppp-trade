@@ -31,439 +31,587 @@
         </ObjectDataProvider>
     </Window.Resources>
     <Grid>
-        <ScrollViewer>
-            <StackPanel>
-                <StackPanel.Resources>
-                    <Style TargetType="TextBlock" BasedOn="{StaticResource TextBlockBaseStyle}">
-                        <Setter Property="FontSize" Value="24" />
-                    </Style>
-                </StackPanel.Resources>
-                <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="5" Padding="10" Margin="10"
-                        VerticalAlignment="Top" HorizontalAlignment="Center">
-                    <StackPanel Orientation="Vertical">
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center">
-                            <hc:ComboBox Width="120" Margin="5"
-                                         ItemsSource="{Binding GameList}"
-                                         SelectedItem="{Binding SelectedGame}" />
-                            <hc:ComboBox Width="120" Margin="5"
-                                         ItemsSource="{Binding ServerList}"
-                                         SelectedItem="{Binding SelectedServer}" />
-                            <hc:ComboBox Width="120" Margin="5"
-                                         ItemsSource="{Binding LeagueList}"
-                                         SelectedItem="{Binding SelectedLeague}" />
-                            <hc:ComboBox Width="150" Margin="5"
-                                         ItemsSource="{Binding TradeTypeList}"
-                                         SelectedItem="{Binding SelectedTradeType}" />
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center">
-                            <Label>污染</Label>
-                            <RadioButton Content="Any" GroupName="Corrupted" Margin="5"
-                                         IsChecked="{Binding SelectedCorruptedState, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static enums:CorruptedState.ANY}}" />
-                            <RadioButton Content="Yes" GroupName="Corrupted" Margin="5"
-                                         IsChecked="{Binding SelectedCorruptedState, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static enums:CorruptedState.YES}}" />
-                            <RadioButton Content="No" GroupName="Corrupted" Margin="5"
-                                         IsChecked="{Binding SelectedCorruptedState, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static enums:CorruptedState.NO}}" />
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center">
-                            <Label>依帳號折疊</Label>
-                            <RadioButton Content="Yes" GroupName="CollapseByAccount" Margin="5"
-                                         IsChecked="{Binding SelectedCollapseState, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static enums:CollapseByAccount.YES}}" />
-                            <RadioButton Content="No" GroupName="CollapseByAccount" Margin="5"
-                                         IsChecked="{Binding SelectedCollapseState, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static enums:CollapseByAccount.NO}}" />
-                        </StackPanel>
-                    </StackPanel>
-                </Border>
-                <Border Visibility="{Binding Poe1ItemInfoVisibility}">
-                    <StackPanel>
-                        <TextBlock HorizontalAlignment="Center">物品名稱</TextBlock>
-                        <TextBlock Text="{Binding ParsedPoe1ItemVM.ItemName, StringFormat='『{0}』', FallbackValue=''}"
-                                   HorizontalAlignment="Center" />
-                        <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="5" Padding="10" Margin="10"
-                                VerticalAlignment="Top" HorizontalAlignment="Center">
-                            <WrapPanel Orientation="Horizontal" Width="400">
-                                <hc:SimpleStackPanel Orientation="Horizontal" Width="200">
-                                    <CheckBox
-                                        IsChecked="{Binding ParsedPoe1ItemVM.FilterItemLevel,Mode=TwoWay}">
-                                        物品等級
-                                    </CheckBox>
-                                    <TextBox Margin="2" Width="50"
-                                             Text="{Binding ParsedPoe1ItemVM.ItemLevelMin,UpdateSourceTrigger=PropertyChanged}" />
-                                    <TextBox Margin="2" Width="50"
-                                             Text="{Binding ParsedPoe1ItemVM.ItemLevelMax,UpdateSourceTrigger=PropertyChanged}" />
-                                </hc:SimpleStackPanel>
-                                <hc:SimpleStackPanel Orientation="Horizontal" Width="200">
-                                    <CheckBox IsChecked="{Binding ParsedPoe1ItemVM.FilterRarity,Mode=TwoWay}">稀有度</CheckBox>
-                                    <ComboBox Margin="2" Width="80"
-                                              ItemsSource="{Binding SelectableRarity}"
-                                              SelectedItem="{Binding ParsedPoe1ItemVM.Rarity}" />
-                                </hc:SimpleStackPanel>
-                                <hc:SimpleStackPanel Orientation="Horizontal" Width="200">
-                                    <CheckBox IsChecked="{Binding ParsedPoe1ItemVM.FilterLink,Mode=TwoWay}">連線數量</CheckBox>
-                                    <TextBox Margin="2" Width="50"
-                                             Text="{Binding ParsedPoe1ItemVM.LinkCountMin,UpdateSourceTrigger=PropertyChanged}" />
-                                    <TextBox Margin="2" Width="50"
-                                             Text="{Binding ParsedPoe1ItemVM.LinkCountMax,UpdateSourceTrigger=PropertyChanged}" />
-                                </hc:SimpleStackPanel>
-                                <hc:SimpleStackPanel Orientation="Horizontal" Width="200">
-                                    <CheckBox IsChecked="{Binding ParsedPoe1ItemVM.FilterItemBase , Mode= TwoWay}">物品分類</CheckBox>
-                                    <TextBox Margin="2" Width="80" IsEnabled="False"
-                                             Text="{Binding ParsedPoe1ItemVM.ItemBaseName}" />
-                                </hc:SimpleStackPanel>
-                                <hc:SimpleStackPanel Orientation="Horizontal" Width="200">
-                                    <CheckBox IsChecked="{Binding ParsedPoe1ItemVM.FilterGemLevel,Mode=TwoWay}">寶石等級</CheckBox>
-                                    <TextBox Margin="2" Width="50"
-                                             Text="{Binding ParsedPoe1ItemVM.GemLevelMin,UpdateSourceTrigger=PropertyChanged}" />
-                                    <TextBox Margin="2" Width="50"
-                                             Text="{Binding ParsedPoe1ItemVM.GemLevelMax,UpdateSourceTrigger=PropertyChanged}" />
-                                </hc:SimpleStackPanel>
-                                <hc:SimpleStackPanel Orientation="Horizontal" Width="200">
-                                    <TextBlock FontSize="12">穢生</TextBlock>
-                                    <hc:ComboBox Margin="2" Width="80"
-                                                 ItemsSource="{Binding Source={StaticResource YesNoAnyOptionEnumKey}}"
-                                                 SelectedItem="{Binding ParsedPoe1ItemVM.FoulBorn}">
-                                        <hc:ComboBox.ItemTemplate>
-                                            <DataTemplate>
-                                                <TextBlock Text="{Binding}" FontSize="10" />
-                                            </DataTemplate>
-                                        </hc:ComboBox.ItemTemplate>
-                                    </hc:ComboBox>
-                                </hc:SimpleStackPanel>
-                            </WrapPanel>
-                        </Border>
-                        <DataGrid ItemsSource="{Binding ParsedPoe1ItemVM.StatVMs , FallbackValue=''}"
-                                  AutoGenerateColumns="False"
-                                  Width="500px"
-                                  PreviewMouseWheel="DataGrid_OnPreviewMouseWheel"
-                                  HeadersVisibility="All" RowHeaderWidth="0" CanUserAddRows="False"
-                                  BorderThickness="0" Background="Transparent"
-                                  PreviewMouseLeftButtonDown="DataGrid_PreviewMouseLeftButtonDown">
-                            <DataGrid.Resources>
-                                <Style TargetType="DataGridRow">
-                                    <Setter Property="Background" Value="Transparent" />
-                                    <Setter Property="BorderBrush" Value="Transparent" />
-                                    <Style.Triggers>
-                                        <Trigger Property="IsSelected" Value="True">
-                                            <Setter Property="Background" Value="Transparent" />
-                                            <Setter Property="BorderBrush" Value="Transparent" />
-                                        </Trigger>
-                                        <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter Property="Background" Value="Transparent" />
-                                            <Setter Property="BorderBrush" Value="Transparent" />
-                                        </Trigger>
-                                    </Style.Triggers>
-                                </Style>
-                                <Style TargetType="DataGridCell">
-                                    <Setter Property="Background" Value="Transparent" />
-                                    <Setter Property="BorderBrush" Value="Transparent" />
-                                    <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-                                    <Style.Triggers>
-                                        <Trigger Property="IsSelected" Value="True">
-                                            <Setter Property="Background" Value="Transparent" />
-                                            <Setter Property="BorderBrush" Value="Transparent" />
-                                            <Setter Property="Foreground" Value="Black" />
-                                        </Trigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </DataGrid.Resources>
-                            <DataGrid.Columns>
-                                <DataGridCheckBoxColumn Header="查詢"
-                                                        Binding="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                        Width="50" />
-                                <DataGridTemplateColumn Header="種類" Width="80">
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">
-                                                <TextBlock.Style>
-                                                    <Style TargetType="TextBlock">
-                                                        <Setter Property="Text" Value="{Binding Type}" />
-                                                        <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding Type}" Value="pseudo">
-                                                                <Setter Property="Foreground" Value="#5555FF" />
-                                                                <Setter Property="Text" Value="偽屬性" />
-                                                            </DataTrigger>
-                                                            <DataTrigger Binding="{Binding Type}" Value="implicit">
-                                                                <Setter Property="Foreground" Value="#5555FF" />
-                                                                <Setter Property="Text" Value="固定" />
-                                                            </DataTrigger>
-                                                            <DataTrigger Binding="{Binding Type}" Value="explicit">
-                                                                <Setter Property="Foreground" Value="Gray" />
-                                                                <Setter Property="Text" Value="隨機" />
-                                                            </DataTrigger>
-                                                            <DataTrigger Binding="{Binding Type}" Value="crafted">
-                                                                <Setter Property="Foreground" Value="#B5A6C7" />
-                                                                <Setter Property="Text" Value="工藝" />
-                                                            </DataTrigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </TextBlock.Style>
-                                            </TextBlock>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
-                                <DataGridTextColumn Header="詞綴內容" Binding="{Binding StatText}" IsReadOnly="True"
-                                                    Width="*">
-                                    <DataGridTextColumn.ElementStyle>
-                                        <Style TargetType="TextBlock">
-                                            <Setter Property="TextWrapping" Value="Wrap" />
-                                            <Setter Property="VerticalAlignment" Value="Center" />
-                                            <Setter Property="Margin" Value="5" />
-                                        </Style>
-                                    </DataGridTextColumn.ElementStyle>
-                                </DataGridTextColumn>
-                                <DataGridTemplateColumn Header="最小值" Width="80">
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <TextBox
-                                                Text="{Binding MinValue, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"
-                                                Margin="2" />
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
-                                <DataGridTemplateColumn Header="最大值" Width="80">
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <TextBox
-                                                Text="{Binding MaxValue,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                                                Margin="2" />
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
-                            </DataGrid.Columns>
-                        </DataGrid>
-                        <hc:SimplePanel Width="500px">
-                            <Button HorizontalAlignment="Right" Background="White" Foreground="#0078D4"
-                                    BorderBrush="#0078D4"
-                                    BorderThickness="1" Margin="0,5,0,0" Padding="15,5">
-                                <b:Interaction.Triggers>
-                                    <b:EventTrigger EventName="Click">
-                                        <b:InvokeCommandAction Command="{Binding QueryCommand}" />
-                                    </b:EventTrigger>
-                                </b:Interaction.Triggers>
-                                查詢
-                            </Button>
-                        </hc:SimplePanel>
-                    </StackPanel>
-                </Border>
-                <Border Visibility="{Binding Poe2ItemInfoVisibility}">
-                    <StackPanel>
-                        <TextBlock HorizontalAlignment="Center">物品名稱</TextBlock>
-                        <TextBlock Text="{Binding ParsedPoe2ItemVM.ItemName, StringFormat='『{0}』'}"
-                                   HorizontalAlignment="Center" />
-                        <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="5" Padding="10" Margin="10"
-                                VerticalAlignment="Top" HorizontalAlignment="Center">
-                            <WrapPanel Orientation="Horizontal" Width="400">
-                                <hc:SimpleStackPanel Orientation="Horizontal" Width="200">
-                                    <CheckBox
-                                        IsChecked="{Binding ParsedPoe2ItemVM.FilterItemLevel,Mode=TwoWay}">
-                                        物品等級
-                                    </CheckBox>
-                                    <TextBox Margin="2" Width="50"
-                                             Text="{Binding ParsedPoe2ItemVM.ItemLevelMin,UpdateSourceTrigger=PropertyChanged}" />
-                                    <TextBox Margin="2" Width="50"
-                                             Text="{Binding ParsedPoe2ItemVM.ItemLevelMax,UpdateSourceTrigger=PropertyChanged}" />
-                                </hc:SimpleStackPanel>
-                                <hc:SimpleStackPanel Orientation="Horizontal" Width="200">
-                                    <CheckBox IsChecked="{Binding ParsedPoe2ItemVM.FilterRarity,Mode=TwoWay}">稀有度</CheckBox>
-                                    <ComboBox Margin="2" Width="80"
-                                              ItemsSource="{Binding SelectableRarity}"
-                                              SelectedItem="{Binding ParsedPoe2ItemVM.Rarity}" />
-                                </hc:SimpleStackPanel>
-                                <hc:SimpleStackPanel Orientation="Horizontal" Width="200">
-                                    <CheckBox
-                                        IsChecked="{Binding ParsedPoe2ItemVM.FilterRunSockets,Mode=TwoWay}">
-                                        符文插槽
-                                    </CheckBox>
-                                    <TextBox Margin="2" Width="50"
-                                             Text="{Binding ParsedPoe2ItemVM.RunSocketsMin ,UpdateSourceTrigger=PropertyChanged}" />
-                                    <TextBox Margin="2" Width="50"
-                                             Text="{Binding ParsedPoe2ItemVM.RunSocketsMax,UpdateSourceTrigger=PropertyChanged}" />
-                                </hc:SimpleStackPanel>
-                                <hc:SimpleStackPanel Orientation="Horizontal" Width="200">
-                                    <CheckBox IsChecked="{Binding ParsedPoe2ItemVM.FilterItemBase , Mode= TwoWay}">物品分類</CheckBox>
-                                    <TextBox Margin="2" Width="80" IsEnabled="False"
-                                             Text="{Binding ParsedPoe2ItemVM.ItemBaseName}" />
-                                </hc:SimpleStackPanel>
-                            </WrapPanel>
-                        </Border>
-                        <DataGrid ItemsSource="{Binding ParsedPoe2ItemVM.StatVMs , FallbackValue=''}"
-                                  AutoGenerateColumns="False"
-                                  Width="500px"
-                                  PreviewMouseWheel="DataGrid_OnPreviewMouseWheel"
-                                  HeadersVisibility="All" RowHeaderWidth="0" CanUserAddRows="False"
-                                  BorderThickness="0" Background="Transparent"
-                                  PreviewMouseLeftButtonDown="DataGrid_PreviewMouseLeftButtonDown">
-                            <DataGrid.Resources>
-                                <Style TargetType="DataGridRow">
-                                    <Setter Property="Background" Value="Transparent" />
-                                    <Setter Property="BorderBrush" Value="Transparent" />
-                                    <Style.Triggers>
-                                        <Trigger Property="IsSelected" Value="True">
-                                            <Setter Property="Background" Value="Transparent" />
-                                            <Setter Property="BorderBrush" Value="Transparent" />
-                                        </Trigger>
-                                        <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter Property="Background" Value="Transparent" />
-                                            <Setter Property="BorderBrush" Value="Transparent" />
-                                        </Trigger>
-                                    </Style.Triggers>
-                                </Style>
-                                <Style TargetType="DataGridCell">
-                                    <Setter Property="Background" Value="Transparent" />
-                                    <Setter Property="BorderBrush" Value="Transparent" />
-                                    <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-                                    <Style.Triggers>
-                                        <Trigger Property="IsSelected" Value="True">
-                                            <Setter Property="Background" Value="Transparent" />
-                                            <Setter Property="BorderBrush" Value="Transparent" />
-                                            <Setter Property="Foreground" Value="Black" />
-                                        </Trigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </DataGrid.Resources>
-                            <DataGrid.Columns>
-                                <DataGridCheckBoxColumn Header="查詢"
-                                                        Binding="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                        Width="50" />
-                                <DataGridTemplateColumn Header="種類" Width="80">
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">
-                                                <TextBlock.Style>
-                                                    <Style TargetType="TextBlock">
-                                                        <Setter Property="Text" Value="{Binding Type}" />
-                                                        <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding Type}" Value="pseudo">
-                                                                <Setter Property="Foreground" Value="#5555FF" />
-                                                                <Setter Property="Text" Value="偽屬性" />
-                                                            </DataTrigger>
-                                                            <DataTrigger Binding="{Binding Type}" Value="implicit">
-                                                                <Setter Property="Foreground" Value="#5555FF" />
-                                                                <Setter Property="Text" Value="固定" />
-                                                            </DataTrigger>
-                                                            <DataTrigger Binding="{Binding Type}" Value="explicit">
-                                                                <Setter Property="Foreground" Value="Gray" />
-                                                                <Setter Property="Text" Value="隨機" />
-                                                            </DataTrigger>
-                                                            <DataTrigger Binding="{Binding Type}" Value="desecrated">
-                                                                <Setter Property="Foreground" Value="#B5A6C7" />
-                                                                <Setter Property="Text" Value="褻瀆" />
-                                                            </DataTrigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </TextBlock.Style>
-                                            </TextBlock>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
-                                <DataGridTextColumn Header="詞綴內容" Binding="{Binding StatText}" IsReadOnly="True"
-                                                    Width="*">
-                                    <DataGridTextColumn.ElementStyle>
-                                        <Style TargetType="TextBlock">
-                                            <Setter Property="TextWrapping" Value="Wrap" />
-                                            <Setter Property="VerticalAlignment" Value="Center" />
-                                            <Setter Property="Margin" Value="5" />
-                                        </Style>
-                                    </DataGridTextColumn.ElementStyle>
-                                </DataGridTextColumn>
-                                <DataGridTemplateColumn Header="最小值" Width="80">
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <TextBox
-                                                Text="{Binding MinValue, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"
-                                                Margin="2" />
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
-                                <DataGridTemplateColumn Header="最大值" Width="80">
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <TextBox
-                                                Text="{Binding MaxValue,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                                                Margin="2" />
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
-                            </DataGrid.Columns>
-                        </DataGrid>
-                        <hc:SimplePanel Width="500px">
-                            <Button HorizontalAlignment="Right" Background="White" Foreground="#0078D4"
-                                    BorderBrush="#0078D4"
-                                    BorderThickness="1" Margin="0,5,0,0" Padding="15,5">
-                                <b:Interaction.Triggers>
-                                    <b:EventTrigger EventName="Click">
-                                        <b:InvokeCommandAction Command="{Binding QueryCommand}" />
-                                    </b:EventTrigger>
-                                </b:Interaction.Triggers>
-                                查詢
-                            </Button>
-                        </hc:SimplePanel>
-                    </StackPanel>
-                </Border>
-                <Border Background="#FFF4CE" CornerRadius="4" Padding="10,5" Margin="0,0,0,10"
-                        Visibility="{Binding RateLimitVisibility}" HorizontalAlignment="Center">
-                    <TextBlock Text="{Binding RateLimitMessage}" Foreground="#E6A23C" VerticalAlignment="Center" />
-                </Border>
-                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10">
-                    <StackPanel.Style>
-                        <Style TargetType="StackPanel">
-                            <Setter Property="Visibility" Value="Collapsed" />
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding CanQuery}" Value="False">
-                                    <Setter Property="Visibility" Value="Visible" />
-                                </DataTrigger>
-                            </Style.Triggers>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <!-- Left Sidebar -->
+        <Border Width="0" Background="#F8F8F8" BorderBrush="#E0E0E0" BorderThickness="0,0,1,0" ClipToBounds="True">
+            <Border.Style>
+                <Style TargetType="Border">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsChecked, ElementName=SidebarToggle}" Value="True">
+                            <DataTrigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetProperty="Width" To="200" Duration="0:0:0.3">
+                                            <DoubleAnimation.EasingFunction>
+                                                <QuadraticEase EasingMode="EaseOut" />
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </DataTrigger.EnterActions>
+                            <DataTrigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetProperty="Width" To="0" Duration="0:0:0.3">
+                                            <DoubleAnimation.EasingFunction>
+                                                <QuadraticEase EasingMode="EaseIn" />
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </DataTrigger.ExitActions>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+            <Grid Width="200">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0" Text="查詢記錄" FontSize="18" FontWeight="Bold" Foreground="#333"
+                           Margin="0,10,0,10" HorizontalAlignment="Center" />
+
+                <ListBox Grid.Row="1" ItemsSource="{Binding QueryHistory}" Background="Transparent" BorderThickness="0"
+                         ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem">
+                            <Setter Property="Padding" Value="0" />
+                            <Setter Property="Margin" Value="0,2" />
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                         </Style>
-                    </StackPanel.Style>
-                    <hc:LoadingCircle />
-                    <TextBlock Text="查詢中..." HorizontalAlignment="Center" Margin="0,5,0,0" />
-                </StackPanel>
-                <StackPanel Visibility="{Binding MatchedItemVisibility}">
-                    <TextBlock Text="{Binding MatchedItem.Count , StringFormat='共 {0} 筆資料符合'}"
-                               HorizontalAlignment="Center" />
-                    <Button Height="40"
-                            Foreground="#0078D4"
-                            BorderBrush="#0078D4"
-                            BorderThickness="1">
-                        <b:Interaction.Triggers>
-                            <b:EventTrigger EventName="Click">
-                                <b:InvokeCommandAction Command="{Binding OpenTradeSiteCommand}" />
-                            </b:EventTrigger>
-                        </b:Interaction.Triggers>
-                        <TextBlock Text="{Binding SelectedServer, StringFormat='{}{0} 打開交易市集'}" />
-                    </Button>
-                    <Image Width="100" Height="100" Margin="5" Source="{Binding MatchedItem.MatchedItemImage}">
-                        <Image.Style>
-                            <Style TargetType="Image">
+                    </ListBox.ItemContainerStyle>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Border Background="White" CornerRadius="5" Margin="5,2" Padding="8" BorderBrush="#EEE"
+                                    BorderThickness="1">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Image Grid.Column="0" Source="{Binding ItemImage}" Width="32" Height="32"
+                                           Margin="0,0,10,0" VerticalAlignment="Center">
+                                        <Image.Style>
+                                            <Style TargetType="Image">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding ItemImage}" Value="{x:Null}">
+                                                        <Setter Property="Visibility" Value="Collapsed" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Image.Style>
+                                    </Image>
+                                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding ItemName}" FontWeight="Bold" FontSize="12"
+                                                   TextTrimming="CharacterEllipsis" />
+                                        <Grid Margin="0,2,0,0">
+                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                                <Border Background="#EEE" CornerRadius="3" Padding="4,1"
+                                                        Margin="0,0,5,0">
+                                                    <TextBlock Text="{Binding Game}" FontSize="10" Foreground="#666" />
+                                                </Border>
+                                                <TextBlock Text="{Binding ResultCount, StringFormat='共 {0} 筆'}"
+                                                           FontSize="10" Foreground="#888" VerticalAlignment="Center" />
+                                            </StackPanel>
+                                            <TextBlock Text="{Binding QueryTime, StringFormat='HH:mm'}" FontSize="10"
+                                                       Foreground="#AAA" HorizontalAlignment="Right"
+                                                       VerticalAlignment="Bottom" />
+                                        </Grid>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+
+                <Button Grid.Row="2" Content="清除記錄" Command="{Binding ClearHistoryCommand}" Height="35"
+                        Margin="10,10,10,20" Background="White" BorderBrush="#DDDDDD" BorderThickness="1" />
+            </Grid>
+        </Border>
+
+        <!-- Main Content Wrapper -->
+        <Grid Grid.Column="1">
+            <ToggleButton x:Name="SidebarToggle"
+                          HorizontalAlignment="Left" VerticalAlignment="Center"
+                          Margin="10,0,0,0" Width="30" Height="60"
+                          Panel.ZIndex="100"
+                          Background="Transparent" BorderThickness="0"
+                          Cursor="Hand">
+                <ToggleButton.Style>
+                    <Style TargetType="ToggleButton" BasedOn="{StaticResource {x:Type ToggleButton}}">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ToggleButton">
+                                    <Border Background="Transparent">
+                                        <TextBlock x:Name="Arrow" Text="▶" FontSize="20" Foreground="#555"
+                                                   VerticalAlignment="Center" HorizontalAlignment="Center"
+                                                   RenderTransformOrigin="0.5,0.5">
+                                            <TextBlock.RenderTransform>
+                                                <RotateTransform Angle="0" />
+                                            </TextBlock.RenderTransform>
+                                        </TextBlock>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsChecked" Value="True">
+                                            <Setter TargetName="Arrow" Property="RenderTransform">
+                                                <Setter.Value>
+                                                    <RotateTransform Angle="180" />
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Trigger>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="Arrow" Property="Foreground" Value="#333" />
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ToggleButton.Style>
+            </ToggleButton>
+            <ScrollViewer>
+                <StackPanel>
+                    <StackPanel.Resources>
+                        <Style TargetType="TextBlock" BasedOn="{StaticResource TextBlockBaseStyle}">
+                            <Setter Property="FontSize" Value="24" />
+                        </Style>
+                    </StackPanel.Resources>
+                    <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="5" Padding="10" Margin="10"
+                            VerticalAlignment="Top" HorizontalAlignment="Center">
+                        <StackPanel Orientation="Vertical">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center">
+                                <hc:ComboBox Width="120" Margin="5"
+                                             ItemsSource="{Binding GameList}"
+                                             SelectedItem="{Binding SelectedGame}" />
+                                <hc:ComboBox Width="120" Margin="5"
+                                             ItemsSource="{Binding ServerList}"
+                                             SelectedItem="{Binding SelectedServer}" />
+                                <hc:ComboBox Width="120" Margin="5"
+                                             ItemsSource="{Binding LeagueList}"
+                                             SelectedItem="{Binding SelectedLeague}" />
+                                <hc:ComboBox Width="150" Margin="5"
+                                             ItemsSource="{Binding TradeTypeList}"
+                                             SelectedItem="{Binding SelectedTradeType}" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center">
+                                <Label>污染</Label>
+                                <RadioButton Content="Any" GroupName="Corrupted" Margin="5"
+                                             IsChecked="{Binding SelectedCorruptedState, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static enums:CorruptedState.ANY}}" />
+                                <RadioButton Content="Yes" GroupName="Corrupted" Margin="5"
+                                             IsChecked="{Binding SelectedCorruptedState, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static enums:CorruptedState.YES}}" />
+                                <RadioButton Content="No" GroupName="Corrupted" Margin="5"
+                                             IsChecked="{Binding SelectedCorruptedState, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static enums:CorruptedState.NO}}" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center">
+                                <Label>依帳號折疊</Label>
+                                <RadioButton Content="Yes" GroupName="CollapseByAccount" Margin="5"
+                                             IsChecked="{Binding SelectedCollapseState, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static enums:CollapseByAccount.YES}}" />
+                                <RadioButton Content="No" GroupName="CollapseByAccount" Margin="5"
+                                             IsChecked="{Binding SelectedCollapseState, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static enums:CollapseByAccount.NO}}" />
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                    <Border Visibility="{Binding Poe1ItemInfoVisibility}">
+                        <StackPanel>
+                            <TextBlock HorizontalAlignment="Center">物品名稱</TextBlock>
+                            <TextBlock
+                                Text="{Binding ParsedPoe1ItemVM.ItemName, StringFormat='『{0}』', FallbackValue=''}"
+                                HorizontalAlignment="Center" />
+                            <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="5" Padding="10" Margin="10"
+                                    VerticalAlignment="Top" HorizontalAlignment="Center">
+                                <WrapPanel Orientation="Horizontal" Width="400">
+                                    <hc:SimpleStackPanel Orientation="Horizontal" Width="200">
+                                        <CheckBox
+                                            IsChecked="{Binding ParsedPoe1ItemVM.FilterItemLevel,Mode=TwoWay}">
+                                            物品等級
+                                        </CheckBox>
+                                        <TextBox Margin="2" Width="50"
+                                                 Text="{Binding ParsedPoe1ItemVM.ItemLevelMin,UpdateSourceTrigger=PropertyChanged}" />
+                                        <TextBox Margin="2" Width="50"
+                                                 Text="{Binding ParsedPoe1ItemVM.ItemLevelMax,UpdateSourceTrigger=PropertyChanged}" />
+                                    </hc:SimpleStackPanel>
+                                    <hc:SimpleStackPanel Orientation="Horizontal" Width="200">
+                                        <CheckBox IsChecked="{Binding ParsedPoe1ItemVM.FilterRarity,Mode=TwoWay}">稀有度</CheckBox>
+                                        <ComboBox Margin="2" Width="80"
+                                                  ItemsSource="{Binding SelectableRarity}"
+                                                  SelectedItem="{Binding ParsedPoe1ItemVM.Rarity}" />
+                                    </hc:SimpleStackPanel>
+                                    <hc:SimpleStackPanel Orientation="Horizontal" Width="200">
+                                        <CheckBox IsChecked="{Binding ParsedPoe1ItemVM.FilterLink,Mode=TwoWay}">連線數量</CheckBox>
+                                        <TextBox Margin="2" Width="50"
+                                                 Text="{Binding ParsedPoe1ItemVM.LinkCountMin,UpdateSourceTrigger=PropertyChanged}" />
+                                        <TextBox Margin="2" Width="50"
+                                                 Text="{Binding ParsedPoe1ItemVM.LinkCountMax,UpdateSourceTrigger=PropertyChanged}" />
+                                    </hc:SimpleStackPanel>
+                                    <hc:SimpleStackPanel Orientation="Horizontal" Width="200">
+                                        <CheckBox IsChecked="{Binding ParsedPoe1ItemVM.FilterItemBase , Mode= TwoWay}">物品分類</CheckBox>
+                                        <TextBox Margin="2" Width="80" IsEnabled="False"
+                                                 Text="{Binding ParsedPoe1ItemVM.ItemBaseName}" />
+                                    </hc:SimpleStackPanel>
+                                    <hc:SimpleStackPanel Orientation="Horizontal" Width="200">
+                                        <CheckBox IsChecked="{Binding ParsedPoe1ItemVM.FilterGemLevel,Mode=TwoWay}">寶石等級</CheckBox>
+                                        <TextBox Margin="2" Width="50"
+                                                 Text="{Binding ParsedPoe1ItemVM.GemLevelMin,UpdateSourceTrigger=PropertyChanged}" />
+                                        <TextBox Margin="2" Width="50"
+                                                 Text="{Binding ParsedPoe1ItemVM.GemLevelMax,UpdateSourceTrigger=PropertyChanged}" />
+                                    </hc:SimpleStackPanel>
+                                    <hc:SimpleStackPanel Orientation="Horizontal" Width="200">
+                                        <TextBlock FontSize="12">穢生</TextBlock>
+                                        <hc:ComboBox Margin="2" Width="80"
+                                                     ItemsSource="{Binding Source={StaticResource YesNoAnyOptionEnumKey}}"
+                                                     SelectedItem="{Binding ParsedPoe1ItemVM.FoulBorn}">
+                                            <hc:ComboBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding}" FontSize="10" />
+                                                </DataTemplate>
+                                            </hc:ComboBox.ItemTemplate>
+                                        </hc:ComboBox>
+                                    </hc:SimpleStackPanel>
+                                </WrapPanel>
+                            </Border>
+                            <DataGrid ItemsSource="{Binding ParsedPoe1ItemVM.StatVMs , FallbackValue=''}"
+                                      AutoGenerateColumns="False"
+                                      Width="500px"
+                                      PreviewMouseWheel="DataGrid_OnPreviewMouseWheel"
+                                      HeadersVisibility="All" RowHeaderWidth="0" CanUserAddRows="False"
+                                      BorderThickness="0" Background="Transparent"
+                                      PreviewMouseLeftButtonDown="DataGrid_PreviewMouseLeftButtonDown">
+                                <DataGrid.Resources>
+                                    <Style TargetType="DataGridRow">
+                                        <Setter Property="Background" Value="Transparent" />
+                                        <Setter Property="BorderBrush" Value="Transparent" />
+                                        <Style.Triggers>
+                                            <Trigger Property="IsSelected" Value="True">
+                                                <Setter Property="Background" Value="Transparent" />
+                                                <Setter Property="BorderBrush" Value="Transparent" />
+                                            </Trigger>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Background" Value="Transparent" />
+                                                <Setter Property="BorderBrush" Value="Transparent" />
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                    <Style TargetType="DataGridCell">
+                                        <Setter Property="Background" Value="Transparent" />
+                                        <Setter Property="BorderBrush" Value="Transparent" />
+                                        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                                        <Style.Triggers>
+                                            <Trigger Property="IsSelected" Value="True">
+                                                <Setter Property="Background" Value="Transparent" />
+                                                <Setter Property="BorderBrush" Value="Transparent" />
+                                                <Setter Property="Foreground" Value="Black" />
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataGrid.Resources>
+                                <DataGrid.Columns>
+                                    <DataGridCheckBoxColumn Header="查詢"
+                                                            Binding="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                            Width="50" />
+                                    <DataGridTemplateColumn Header="種類" Width="80">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="TextBlock">
+                                                            <Setter Property="Text" Value="{Binding Type}" />
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding Type}" Value="pseudo">
+                                                                    <Setter Property="Foreground" Value="#5555FF" />
+                                                                    <Setter Property="Text" Value="偽屬性" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Type}" Value="implicit">
+                                                                    <Setter Property="Foreground" Value="#5555FF" />
+                                                                    <Setter Property="Text" Value="固定" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Type}" Value="explicit">
+                                                                    <Setter Property="Foreground" Value="Gray" />
+                                                                    <Setter Property="Text" Value="隨機" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Type}" Value="crafted">
+                                                                    <Setter Property="Foreground" Value="#B5A6C7" />
+                                                                    <Setter Property="Text" Value="工藝" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                </TextBlock>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTextColumn Header="詞綴內容" Binding="{Binding StatText}" IsReadOnly="True"
+                                                        Width="*">
+                                        <DataGridTextColumn.ElementStyle>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="TextWrapping" Value="Wrap" />
+                                                <Setter Property="VerticalAlignment" Value="Center" />
+                                                <Setter Property="Margin" Value="5" />
+                                            </Style>
+                                        </DataGridTextColumn.ElementStyle>
+                                    </DataGridTextColumn>
+                                    <DataGridTemplateColumn Header="最小值" Width="80">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBox
+                                                    Text="{Binding MinValue, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"
+                                                    Margin="2" />
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTemplateColumn Header="最大值" Width="80">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBox
+                                                    Text="{Binding MaxValue,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                                    Margin="2" />
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <hc:SimplePanel Width="500px">
+                                <Button HorizontalAlignment="Right" Background="White" Foreground="#0078D4"
+                                        BorderBrush="#0078D4"
+                                        BorderThickness="1" Margin="0,5,0,0" Padding="15,5">
+                                    <b:Interaction.Triggers>
+                                        <b:EventTrigger EventName="Click">
+                                            <b:InvokeCommandAction Command="{Binding QueryCommand}" />
+                                        </b:EventTrigger>
+                                    </b:Interaction.Triggers>
+                                    查詢
+                                </Button>
+                            </hc:SimplePanel>
+                        </StackPanel>
+                    </Border>
+                    <Border Visibility="{Binding Poe2ItemInfoVisibility}">
+                        <StackPanel>
+                            <TextBlock HorizontalAlignment="Center">物品名稱</TextBlock>
+                            <TextBlock Text="{Binding ParsedPoe2ItemVM.ItemName, StringFormat='『{0}』'}"
+                                       HorizontalAlignment="Center" />
+                            <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="5" Padding="10" Margin="10"
+                                    VerticalAlignment="Top" HorizontalAlignment="Center">
+                                <WrapPanel Orientation="Horizontal" Width="400">
+                                    <hc:SimpleStackPanel Orientation="Horizontal" Width="200">
+                                        <CheckBox
+                                            IsChecked="{Binding ParsedPoe2ItemVM.FilterItemLevel,Mode=TwoWay}">
+                                            物品等級
+                                        </CheckBox>
+                                        <TextBox Margin="2" Width="50"
+                                                 Text="{Binding ParsedPoe2ItemVM.ItemLevelMin,UpdateSourceTrigger=PropertyChanged}" />
+                                        <TextBox Margin="2" Width="50"
+                                                 Text="{Binding ParsedPoe2ItemVM.ItemLevelMax,UpdateSourceTrigger=PropertyChanged}" />
+                                    </hc:SimpleStackPanel>
+                                    <hc:SimpleStackPanel Orientation="Horizontal" Width="200">
+                                        <CheckBox IsChecked="{Binding ParsedPoe2ItemVM.FilterRarity,Mode=TwoWay}">稀有度</CheckBox>
+                                        <ComboBox Margin="2" Width="80"
+                                                  ItemsSource="{Binding SelectableRarity}"
+                                                  SelectedItem="{Binding ParsedPoe2ItemVM.Rarity}" />
+                                    </hc:SimpleStackPanel>
+                                    <hc:SimpleStackPanel Orientation="Horizontal" Width="200">
+                                        <CheckBox
+                                            IsChecked="{Binding ParsedPoe2ItemVM.FilterRunSockets,Mode=TwoWay}">
+                                            符文插槽
+                                        </CheckBox>
+                                        <TextBox Margin="2" Width="50"
+                                                 Text="{Binding ParsedPoe2ItemVM.RunSocketsMin ,UpdateSourceTrigger=PropertyChanged}" />
+                                        <TextBox Margin="2" Width="50"
+                                                 Text="{Binding ParsedPoe2ItemVM.RunSocketsMax,UpdateSourceTrigger=PropertyChanged}" />
+                                    </hc:SimpleStackPanel>
+                                    <hc:SimpleStackPanel Orientation="Horizontal" Width="200">
+                                        <CheckBox IsChecked="{Binding ParsedPoe2ItemVM.FilterItemBase , Mode= TwoWay}">物品分類</CheckBox>
+                                        <TextBox Margin="2" Width="80" IsEnabled="False"
+                                                 Text="{Binding ParsedPoe2ItemVM.ItemBaseName}" />
+                                    </hc:SimpleStackPanel>
+                                </WrapPanel>
+                            </Border>
+                            <DataGrid ItemsSource="{Binding ParsedPoe2ItemVM.StatVMs , FallbackValue=''}"
+                                      AutoGenerateColumns="False"
+                                      Width="500px"
+                                      PreviewMouseWheel="DataGrid_OnPreviewMouseWheel"
+                                      HeadersVisibility="All" RowHeaderWidth="0" CanUserAddRows="False"
+                                      BorderThickness="0" Background="Transparent"
+                                      PreviewMouseLeftButtonDown="DataGrid_PreviewMouseLeftButtonDown">
+                                <DataGrid.Resources>
+                                    <Style TargetType="DataGridRow">
+                                        <Setter Property="Background" Value="Transparent" />
+                                        <Setter Property="BorderBrush" Value="Transparent" />
+                                        <Style.Triggers>
+                                            <Trigger Property="IsSelected" Value="True">
+                                                <Setter Property="Background" Value="Transparent" />
+                                                <Setter Property="BorderBrush" Value="Transparent" />
+                                            </Trigger>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Background" Value="Transparent" />
+                                                <Setter Property="BorderBrush" Value="Transparent" />
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                    <Style TargetType="DataGridCell">
+                                        <Setter Property="Background" Value="Transparent" />
+                                        <Setter Property="BorderBrush" Value="Transparent" />
+                                        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                                        <Style.Triggers>
+                                            <Trigger Property="IsSelected" Value="True">
+                                                <Setter Property="Background" Value="Transparent" />
+                                                <Setter Property="BorderBrush" Value="Transparent" />
+                                                <Setter Property="Foreground" Value="Black" />
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataGrid.Resources>
+                                <DataGrid.Columns>
+                                    <DataGridCheckBoxColumn Header="查詢"
+                                                            Binding="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                            Width="50" />
+                                    <DataGridTemplateColumn Header="種類" Width="80">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="TextBlock">
+                                                            <Setter Property="Text" Value="{Binding Type}" />
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding Type}" Value="pseudo">
+                                                                    <Setter Property="Foreground" Value="#5555FF" />
+                                                                    <Setter Property="Text" Value="偽屬性" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Type}" Value="implicit">
+                                                                    <Setter Property="Foreground" Value="#5555FF" />
+                                                                    <Setter Property="Text" Value="固定" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Type}" Value="explicit">
+                                                                    <Setter Property="Foreground" Value="Gray" />
+                                                                    <Setter Property="Text" Value="隨機" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Type}"
+                                                                             Value="desecrated">
+                                                                    <Setter Property="Foreground" Value="#B5A6C7" />
+                                                                    <Setter Property="Text" Value="褻瀆" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                </TextBlock>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTextColumn Header="詞綴內容" Binding="{Binding StatText}" IsReadOnly="True"
+                                                        Width="*">
+                                        <DataGridTextColumn.ElementStyle>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="TextWrapping" Value="Wrap" />
+                                                <Setter Property="VerticalAlignment" Value="Center" />
+                                                <Setter Property="Margin" Value="5" />
+                                            </Style>
+                                        </DataGridTextColumn.ElementStyle>
+                                    </DataGridTextColumn>
+                                    <DataGridTemplateColumn Header="最小值" Width="80">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBox
+                                                    Text="{Binding MinValue, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"
+                                                    Margin="2" />
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTemplateColumn Header="最大值" Width="80">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBox
+                                                    Text="{Binding MaxValue,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                                    Margin="2" />
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <hc:SimplePanel Width="500px">
+                                <Button HorizontalAlignment="Right" Background="White" Foreground="#0078D4"
+                                        BorderBrush="#0078D4"
+                                        BorderThickness="1" Margin="0,5,0,0" Padding="15,5">
+                                    <b:Interaction.Triggers>
+                                        <b:EventTrigger EventName="Click">
+                                            <b:InvokeCommandAction Command="{Binding QueryCommand}" />
+                                        </b:EventTrigger>
+                                    </b:Interaction.Triggers>
+                                    查詢
+                                </Button>
+                            </hc:SimplePanel>
+                        </StackPanel>
+                    </Border>
+                    <Border Background="#FFF4CE" CornerRadius="4" Padding="10,5" Margin="0,0,0,10"
+                            Visibility="{Binding RateLimitVisibility}" HorizontalAlignment="Center">
+                        <TextBlock Text="{Binding RateLimitMessage}" Foreground="#E6A23C" VerticalAlignment="Center" />
+                    </Border>
+                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10">
+                        <StackPanel.Style>
+                            <Style TargetType="StackPanel">
+                                <Setter Property="Visibility" Value="Collapsed" />
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding MatchedItem.MatchedItemImage}" Value="{x:Null}">
-                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    <DataTrigger Binding="{Binding CanQuery}" Value="False">
+                                        <Setter Property="Visibility" Value="Visible" />
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
-                        </Image.Style>
-                    </Image>
-                    <ItemsControl ItemsSource="{Binding MatchedItem.PriceAnalysisVMs}">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal" Margin="5" HorizontalAlignment="Center">
-                                    <TextBlock Text="報價: " VerticalAlignment="Center" FontSize="16" />
-                                    <TextBlock Text="{Binding Price}" VerticalAlignment="Center" FontSize="16" />
-                                    <TextBlock Text=" x " VerticalAlignment="Center" FontSize="16" />
-                                    <Image Source="{Binding CurrencyImageUrl}" Width="30" Height="30" />
-                                    <TextBlock Text=" / " VerticalAlignment="Center" FontSize="16" />
-                                    <TextBlock Text="{Binding Count}" FontWeight="Bold" VerticalAlignment="Center"
-                                               FontSize="16" />
-                                    <TextBlock Text="筆" FontWeight="Bold" VerticalAlignment="Center" FontSize="16" />
-                                </StackPanel>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
+                        </StackPanel.Style>
+                        <hc:LoadingCircle />
+                        <TextBlock Text="查詢中..." HorizontalAlignment="Center" Margin="0,5,0,0" />
+                    </StackPanel>
+                    <StackPanel Visibility="{Binding MatchedItemVisibility}">
+                        <TextBlock Text="{Binding MatchedItem.Count , StringFormat='共 {0} 筆資料符合'}"
+                                   HorizontalAlignment="Center" />
+                        <Button Height="40"
+                                Foreground="#0078D4"
+                                BorderBrush="#0078D4"
+                                BorderThickness="1">
+                            <b:Interaction.Triggers>
+                                <b:EventTrigger EventName="Click">
+                                    <b:InvokeCommandAction Command="{Binding OpenTradeSiteCommand}" />
+                                </b:EventTrigger>
+                            </b:Interaction.Triggers>
+                            <TextBlock Text="{Binding SelectedServer, StringFormat='{}{0} 打開交易市集'}" />
+                        </Button>
+                        <Image Width="100" Height="100" Margin="5" Source="{Binding MatchedItem.MatchedItemImage}">
+                            <Image.Style>
+                                <Style TargetType="Image">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding MatchedItem.MatchedItemImage}" Value="{x:Null}">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Image.Style>
+                        </Image>
+                        <ItemsControl ItemsSource="{Binding MatchedItem.PriceAnalysisVMs}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" Margin="5" HorizontalAlignment="Center">
+                                        <TextBlock Text="報價: " VerticalAlignment="Center" FontSize="16" />
+                                        <TextBlock Text="{Binding Price}" VerticalAlignment="Center" FontSize="16" />
+                                        <TextBlock Text=" x " VerticalAlignment="Center" FontSize="16" />
+                                        <Image Source="{Binding CurrencyImageUrl}" Width="30" Height="30" />
+                                        <TextBlock Text=" / " VerticalAlignment="Center" FontSize="16" />
+                                        <TextBlock Text="{Binding Count}" FontWeight="Bold" VerticalAlignment="Center"
+                                                   FontSize="16" />
+                                        <TextBlock Text="筆" FontWeight="Bold" VerticalAlignment="Center" FontSize="16" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
                 </StackPanel>
-            </StackPanel>
-        </ScrollViewer>
-        <ScrollViewer VerticalScrollBarVisibility="Hidden" HorizontalAlignment="Right">
-            <StackPanel hc:Growl.Token="LogMsg" VerticalAlignment="Top"
-                        Margin="0,10,10,10" />
-        </ScrollViewer>
+            </ScrollViewer>
+            <ScrollViewer VerticalScrollBarVisibility="Hidden" HorizontalAlignment="Right">
+                <StackPanel hc:Growl.Token="LogMsg" VerticalAlignment="Top"
+                            Margin="0,10,10,10" />
+            </ScrollViewer>
+        </Grid>
     </Grid>
 </Window>

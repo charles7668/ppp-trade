@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Text.Json;
 using System.Text.Json.Nodes;
@@ -162,6 +163,9 @@ public partial class MainWindowViewModel : ObservableObject
     private CancellationTokenSource _queryCts = new();
 
     [ObservableProperty]
+    private ObservableCollection<QueryHistoryItem> _queryHistory = [];
+
+    [ObservableProperty]
     private string? _rateLimitMessage;
 
     [ObservableProperty]
@@ -309,6 +313,12 @@ public partial class MainWindowViewModel : ObservableObject
         return matchItem;
     }
 
+    [RelayCommand]
+    private void ClearHistory()
+    {
+        QueryHistory.Clear();
+    }
+
     private void ClearParsedData()
     {
         _clipboardMonitorService.ClearClipboard();
@@ -362,7 +372,7 @@ public partial class MainWindowViewModel : ObservableObject
     {
         return _mapper.Map<ItemVM>(item, opt =>
         {
-            opt.AfterMap((src, dest) =>
+            opt.AfterMap((_, dest) =>
             {
                 dest.Rarity = item.Rarity switch
                 {
@@ -550,6 +560,20 @@ public partial class MainWindowViewModel : ObservableObject
             }
 
             MatchedItemVisibility = Visibility.Visible;
+
+            var itemName = SelectedGame == "POE1" ? ParsedPoe1ItemVM?.ItemName : ParsedPoe2ItemVM?.ItemName;
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                QueryHistory.Insert(0, new QueryHistoryItem
+                {
+                    ItemName = itemName,
+                    ItemImage = MatchedItem?.MatchedItemImage,
+                    QueryTime = DateTime.Now,
+                    Game = SelectedGame,
+                    League = SelectedLeague,
+                    ResultCount = MatchedItem?.Count ?? 0
+                });
+            });
         }
         finally
         {
@@ -659,7 +683,7 @@ public partial class MainWindowViewModel : ObservableObject
 
         public bool FilterLink { get; set; } = true;
 
-        public bool FilterGemLevel { get; set; } = false;
+        public bool FilterGemLevel { get; set; }
 
         public bool FilterItemBase { get; set; } = true;
 
@@ -696,5 +720,20 @@ public partial class MainWindowViewModel : ObservableObject
         public string? Type { get; set; }
 
         public string? StatText { get; set; }
+    }
+
+    public class QueryHistoryItem
+    {
+        public string? ItemName { get; set; }
+
+        public string? ItemImage { get; set; }
+
+        public DateTime QueryTime { get; set; }
+
+        public string? Game { get; set; }
+
+        public string? League { get; set; }
+
+        public int ResultCount { get; set; }
     }
 }
