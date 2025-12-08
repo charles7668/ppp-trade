@@ -9,6 +9,7 @@ PPP-Trade 是一個為了 Path of Exile (POE1 & POE2) 設計的查價工具，�
 
 - **多版本支援**：同時支援 Path of Exile 1 (POE1) 與 Path of Exile 2 (POE2)。
 - **多服務器支援**: 同時支援台服與國際服。
+- **中文及英文版支援**: 支援中文化後的遊戲及英文版的遊戲。
 - **剪貼簿監聽**：複製遊戲內物品資訊 (Ctrl+C)，程式自動解析道具類型及其詞綴。
 - **通貨匯率走勢**：
   - 針對通貨查詢，顯示即時匯率。
@@ -31,3 +32,4 @@ PPP-Trade 是一個為了 Path of Exile (POE1 & POE2) 設計的查價工具，�
 ## 📚 參考資料
 
 - 本程式中文部分的道具資訊皆源於 [POE 編年史](https://poedb.tw/tw/)
+- 通貨匯率資料來源於 [POE ninja](https://poe.ninja/)
