@@ -36,7 +36,7 @@ public class Poe2TWParser(CacheService cacheService) : IParser
 
     private string EnchantKeyword => "(enchant)";
 
-    protected virtual string StatTwCacheKey => "parser:poe2:stat_zh_tw";
+    protected virtual string StatCacheKey => "parser:poe2:stat_zh_tw";
 
     protected virtual string LocalKeyword => "(部分)";
 
@@ -263,10 +263,10 @@ public class Poe2TWParser(CacheService cacheService) : IParser
 
     protected virtual List<StatGroup> GetStatGroups()
     {
-        if (!cacheService.TryGet(StatTwCacheKey, out List<StatGroup>? statTw))
+        if (!cacheService.TryGet(StatCacheKey, out List<StatGroup>? statTw))
         {
             statTw = LoadStats("stats_tw.json");
-            cacheService.Set(StatTwCacheKey, statTw);
+            cacheService.Set(StatCacheKey, statTw);
         }
 
         return statTw ?? [];

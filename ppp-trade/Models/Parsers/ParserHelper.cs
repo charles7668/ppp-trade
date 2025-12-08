@@ -29,4 +29,24 @@ internal static class ParserHelper
 
         return (false, null, null);
     }
+
+    public static (bool, int?, int?) TryResolveIncreasedAndDecreasedEn(Stat stat, string statText, ItemBase itemBase)
+    {
+        // try match normal case
+        var regex = stat.Text.Replace("#", "(\\d+)");
+        var match = Regex.Match(statText, regex);
+        if (match.Success)
+        {
+            return (true, int.Parse(match.Groups[1].Value), null);
+        }
+
+        regex = stat.Text.Replace("increased", "decreased").Replace("#", "(\\d+)");
+        match = Regex.Match(statText, regex);
+        if (match.Success)
+        {
+            return (true, int.Parse(match.Groups[1].Value) * -1, null);
+        }
+
+        return (false, null, null);
+    }
 }
