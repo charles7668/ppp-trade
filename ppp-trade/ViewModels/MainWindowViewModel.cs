@@ -600,6 +600,16 @@ public partial class MainWindowViewModel : ObservableObject
         }
     }
 
+    [RelayCommand]
+    private void OpenAbout()
+    {
+        Process.Start(new ProcessStartInfo
+        {
+            FileName = "https://github.com/charles7668/ppp-trade",
+            UseShellExecute = true
+        });
+    }
+
     private async Task WaitWithCountdown(int waitTimeMs, CancellationToken ct)
     {
         if (waitTimeMs <= 0 || _waitTimeTask != Task.CompletedTask)
