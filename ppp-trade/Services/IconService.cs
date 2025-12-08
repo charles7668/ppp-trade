@@ -11,7 +11,7 @@ public class IconService(CacheService cacheService)
         var cacheKey = $"{forGame}:currency:icons";
         if (cacheService.TryGet(cacheKey, out Dictionary<string, string>? iconDictionary))
         {
-            return iconDictionary?[currency];
+            return "https://web.poecdn.com" + iconDictionary?[currency];
         }
 
         var currencyFile = Path.Combine("datas", forGame == "POE1" ? "poe" : "poe2", "currency.json");
