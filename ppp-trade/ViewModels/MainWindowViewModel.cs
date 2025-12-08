@@ -295,13 +295,13 @@ public partial class MainWindowViewModel : ObservableObject
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
             foreach (var group in groups)
             {
-                var currency = JudgeCurrency(group.Key.currency);
+                var currency = group.Key.currency;
                 analysis.Add(new PriceAnalysisVM
                 {
                     Count = group.Count(),
                     Currency = group.Key.currency,
                     Price = group.Key.amount,
-                    CurrencyImageUrl = _iconService.GetCurrencyIcon(currency)
+                    CurrencyImageUrl = _iconService.GetCurrencyIcon(currency, SelectedGame)
                 });
             }
         }
@@ -339,25 +339,6 @@ public partial class MainWindowViewModel : ObservableObject
         ParsedPoe1ItemVM = null;
         ParsedPoe2ItemVM = null;
         _parsedItem = null;
-    }
-
-    private Currency? JudgeCurrency(string currencyText)
-    {
-        if (string.IsNullOrWhiteSpace(currencyText))
-        {
-            return null;
-        }
-
-        // normalize text to upper case
-        var standardizedName = currencyText.Replace('-', '_').ToUpperInvariant();
-
-        var parseState = Enum.TryParse(standardizedName, out Currency currency);
-        if (parseState)
-        {
-            return currency;
-        }
-
-        return null;
     }
 
     private async Task LoadLeagues()
