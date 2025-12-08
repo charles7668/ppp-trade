@@ -187,6 +187,9 @@ public partial class MainWindowViewModel : ObservableObject
     private string? _selectedGame;
 
     [ObservableProperty]
+    private QueryHistoryItem? _selectedHistoryItem;
+
+    [ObservableProperty]
     private string? _selectedLeague;
 
     [ObservableProperty]
@@ -456,6 +459,21 @@ public partial class MainWindowViewModel : ObservableObject
         ClearParsedData();
     }
 
+    partial void OnSelectedHistoryItemChanged(QueryHistoryItem? value)
+    {
+        if (value == null)
+        {
+            return;
+        }
+
+        if (value.MatchedItem != null)
+        {
+            MatchedItem = value.MatchedItem;
+        }
+
+        MatchedItemVisibility = Visibility.Visible;
+    }
+
     partial void OnSelectedServerChanged(string? value)
     {
         var domain = value == "台服" ? "https://pathofexile.tw/" : "https://www.pathofexile.com/";
@@ -571,7 +589,8 @@ public partial class MainWindowViewModel : ObservableObject
                     QueryTime = DateTime.Now,
                     Game = SelectedGame,
                     League = SelectedLeague,
-                    ResultCount = MatchedItem?.Count ?? 0
+                    ResultCount = MatchedItem?.Count ?? 0,
+                    MatchedItem = MatchedItem
                 });
             });
         }
@@ -735,5 +754,7 @@ public partial class MainWindowViewModel : ObservableObject
         public string? League { get; set; }
 
         public int ResultCount { get; set; }
+
+        public MatchedItemVM? MatchedItem { get; set; }
     }
 }

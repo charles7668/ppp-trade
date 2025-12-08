@@ -78,7 +78,8 @@
                 <TextBlock Grid.Row="0" Text="查詢記錄" FontSize="18" FontWeight="Bold" Foreground="#333"
                            Margin="0,10,0,10" HorizontalAlignment="Center" />
 
-                <ListBox Grid.Row="1" ItemsSource="{Binding QueryHistory}" Background="Transparent" BorderThickness="0"
+                <ListBox Grid.Row="1" ItemsSource="{Binding QueryHistory}" SelectedItem="{Binding SelectedHistoryItem}"
+                         Background="Transparent" BorderThickness="0"
                          ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                     <ListBox.ItemContainerStyle>
                         <Style TargetType="ListBoxItem">
