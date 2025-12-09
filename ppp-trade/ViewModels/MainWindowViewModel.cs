@@ -377,6 +377,12 @@ public partial class MainWindowViewModel : ObservableObject
     [DllImport("user32.dll")]
     private static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, uint dwExtraInfo);
 
+    [DllImport("user32.dll")]
+    private static extern IntPtr GetForegroundWindow();
+
+    [DllImport("user32.dll")]
+    private static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
+
     private async Task LoadLeagues()
     {
         try
@@ -501,6 +507,12 @@ public partial class MainWindowViewModel : ObservableObject
 
     private void OnCtrlAltDPressed()
     {
+        if (!IsPoeGame(out var poeGameVersion))
+        {
+            return;
+        }
+
+        SelectedGame = poeGameVersion;
         CopyText();
         Application.Current.Dispatcher.Invoke(() =>
         {
@@ -523,8 +535,36 @@ public partial class MainWindowViewModel : ObservableObject
         });
     }
 
+    private bool IsPoeGame(out string game)
+    {
+        game = string.Empty;
+        try
+        {
+            var hWnd = GetForegroundWindow();
+            GetWindowThreadProcessId(hWnd, out var processId);
+            var process = Process.GetProcessById((int)processId);
+            if (process.MainModule is { ModuleName: "PathOfExile.exe" or "PathOfExile_x64.exe" })
+            {
+                game = process.MainModule.FileName.Contains("Path of Exile 2") ? "POE2" : "POE1";
+                return true;
+            }
+        }
+        catch
+        {
+            return false;
+        }
+
+        return false;
+    }
+
     private void OnCtrlDPressed()
     {
+        if (!IsPoeGame(out var poeGameVersion))
+        {
+            return;
+        }
+
+        SelectedGame = poeGameVersion;
         CopyText();
         _showOverlay = true;
     }
@@ -671,7 +711,10 @@ public partial class MainWindowViewModel : ObservableObject
         {
             var rate = exchange?["rate"]?.ToString();
             if (rate == null)
+            {
                 continue;
+            }
+
             imgUrl = (from core in cores
                 where core?["id"]?.ToString() == exchange?["id"]?.ToString()
                 select core?["image"]?.ToString()).FirstOrDefault();
