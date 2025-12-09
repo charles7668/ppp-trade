@@ -24,6 +24,8 @@ public partial class App
         services.AddSingleton<RateLimitParser>();
         services.AddSingleton<IconService>();
         services.AddSingleton<NameMappingService>();
+        services.AddSingleton<OverlayWindowService>();
+        services.AddSingleton<GlobalHotkeyService>();
         services.AddTransient<RequestBodyBuilder>();
         services.AddScoped<IParser, Poe1ENParser>();
         services.AddScoped<IParser, Poe1TWParser>();

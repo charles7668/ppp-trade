@@ -1,13 +1,22 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows;
+using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using LiveCharts;
 using LiveCharts.Wpf;
+using ppp_trade.Services;
 
 namespace ppp_trade.ViewModels;
 
 public partial class OverlayWindowViewModel : ObservableObject
 {
+    public OverlayWindowViewModel(OverlayWindowService windowService, DisplayOption displayOption)
+    {
+        _displayOption = displayOption;
+        _overlayWindowService = windowService;
+    }
+
     public OverlayWindowViewModel()
     {
         if (App.ServiceProvider == null!)
@@ -62,6 +71,10 @@ public partial class OverlayWindowViewModel : ObservableObject
         }
     }
 
+    private readonly DisplayOption _displayOption = new();
+
+    private readonly OverlayWindowService? _overlayWindowService;
+
     [ObservableProperty]
     private MatchedCurrencyVM? _matchedCurrency;
 
@@ -73,6 +86,29 @@ public partial class OverlayWindowViewModel : ObservableObject
 
     [ObservableProperty]
     private Visibility _matchedItemVisibility = Visibility.Collapsed;
+
+    private Point _previousMousePoint;
+
+    [RelayCommand]
+    private void OnMouseMove(MouseEventArgs e)
+    {
+        if (_displayOption.CloseOnMouseMove)
+        {
+            var p = e.GetPosition(null);
+            if (_previousMousePoint is { X: 0, Y: 0 })
+            {
+                _previousMousePoint = p;
+            }
+            else
+            {
+                var distance = Point.Subtract(p, _previousMousePoint).Length;
+                if (distance > 50)
+                {
+                    _overlayWindowService?.Close();
+                }
+            }
+        }
+    }
 
     public class ExchangeRate
     {
@@ -116,5 +152,10 @@ public partial class OverlayWindowViewModel : ObservableObject
         public string? CurrencyImageUrl { get; set; }
 
         public int Count { get; set; }
+    }
+
+    public class DisplayOption
+    {
+        public bool CloseOnMouseMove { get; set; }
     }
 }

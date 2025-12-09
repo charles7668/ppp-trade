@@ -4,6 +4,7 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 using System.Windows;
+using System.Windows.Input;
 using AutoMapper;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -107,6 +108,9 @@ public partial class MainWindowViewModel : ObservableObject
         _rateLimitParser = App.ServiceProvider.GetRequiredService<RateLimitParser>();
         _iconService = App.ServiceProvider.GetRequiredService<IconService>();
         _mapper = App.ServiceProvider.GetRequiredService<IMapper>();
+        _globalHotkeyService = App.ServiceProvider.GetRequiredService<GlobalHotkeyService>();
+        _overlayWindowService = App.ServiceProvider.GetRequiredService<OverlayWindowService>();
+
         _selectedServer = _serverList[1];
         _selectedGame = _gameList[0];
         _selectableRarity =
@@ -118,15 +122,20 @@ public partial class MainWindowViewModel : ObservableObject
         ];
         OnSelectedServerChanged(_selectedServer);
         _selectedTradeType = _tradeTypeList[1];
+
+        _globalHotkeyService.Register(ModifierKeys.Control, Key.D, OnCtrlDPressed);
     }
 
     private readonly ClipboardMonitorService _clipboardMonitorService = null!;
 
     private readonly GameStringService _gameStringService = null!;
 
+    private readonly GlobalHotkeyService _globalHotkeyService = null!;
+
     private readonly IconService _iconService = null!;
 
     private readonly IMapper _mapper = null!;
+    private readonly OverlayWindowService _overlayWindowService = null!;
 
     private readonly ParserFactory _parserFactory = null!;
 
@@ -442,6 +451,11 @@ public partial class MainWindowViewModel : ObservableObject
         }
     }
 
+    private void OnCtrlDPressed()
+    {
+        _overlayWindowService.Show();
+    }
+
     partial void OnSelectedGameChanged(string? value)
     {
         _poeApiService.SwitchGame(value ?? "POE1");
@@ -592,7 +606,7 @@ public partial class MainWindowViewModel : ObservableObject
                 Value = double.Parse(rate!)
             });
         }
-        
+
         if (matchedCurrency.ExchangeRateList.Count > 0)
         {
             matchedCurrency.PayCurrencyImage = matchedCurrency.ExchangeRateList[0].CurrencyImageUrl;
@@ -750,6 +764,7 @@ public partial class MainWindowViewModel : ObservableObject
     private Task WindowClosing()
     {
         _clipboardMonitorService.StopMonitoring();
+        _globalHotkeyService.UnRegister();
         return Task.CompletedTask;
     }
 
