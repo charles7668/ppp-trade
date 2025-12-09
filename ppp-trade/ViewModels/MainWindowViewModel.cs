@@ -659,15 +659,17 @@ public partial class MainWindowViewModel : ObservableObject
 
         foreach (var exchange in exchangeList)
         {
+            var rate = exchange?["rate"]?.ToString();
+            if (rate == null)
+                continue;
             imgUrl = (from core in cores
                 where core?["id"]?.ToString() == exchange?["id"]?.ToString()
                 select core?["image"]?.ToString()).FirstOrDefault();
 
-            var rate = exchange?["rate"]!.ToString();
             matchedCurrency.ExchangeRateList.Add(new ExchangeRateVM
             {
                 CurrencyImageUrl = "https://web.poecdn.com" + imgUrl,
-                Value = double.Parse(rate!)
+                Value = double.Parse(rate)
             });
         }
 
