@@ -55,7 +55,7 @@ public partial class MainWindow
             dep = VisualTreeHelper.GetParent(dep);
         }
 
-        if (dep is DataGridRow { Item: MainWindowViewModel.ItemStatVM item })
+        if (dep is DataGridRow { Item: ItemStatVM item })
         {
             item.IsSelected = !item.IsSelected;
             e.Handled = true;

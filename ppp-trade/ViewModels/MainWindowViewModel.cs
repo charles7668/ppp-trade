@@ -35,7 +35,7 @@ public partial class MainWindowViewModel : ObservableObject
             _poe2ItemInfoVisibility = Visibility.Visible;
             _matchedItemVisibility = Visibility.Visible;
             _matchedCurrencyVisibility = Visibility.Visible;
-            _parsedPoe1ItemVM = new ItemVM
+            _parsedPoe1ItemVM = new Poe1ItemVM
             {
                 ItemName = "Design Time Item Name",
                 StatVMs =
@@ -169,7 +169,7 @@ public partial class MainWindowViewModel : ObservableObject
     private ItemBase? _parsedItem;
 
     [ObservableProperty]
-    private ItemVM? _parsedPoe1ItemVM;
+    private Poe1ItemVM? _parsedPoe1ItemVM;
 
     [ObservableProperty]
     private Poe2ItemVM? _parsedPoe2ItemVM;
@@ -377,9 +377,9 @@ public partial class MainWindowViewModel : ObservableObject
         }
     }
 
-    private ItemVM MapPoe1ItemToView(Poe1Item item)
+    private Poe1ItemVM MapPoe1ItemToView(Poe1Item item)
     {
-        return _mapper.Map<ItemVM>(item, opt =>
+        return _mapper.Map<Poe1ItemVM>(item, opt =>
         {
             opt.AfterMap((_, dest) =>
             {
@@ -656,7 +656,7 @@ public partial class MainWindowViewModel : ObservableObject
                 select core?["image"]?.ToString()).FirstOrDefault();
 
             var rate = exchange?["rate"]!.ToString();
-            matchedCurrency.ExchangeRateList.Add(new ExchangeRate
+            matchedCurrency.ExchangeRateList.Add(new ExchangeRateVM
             {
                 CurrencyImageUrl = "https://web.poecdn.com" + imgUrl,
                 Value = double.Parse(rate!)
@@ -831,130 +831,6 @@ public partial class MainWindowViewModel : ObservableObject
         await LoadLeagues();
         _clipboardMonitorService.ClipboardChanged += OnClipboardChanged;
         _clipboardMonitorService.StartMonitoring();
-    }
-
-    public class ExchangeRate
-    {
-        public string? CurrencyImageUrl { get; set; }
-
-        public double Value { get; set; }
-    }
-
-    public class MatchedCurrencyVM
-    {
-        public string? MatchedCurrencyImage { get; set; }
-
-        public string? PayCurrencyImage { get; set; }
-
-        public List<ExchangeRate> ExchangeRateList { get; set; } = [];
-
-        public SeriesCollection SeriesCollection { get; set; } = [];
-
-        public ObservableCollection<string> Labels { get; set; } = [];
-
-        public Func<double, string>? YFormatter { get; set; }
-    }
-
-    public class MatchedItemVM
-    {
-        public int Count { get; set; }
-
-        public string? MatchedItemImage { get; set; }
-
-        public string? QueryId { get; set; }
-
-        public List<PriceAnalysisVM> PriceAnalysisVMs { get; set; } = [];
-    }
-
-    public class PriceAnalysisVM
-    {
-        public string? Currency { get; set; }
-
-        public double Price { get; set; }
-
-        public string? CurrencyImageUrl { get; set; }
-
-        public int Count { get; set; }
-    }
-
-    public class Poe2ItemVM
-    {
-        public string? ItemName { get; set; }
-
-        public int? ItemLevelMin { get; set; }
-
-        public int? ItemLevelMax { get; set; }
-
-        public bool FilterItemLevel { get; set; } = true;
-
-        public bool FilterRarity { get; set; } = true;
-
-        public bool FilterItemBase { get; set; } = true;
-
-        public string? Rarity { get; set; }
-
-        public string? ItemBaseName { get; set; }
-
-        public bool FilterRunSockets { get; set; }
-
-        public int? RunSocketsMin { get; set; }
-
-        public int? RunSocketsMax { get; set; }
-
-        public List<ItemStatVM> StatVMs { get; set; } = [];
-    }
-
-    public class ItemVM
-    {
-        public string? ItemName { get; set; }
-
-        public int? ItemLevelMin { get; set; }
-
-        public int? ItemLevelMax { get; set; }
-
-        public bool FilterItemLevel { get; set; } = true;
-
-        public bool FilterRarity { get; set; } = true;
-
-        public bool FilterLink { get; set; } = true;
-
-        public bool FilterGemLevel { get; set; }
-
-        public bool FilterItemBase { get; set; } = true;
-
-        public string? Rarity { get; set; }
-
-        public int? LinkCountMin { get; set; }
-
-        public int? LinkCountMax { get; set; }
-
-        public int? GemLevelMin { get; set; }
-
-        public int? GemLevelMax { get; set; }
-
-        public string? ItemBaseName { get; set; }
-
-        public YesNoAnyOption FoulBorn { get; set; } = YesNoAnyOption.ANY;
-
-        public List<ItemStatVM> StatVMs { get; set; } = [];
-    }
-
-    public partial class ItemStatVM : ObservableObject
-    {
-        [ObservableProperty]
-        private bool _isSelected;
-
-        [ObservableProperty]
-        private int? _maxValue;
-
-        [ObservableProperty]
-        private int? _minValue;
-
-        public string? Id { get; set; }
-
-        public string? Type { get; set; }
-
-        public string? StatText { get; set; }
     }
 
     public class QueryHistoryItem
