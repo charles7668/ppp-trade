@@ -8,9 +8,9 @@ public class ClipboardMonitorService
     private CancellationTokenSource? _cts;
     private string _lastClipboardText = string.Empty;
 
-    public Task ClearClipboard()
+    public void ClearClipboard()
     {
-        Application.Current.Dispatcher.InvokeAsync(() =>
+        Application.Current.Dispatcher.Invoke(() =>
         {
             try
             {
@@ -22,7 +22,6 @@ public class ClipboardMonitorService
                 Debug.WriteLine("clipboard clear failed : " + ex.Message);
             }
         });
-        return Task.CompletedTask;
     }
 
     public event EventHandler<string>? ClipboardChanged;
@@ -45,7 +44,7 @@ public class ClipboardMonitorService
                 }
             });
 
-            if (!string.IsNullOrEmpty(currentText) && currentText != _lastClipboardText)
+            if (currentText != _lastClipboardText)
             {
                 _lastClipboardText = currentText;
                 ClipboardChanged?.Invoke(this, currentText);

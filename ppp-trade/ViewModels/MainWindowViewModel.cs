@@ -606,6 +606,7 @@ public partial class MainWindowViewModel : ObservableObject
             switch (checkItemType)
             {
                 case ItemType.STACKABLE_CURRENCY:
+                case ItemType.VAULT_KEY:
                     await QueryCurrency();
                     break;
                 default:

@@ -61,6 +61,7 @@ public enum ItemType
 
     SOCKETABLE,
     TABLET,
+    VAULT_KEY,
 
     #endregion
 

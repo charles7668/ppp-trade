@@ -48,6 +48,56 @@ public class Poe2TWParser(CacheService cacheService) : IParser
 
     protected virtual string ReqStrKeyword => "力量";
 
+    protected virtual Dictionary<string, ItemType> ItemTypeMap { get; set; } = new Dictionary<string, ItemType>
+    {
+        { "爪", ItemType.CLAW },
+        { "匕首", ItemType.DAGGER },
+        { "法杖", ItemType.WAND },
+        { "單手劍", ItemType.ONE_HAND_SWORD },
+        { "單手斧", ItemType.ONE_HAND_AXE },
+        { "單手錘", ItemType.ONE_HAND_MACE },
+        { "權杖", ItemType.SCEPTRE },
+        { "長矛", ItemType.SPEAR },
+        { "鏈錘", ItemType.FLAIL },
+
+        { "弓", ItemType.BOW },
+        { "長杖", ItemType.STAFF },
+        { "雙手劍", ItemType.TWO_HAND_SWORD },
+        { "雙手斧", ItemType.TWO_HAND_AXE },
+        { "雙手錘", ItemType.TWO_HAND_MACE },
+        { "細杖", ItemType.QUARTERSTAFF },
+        { "魚竿", ItemType.FISHING_ROD },
+        { "十字弓", ItemType.CROSSBOW },
+        { "陷阱", ItemType.TRAP },
+
+        { "箭袋", ItemType.QUIVER },
+        { "盾牌", ItemType.SHIELD },
+        { "盾", ItemType.SHIELD },
+        { "輕盾", ItemType.BUCKLER },
+        { "法器", ItemType.FOCI },
+
+        { "頭部", ItemType.HELMET },
+        { "胸甲", ItemType.BODY_ARMOUR },
+        { "手套", ItemType.GLOVES },
+        { "鞋子", ItemType.BOOTS },
+        { "腰帶", ItemType.BELT },
+
+        { "項鍊", ItemType.AMULET },
+        { "戒指", ItemType.RING },
+
+        { "可堆疊通貨", ItemType.STACKABLE_CURRENCY },
+        { "可鑲嵌", ItemType.SOCKETABLE },
+        { "碑牌", ItemType.TABLET },
+        { "珠寶", ItemType.JEWEL },
+        { "護符", ItemType.CHARMS },
+
+        { "生命藥劑", ItemType.FLASK },
+        { "魔力藥劑", ItemType.FLASK },
+
+        { "換界石", ItemType.WAY_STONE },
+        { "遺鑰", ItemType.VAULT_KEY }
+    };
+
     protected virtual Dictionary<string, Func<Stat, string, ItemBase, (bool, int?, int?)>> SpecialCaseStat { get; } =
         new()
         {
@@ -353,58 +403,8 @@ public class Poe2TWParser(CacheService cacheService) : IParser
 
     protected virtual ItemType ResolveItemType(string lineText)
     {
-        var substr = lineText.Substring(ItemTypeKeyword.Length, lineText.Length - ItemTypeKeyword.Length)
-            .Trim();
-        var typeMap = new Dictionary<string, ItemType>
-        {
-            { "爪", ItemType.CLAW },
-            { "匕首", ItemType.DAGGER },
-            { "法杖", ItemType.WAND },
-            { "單手劍", ItemType.ONE_HAND_SWORD },
-            { "單手斧", ItemType.ONE_HAND_AXE },
-            { "單手錘", ItemType.ONE_HAND_MACE },
-            { "權杖", ItemType.SCEPTRE },
-            { "長矛", ItemType.SPEAR },
-            { "鏈錘", ItemType.FLAIL },
-
-            { "弓", ItemType.BOW },
-            { "長杖", ItemType.STAFF },
-            { "雙手劍", ItemType.TWO_HAND_SWORD },
-            { "雙手斧", ItemType.TWO_HAND_AXE },
-            { "雙手錘", ItemType.TWO_HAND_MACE },
-            { "細杖", ItemType.QUARTERSTAFF },
-            { "魚竿", ItemType.FISHING_ROD },
-            { "十字弓", ItemType.CROSSBOW },
-            { "陷阱", ItemType.TRAP },
-
-            { "箭袋", ItemType.QUIVER },
-            { "盾牌", ItemType.SHIELD },
-            { "盾", ItemType.SHIELD },
-            { "輕盾", ItemType.BUCKLER },
-            { "法器", ItemType.FOCI },
-
-            { "頭部", ItemType.HELMET },
-            { "胸甲", ItemType.BODY_ARMOUR },
-            { "手套", ItemType.GLOVES },
-            { "鞋子", ItemType.BOOTS },
-            { "腰帶", ItemType.BELT },
-
-            { "項鍊", ItemType.AMULET },
-            { "戒指", ItemType.RING },
-
-            { "可堆疊通貨", ItemType.STACKABLE_CURRENCY },
-            { "可鑲嵌", ItemType.SOCKETABLE },
-            { "碑牌", ItemType.TABLET },
-            { "珠寶", ItemType.JEWEL },
-            { "護符", ItemType.CHARMS },
-
-            { "生命藥劑", ItemType.FLASK },
-            { "魔力藥劑", ItemType.FLASK },
-
-            { "換界石", ItemType.WAY_STONE }
-        };
-
-        return typeMap.GetValueOrDefault(substr, ItemType.OTHER);
+        var substr = lineText.Substring(ItemTypeKeyword.Length).Trim();
+        return ItemTypeMap.GetValueOrDefault(substr, ItemType.OTHER);
     }
 
     protected virtual (string, string) ResolveMagicItemName(string nameText)
