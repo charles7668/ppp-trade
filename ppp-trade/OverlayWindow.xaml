@@ -5,12 +5,18 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         xmlns:viewModels="clr-namespace:ppp_trade.ViewModels"
+        xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance Type=viewModels:OverlayWindowViewModel, IsDesignTimeCreatable=True}"
         Title="OverlayWindow" Height="600" Width="400"
         AllowsTransparency="True" Background="Transparent" WindowStyle="None" ResizeMode="NoResize"
         ShowInTaskbar="False" Topmost="True" WindowStartupLocation="Manual"
         Left="0" Top="0">
+    <b:Interaction.Triggers>
+        <b:EventTrigger EventName="Loaded">
+            <b:InvokeCommandAction Command="{Binding LoadedCommand}" />
+        </b:EventTrigger>
+    </b:Interaction.Triggers>
     <Border Background="White" CornerRadius="8" Margin="10" BorderBrush="#DDD" BorderThickness="1"
             VerticalAlignment="Top" HorizontalAlignment="Left">
         <Border.Effect>
@@ -19,6 +25,10 @@
         <Grid>
             <ScrollViewer VerticalScrollBarVisibility="Auto">
                 <StackPanel Width="380">
+                    <Border Background="#FFF4CE" CornerRadius="4" Padding="10,5" Margin="0,0,0,10"
+                            Visibility="{Binding RateLimitVisibility}" HorizontalAlignment="Center">
+                        <TextBlock Text="{Binding RateLimitMessage}" Foreground="#E6A23C" VerticalAlignment="Center" />
+                    </Border>
                     <!-- Matched Item Result -->
                     <StackPanel Visibility="{Binding MatchedItemVisibility}">
                         <TextBlock Text="{Binding MatchedItem.Count , StringFormat='共 {0} 筆資料符合'}"

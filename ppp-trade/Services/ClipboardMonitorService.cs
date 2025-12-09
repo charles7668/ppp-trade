@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Windows;
 
 namespace ppp_trade.Services;
@@ -7,8 +8,6 @@ public class ClipboardMonitorService
     private CancellationTokenSource? _cts;
     private string _lastClipboardText = string.Empty;
 
-    public event EventHandler<string>? ClipboardChanged;
-
     public Task ClearClipboard()
     {
         Application.Current.Dispatcher.InvokeAsync(() =>
@@ -16,14 +15,17 @@ public class ClipboardMonitorService
             try
             {
                 Clipboard.Clear();
+                _lastClipboardText = string.Empty;
             }
-            catch
+            catch (Exception ex)
             {
-                // ignore
+                Debug.WriteLine("clipboard clear failed : " + ex.Message);
             }
         });
         return Task.CompletedTask;
     }
+
+    public event EventHandler<string>? ClipboardChanged;
 
     private async Task MonitorClipboard(CancellationToken token)
     {
@@ -35,10 +37,7 @@ public class ClipboardMonitorService
             {
                 try
                 {
-                    if (Clipboard.ContainsText())
-                    {
-                        currentText = Clipboard.GetText();
-                    }
+                    currentText = Clipboard.ContainsText() ? Clipboard.GetText() : string.Empty;
                 }
                 catch
                 {

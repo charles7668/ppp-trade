@@ -1,9 +1,17 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Text.Json;
+using System.Text.Json.Nodes;
+using System.Text.Json.Serialization;
 using System.Windows;
+using AutoMapper;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using LiveCharts;
 using LiveCharts.Wpf;
+using Microsoft.Extensions.DependencyInjection;
+using ppp_trade.Builders;
+using ppp_trade.Enums;
 using ppp_trade.Models;
 using ppp_trade.Services;
 
@@ -16,6 +24,16 @@ public partial class OverlayWindowViewModel : ObservableObject
         _displayOption = displayOption;
         _overlayWindowService = windowService;
         _isQuerying = true;
+
+        switch (displayOption.GameInfo.Game)
+        {
+            case "POE1":
+                _poe1ItemVM = _mapper.Map<Poe1ItemVM>(_displayOption.Item);
+                break;
+            case "POE2":
+                _poe2ItemVM = _mapper.Map<Poe2ItemVM>(_displayOption.Item);
+                break;
+        }
 
         if (_displayOption.CloseOnMouseMove)
         {
@@ -60,7 +78,7 @@ public partial class OverlayWindowViewModel : ObservableObject
                     "https://web.poecdn.com/gen/image/WzI1LDE0LHsiZiI6IjJESXRlbXMvQ3VycmVuY3kvQ3VycmVuY3lSZXJvbGxSYXJlIiwic2NhbGUiOjF9XQ/46a2347805/CurrencyRerollRare.png",
                 ExchangeRateList =
                 [
-                    new ExchangeRate
+                    new ExchangeRateVM
                     {
                         Value = 160.5,
                         CurrencyImageUrl =
@@ -75,11 +93,25 @@ public partial class OverlayWindowViewModel : ObservableObject
                 YFormatter = val => val.ToString("N1")
             };
         }
+        else
+        {
+            _poeApiService = App.ServiceProvider.GetRequiredService<PoeApiService>();
+            _iconService = App.ServiceProvider.GetRequiredService<IconService>();
+            _rateLimitParser = App.ServiceProvider.GetRequiredService<RateLimitParser>();
+            _mapper = App.ServiceProvider.GetRequiredService<IMapper>();
+        }
     }
 
     private readonly DisplayOption _displayOption = new();
+    private readonly IconService _iconService = null!;
+    private readonly IMapper _mapper = null!;
 
     private readonly OverlayWindowService? _overlayWindowService;
+
+    private readonly Poe1ItemVM? _poe1ItemVM;
+    private readonly Poe2ItemVM? _poe2ItemVM;
+    private readonly PoeApiService _poeApiService = null!;
+    private readonly RateLimitParser _rateLimitParser;
 
     [ObservableProperty]
     private bool _isQuerying;
@@ -97,10 +129,311 @@ public partial class OverlayWindowViewModel : ObservableObject
     private Visibility _matchedItemVisibility = Visibility.Collapsed;
 
     private Point _previousMousePoint;
+    private CancellationTokenSource _queryCts = new();
+
+    [ObservableProperty]
+    private string? _rateLimitMessage;
+
+    [ObservableProperty]
+    private Visibility _rateLimitVisibility = Visibility.Collapsed;
+
+    private Task _waitTimeTask = Task.CompletedTask;
+
+    private async Task<MatchedItemVM> AnalysisPriceAsync(object queryObj)
+    {
+        var (game, league, _) = (_displayOption.GameInfo.Game, _displayOption.GameInfo.League,
+            _displayOption.GameInfo.Server);
+        var serializerOptions = new JsonSerializerOptions
+        {
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+        };
+        var json = JsonSerializer.Serialize(queryObj, serializerOptions);
+        Debug.WriteLine(json);
+        List<PriceAnalysisVM> analysis = [];
+        var matchItem = new MatchedItemVM();
+        try
+        {
+            _queryCts = new CancellationTokenSource();
+            await _waitTimeTask;
+            var fetched = await _poeApiService.GetTradeSearchResultAsync(league, json);
+            Debug.WriteLine(JsonSerializer.Serialize(fetched));
+            if (!fetched.ContainsKey("id") || !fetched.ContainsKey("result"))
+            {
+                throw new ArgumentException("search result not contain 'id' or 'result' field");
+            }
+
+            var needWaitTime = _rateLimitParser.GetWaitTimeForRateLimit(fetched["rate-limit"].Deserialize<string?>(),
+                fetched["rate-limit-state"].Deserialize<string?>());
+
+            await WaitWithCountdown(needWaitTime, _queryCts.Token);
+
+            var queryId = fetched["id"]!.ToString();
+            var results = fetched["result"].Deserialize<List<string>>()!;
+            var total = fetched["total"]!.GetValue<int>();
+            matchItem.Count = total;
+            matchItem.QueryId = queryId;
+
+            List<JsonNode> nodes = [];
+            for (var i = 0; i < 4; i++)
+            {
+                var end = (i + 1) * 10;
+                List<string> fetchIds = [];
+                for (var j = i * 10; j < Math.Min(end, results.Count); j++)
+                {
+                    fetchIds.Add(results[j]);
+                }
+
+                if (fetchIds.Count == 0)
+                {
+                    continue;
+                }
+
+                var fetchItems = await _poeApiService.FetchItems(fetchIds, queryId);
+                needWaitTime = _rateLimitParser.GetWaitTimeForRateLimit(
+                    fetched["rate-limit"].Deserialize<string?>(),
+                    fetched["rate-limit-state"].Deserialize<string?>());
+
+                await WaitWithCountdown(needWaitTime, _queryCts.Token);
+                if (!fetchItems.ContainsKey("result"))
+                {
+                    throw new ArgumentException("fetch result not contain 'result' field");
+                }
+
+                nodes.AddRange(fetchItems["result"]!.AsArray()!);
+            }
+
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+            matchItem.MatchedItemImage = null;
+            if (nodes.Count > 0)
+            {
+                matchItem.MatchedItemImage = nodes[0]["item"]["icon"].ToString();
+            }
+
+            var priceInfos = nodes.Select(x =>
+                new
+                {
+                    type = x["listing"]["price"]["type"].ToString(),
+                    amount = x["listing"]["price"]["amount"].GetValue<int>(),
+                    currency = x["listing"]["price"]["currency"].ToString()
+                });
+            var groups = priceInfos.GroupBy(x => (x.amount, x.currency));
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+            foreach (var group in groups)
+            {
+                var currency = group.Key.currency;
+                analysis.Add(new PriceAnalysisVM
+                {
+                    Count = group.Count(),
+                    Currency = group.Key.currency,
+                    Price = group.Key.amount,
+                    CurrencyImageUrl = _iconService.GetCurrencyIcon(currency, game)
+                });
+            }
+        }
+        catch (TaskCanceledException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            //todo show error message
+            Debug.WriteLine(ex);
+        }
+
+        matchItem.PriceAnalysisVMs = analysis;
+
+        return matchItem;
+    }
 
     [DllImport("user32.dll")]
     [return: MarshalAs(UnmanagedType.Bool)]
     private static extern bool GetCursorPos(ref Win32Point pt);
+
+    [RelayCommand]
+    private async Task OnLoaded()
+    {
+        try
+        {
+            await Query();
+        }
+        catch
+        {
+            // ignore
+        }
+        finally
+        {
+            IsQuerying = false;
+        }
+    }
+
+    private async Task Query()
+    {
+        try
+        {
+            MatchedItemVisibility = Visibility.Collapsed;
+            MatchedCurrencyVisibility = Visibility.Collapsed;
+
+            switch (_displayOption.Item.ItemType)
+            {
+                case ItemType.STACKABLE_CURRENCY:
+                    await QueryCurrency();
+                    break;
+                default:
+                    await QueryItem();
+                    break;
+            }
+        }
+        catch (Exception ex)
+        {
+            // todo show error on window
+        }
+    }
+
+    private async Task QueryCurrency()
+    {
+        if (_displayOption.GameInfo.Server != "國際服")
+        {
+            // todo show error on window
+            return;
+        }
+
+        var (game, league, server) = (_displayOption.GameInfo.Game, _displayOption.GameInfo.League,
+            _displayOption.GameInfo.Server);
+
+        var item = _displayOption.Item;
+        var nameMappingService = App.ServiceProvider.GetRequiredService<NameMappingService>();
+        var currencyName =
+            await nameMappingService.MapBaseItemNameAsync(item.ItemBaseName, game);
+        if (currencyName == null)
+        {
+            // todo show error on window
+            return;
+        }
+
+        var response = await _poeApiService.GetCurrencyExchangeRate(currencyName, league, game);
+        var imgUrl = response["item"]?["image"]?.ToString();
+        var matchedCurrency = new MatchedCurrencyVM
+        {
+            MatchedCurrencyImage = "https://web.poecdn.com" + imgUrl,
+            YFormatter = value => value.ToString("F4")
+        };
+        var exchangeList = response["pairs"]?.AsArray();
+        if (exchangeList == null)
+        {
+            // todo show error on window
+            return;
+        }
+
+        var cores = response["core"]?["items"]?.AsArray()!;
+
+        foreach (var exchange in exchangeList)
+        {
+            imgUrl = (from core in cores
+                where core?["id"]?.ToString() == exchange?["id"]?.ToString()
+                select core?["image"]?.ToString()).FirstOrDefault();
+
+            var rate = exchange?["rate"]!.ToString();
+            matchedCurrency.ExchangeRateList.Add(new ExchangeRateVM
+            {
+                CurrencyImageUrl = "https://web.poecdn.com" + imgUrl,
+                Value = double.Parse(rate!)
+            });
+        }
+
+        if (matchedCurrency.ExchangeRateList.Count > 0)
+        {
+            matchedCurrency.PayCurrencyImage = matchedCurrency.ExchangeRateList[0].CurrencyImageUrl;
+        }
+
+        var history = exchangeList.First()?["history"]?.AsArray();
+        if (history != null)
+        {
+            var rateHistories = history.Select(x => double.Parse(x?["rate"]!.ToString()!)).Reverse().ToList();
+            var dateHistories = history
+                .Select(x => DateTime.Parse(x?["timestamp"]!.ToString()!).ToString("MM/dd")).Reverse().ToList();
+
+            if (rateHistories.Count > 0)
+            {
+                var values = new ChartValues<double>();
+                values.AddRange(rateHistories);
+
+                matchedCurrency.SeriesCollection.Add(new LineSeries
+                {
+                    Title = "Rate",
+                    Values = values,
+                    PointGeometry = null
+                });
+
+                foreach (var date in dateHistories)
+                {
+                    matchedCurrency.Labels.Add(date);
+                }
+            }
+        }
+
+        MatchedCurrency = matchedCurrency;
+        MatchedCurrencyVisibility = Visibility.Visible;
+    }
+
+    private async Task QueryItem()
+    {
+        // todo complete method
+        var tradeType = "securable";
+        var (game, league, server) = (_displayOption.GameInfo.Game, _displayOption.GameInfo.League,
+            _displayOption.GameInfo.Server);
+        SearchRequestBase searchRequest;
+        if (game == "POE1")
+        {
+            searchRequest = _mapper.Map<Poe1SearchRequest>(_poe1ItemVM, opt =>
+            {
+                opt.AfterMap((_, dest) =>
+                {
+                    dest.ServerOption = server == "台服"
+                        ? ServerOption.TAIWAN_SERVER
+                        : ServerOption.INTERNATIONAL_SERVER;
+                    dest.TradeType = tradeType;
+                    dest.CorruptedState = CorruptedState.NO;
+                    dest.CollapseByAccount = CollapseByAccount.YES;
+                    dest.Item = _displayOption.Item;
+                });
+            });
+        }
+        else
+        {
+            searchRequest = _mapper.Map<Poe2SearchRequest>(_poe2ItemVM, opt =>
+            {
+                opt.AfterMap((_, dest) =>
+                {
+                    dest.ServerOption = server == "台服"
+                        ? ServerOption.TAIWAN_SERVER
+                        : ServerOption.INTERNATIONAL_SERVER;
+                    dest.TradeType = tradeType;
+                    dest.CorruptedState = CorruptedState.NO;
+                    dest.CollapseByAccount = CollapseByAccount.YES;
+                    dest.Item = _displayOption.Item;
+                });
+            });
+        }
+
+        var builder = App.ServiceProvider.GetRequiredService<RequestBodyBuilder>();
+        var searchBody = await builder.BuildSearchBodyAsync(searchRequest, game);
+        if (searchBody == null)
+        {
+            // todo show error message
+            return;
+        }
+
+        try
+        {
+            MatchedItem = await AnalysisPriceAsync(searchBody);
+        }
+        catch (TaskCanceledException)
+        {
+            return;
+        }
+
+        MatchedItemVisibility = Visibility.Visible;
+    }
 
     private void StartMonitoring()
     {
@@ -117,6 +450,7 @@ public partial class OverlayWindowViewModel : ObservableObject
                 var current = new Point(pt.X, pt.Y);
                 if (Point.Subtract(current, _previousMousePoint).Length > 50)
                 {
+                    await _queryCts.CancelAsync();
                     _overlayWindowService?.Close();
                     break;
                 }
@@ -124,55 +458,34 @@ public partial class OverlayWindowViewModel : ObservableObject
         }, TaskCreationOptions.LongRunning);
     }
 
+    private async Task WaitWithCountdown(int waitTimeMs, CancellationToken ct)
+    {
+        if (waitTimeMs <= 0 || _waitTimeTask != Task.CompletedTask)
+        {
+            return;
+        }
+
+        _waitTimeTask = Task.Run(async () =>
+        {
+            RateLimitVisibility = Visibility.Visible;
+            var seconds = (int)Math.Ceiling(waitTimeMs / 1000.0);
+            for (var i = seconds; i > 0; i--)
+            {
+                RateLimitMessage = $"請求過於頻繁，需等待 {i} 秒...";
+                await Task.Delay(1000, CancellationToken.None);
+            }
+
+            RateLimitVisibility = Visibility.Collapsed;
+        }, CancellationToken.None);
+
+        await Task.Delay(waitTimeMs, ct);
+    }
+
     [StructLayout(LayoutKind.Sequential)]
     private struct Win32Point
     {
         public int X;
         public int Y;
-    }
-
-    public class ExchangeRate
-    {
-        public string? CurrencyImageUrl { get; set; }
-
-        public double Value { get; set; }
-    }
-
-    public class MatchedCurrencyVM
-    {
-        public string? MatchedCurrencyImage { get; set; }
-
-        public string? PayCurrencyImage { get; set; }
-
-        public List<ExchangeRate> ExchangeRateList { get; set; } = [];
-
-        public SeriesCollection SeriesCollection { get; set; } = [];
-
-        public ObservableCollection<string> Labels { get; set; } = [];
-
-        public Func<double, string>? YFormatter { get; set; }
-    }
-
-    public class MatchedItemVM
-    {
-        public int Count { get; set; }
-
-        public string? MatchedItemImage { get; set; }
-
-        public string? QueryId { get; set; }
-
-        public List<PriceAnalysisVM> PriceAnalysisVMs { get; set; } = [];
-    }
-
-    public class PriceAnalysisVM
-    {
-        public string? Currency { get; set; }
-
-        public double Price { get; set; }
-
-        public string? CurrencyImageUrl { get; set; }
-
-        public int Count { get; set; }
     }
 
     public class DisplayOption

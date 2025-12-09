@@ -499,6 +499,7 @@ public partial class MainWindowViewModel : ObservableObject
 
     private void OnCtrlDPressed()
     {
+        _clipboardMonitorService.ClearClipboard();
         // ReSharper disable InconsistentNaming
         const int KEYEVENTF_KEYUP = 0x0002;
         const int VK_CONTROL = 0x11;
