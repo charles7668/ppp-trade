@@ -85,4 +85,14 @@ public class Poe2EnParser(CacheService cacheService) : Poe2TWParser(cacheService
         {
             { "stat_3639275092", ParserHelper.TryResolveIncreasedAndDecreasedEn }
         };
+
+    protected override (string, string) ResolveMagicItemName(string nameText)
+    {
+        return ResolveMagicNameEN(nameText);
+    }
+
+    protected override (string, string) ResolveCharmItemName(string nameText)
+    {
+        return ResolveMagicNameEN(nameText);
+    }
 }

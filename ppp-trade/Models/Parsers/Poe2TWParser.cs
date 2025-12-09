@@ -48,7 +48,7 @@ public class Poe2TWParser(CacheService cacheService) : IParser
 
     protected virtual string ReqStrKeyword => "力量";
 
-    protected virtual Dictionary<string, ItemType> ItemTypeMap { get; set; } = new Dictionary<string, ItemType>
+    protected virtual Dictionary<string, ItemType> ItemTypeMap { get; set; } = new()
     {
         { "爪", ItemType.CLAW },
         { "匕首", ItemType.DAGGER },
@@ -353,6 +353,14 @@ public class Poe2TWParser(CacheService cacheService) : IParser
             return;
         }
 
+        if (parsingItem.Rarity is Rarity.MAGIC && parsingItem.ItemType == ItemType.CHARMS)
+        {
+            var (itemName, itemBaseName) = ResolveCharmItemName(itemNameTextList[0]);
+            parsingItem.ItemName = itemName;
+            parsingItem.ItemBaseName = itemBaseName;
+            return;
+        }
+
         if (parsingItem.Rarity is Rarity.MAGIC)
         {
             var (itemName, itemBaseName) = ResolveMagicItemName(itemNameTextList[0]);
@@ -407,6 +415,55 @@ public class Poe2TWParser(CacheService cacheService) : IParser
         return ItemTypeMap.GetValueOrDefault(substr, ItemType.OTHER);
     }
 
+    protected (string, string) ResolveMagicNameEN(string nameText)
+    {
+        const string cacheKey = "poe2:item_base:en";
+        if (!cacheService.TryGet(cacheKey, out HashSet<string>? itemBaseHashSet))
+        {
+            var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "datas\\poe2", "items_en.txt");
+            if (!File.Exists(path))
+            {
+                return (nameText, nameText);
+            }
+
+            var contents = File.ReadAllText(path);
+            itemBaseHashSet = [];
+            foreach (var content in contents.Split('\n'))
+            {
+                if (content.StartsWith("###"))
+                {
+                    continue;
+                }
+
+                itemBaseHashSet.Add(content.Trim().TrimEnd('\r').Trim());
+            }
+
+            cacheService.Set(cacheKey, itemBaseHashSet);
+        }
+
+        var index = nameText.IndexOf(" of ", StringComparison.Ordinal);
+        var tempText = nameText;
+        if (index > 0)
+        {
+            tempText = nameText.Substring(0, index).Trim();
+        }
+
+        index = -1;
+        do
+        {
+            var check = tempText.Substring(index + 1).Trim();
+            if (itemBaseHashSet!.Contains(check))
+            {
+                return (nameText, check);
+            }
+
+            tempText = check;
+            index = tempText.IndexOf(' ');
+        } while (index > 0);
+
+        return (nameText, nameText);
+    }
+
     protected virtual (string, string) ResolveMagicItemName(string nameText)
     {
         var index1 = nameText.IndexOf('之');
@@ -419,6 +476,34 @@ public class Poe2TWParser(CacheService cacheService) : IParser
         }
 
         return (nameText, baseName);
+    }
+
+    protected virtual (string, string) ResolveCharmItemName(string nameText)
+    {
+        // try resolve chinese
+        {
+            var index1 = nameText.IndexOf('之');
+            var index2 = nameText.IndexOf('的');
+            if (index1 != -1 || index2 != -1)
+            {
+                var baseName = nameText;
+                if (index2 != -1)
+                {
+                    baseName = nameText.Substring(index2 + 1);
+                }
+
+                if (index1 != -1)
+                {
+                    var split = baseName.Split(' ').ToList();
+                    split.RemoveAt(split.Count - 1);
+                    baseName = string.Join(" ", split);
+                }
+
+                return (nameText, baseName);
+            }
+        }
+        // fallback try resolve english
+        return ResolveMagicNameEN(nameText);
     }
 
     protected virtual List<ItemStat> ResolvePseudoStats(IEnumerable<ItemStat> itemStats, StatGroup pseudoStatGroup)
