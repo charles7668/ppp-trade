@@ -29,6 +29,10 @@
                             Visibility="{Binding RateLimitVisibility}" HorizontalAlignment="Center">
                         <TextBlock Text="{Binding RateLimitMessage}" Foreground="#E6A23C" VerticalAlignment="Center" />
                     </Border>
+                    <Border Background="#FDEDED" CornerRadius="4" Padding="10,5" Margin="0,0,0,10"
+                            Visibility="{Binding ErrorVisibility}" HorizontalAlignment="Center">
+                        <TextBlock Text="{Binding ErrorMessage}" Foreground="#F56C6C" VerticalAlignment="Center" />
+                    </Border>
                     <!-- Matched Item Result -->
                     <StackPanel Visibility="{Binding MatchedItemVisibility}">
                         <TextBlock Text="{Binding MatchedItem.Count , StringFormat='共 {0} 筆資料符合'}"

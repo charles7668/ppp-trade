@@ -114,6 +114,12 @@ public partial class OverlayWindowViewModel : ObservableObject
     private readonly RateLimitParser _rateLimitParser;
 
     [ObservableProperty]
+    private string? _errorMessage;
+
+    [ObservableProperty]
+    private Visibility _errorVisibility;
+
+    [ObservableProperty]
     private bool _isQuerying;
 
     [ObservableProperty]
@@ -236,8 +242,8 @@ public partial class OverlayWindowViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            //todo show error message
             Debug.WriteLine(ex);
+            throw;
         }
 
         matchItem.PriceAnalysisVMs = analysis;
@@ -285,7 +291,8 @@ public partial class OverlayWindowViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            // todo show error on window
+            ErrorMessage = ex.Message;
+            ErrorVisibility = Visibility.Visible;
         }
     }
 
@@ -293,7 +300,8 @@ public partial class OverlayWindowViewModel : ObservableObject
     {
         if (_displayOption.GameInfo.Server != "國際服")
         {
-            // todo show error on window
+            ErrorMessage = "通貨匯率查詢只支援國際服";
+            ErrorVisibility = Visibility.Visible;
             return;
         }
 
@@ -306,7 +314,8 @@ public partial class OverlayWindowViewModel : ObservableObject
             await nameMappingService.MapBaseItemNameAsync(item.ItemBaseName, game);
         if (currencyName == null)
         {
-            // todo show error on window
+            ErrorMessage = "無法解析通貨名";
+            ErrorVisibility = Visibility.Visible;
             return;
         }
 
@@ -320,7 +329,8 @@ public partial class OverlayWindowViewModel : ObservableObject
         var exchangeList = response["pairs"]?.AsArray();
         if (exchangeList == null)
         {
-            // todo show error on window
+            ErrorMessage = "沒有此通貨匯率資料";
+            ErrorVisibility = Visibility.Visible;
             return;
         }
 
@@ -419,7 +429,8 @@ public partial class OverlayWindowViewModel : ObservableObject
         var searchBody = await builder.BuildSearchBodyAsync(searchRequest, game);
         if (searchBody == null)
         {
-            // todo show error message
+            ErrorMessage = "無法建立搜尋參數";
+            ErrorVisibility = Visibility.Visible;
             return;
         }
 
