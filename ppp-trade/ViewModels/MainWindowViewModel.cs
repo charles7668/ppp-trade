@@ -360,8 +360,13 @@ public partial class MainWindowViewModel : ObservableObject
         // ReSharper disable InconsistentNaming
         const int KEYEVENTF_KEYUP = 0x0002;
         const int VK_CONTROL = 0x11;
+        const int VK_MENU = 0x12;
         const int VK_C = 0x43;
         // ReSharper restore InconsistentNaming
+
+        // Release Shift, Control, and Alt to ensure clean state
+        keybd_event(VK_CONTROL, 0, KEYEVENTF_KEYUP, 0);
+        keybd_event(VK_MENU, 0, KEYEVENTF_KEYUP, 0);
 
         keybd_event(VK_CONTROL, 0, 0, 0);
         keybd_event(VK_C, 0, 0, 0);
