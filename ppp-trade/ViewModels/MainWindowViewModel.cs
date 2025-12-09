@@ -354,6 +354,21 @@ public partial class MainWindowViewModel : ObservableObject
         _parsedItem = null;
     }
 
+    private void CopyText()
+    {
+        _clipboardMonitorService.ClearClipboard();
+        // ReSharper disable InconsistentNaming
+        const int KEYEVENTF_KEYUP = 0x0002;
+        const int VK_CONTROL = 0x11;
+        const int VK_C = 0x43;
+        // ReSharper restore InconsistentNaming
+
+        keybd_event(VK_CONTROL, 0, 0, 0);
+        keybd_event(VK_C, 0, 0, 0);
+        keybd_event(VK_C, 0, KEYEVENTF_KEYUP, 0);
+        keybd_event(VK_CONTROL, 0, KEYEVENTF_KEYUP, 0);
+    }
+
     [DllImport("user32.dll")]
     private static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, uint dwExtraInfo);
 
@@ -476,6 +491,7 @@ public partial class MainWindowViewModel : ObservableObject
 
     private void OnCtrlAltDPressed()
     {
+        CopyText();
         Application.Current.Dispatcher.Invoke(() =>
         {
             var mainWindow = Application.Current.MainWindow;
@@ -499,17 +515,7 @@ public partial class MainWindowViewModel : ObservableObject
 
     private void OnCtrlDPressed()
     {
-        _clipboardMonitorService.ClearClipboard();
-        // ReSharper disable InconsistentNaming
-        const int KEYEVENTF_KEYUP = 0x0002;
-        const int VK_CONTROL = 0x11;
-        const int VK_C = 0x43;
-        // ReSharper restore InconsistentNaming
-
-        keybd_event(VK_CONTROL, 0, 0, 0);
-        keybd_event(VK_C, 0, 0, 0);
-        keybd_event(VK_C, 0, KEYEVENTF_KEYUP, 0);
-        keybd_event(VK_CONTROL, 0, KEYEVENTF_KEYUP, 0);
+        CopyText();
         _showOverlay = true;
     }
 
