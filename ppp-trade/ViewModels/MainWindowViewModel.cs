@@ -444,6 +444,9 @@ public partial class MainWindowViewModel : ObservableObject
 
         Poe1ItemInfoVisibility = Visibility.Collapsed;
         Poe2ItemInfoVisibility = Visibility.Collapsed;
+        MatchedCurrencyVisibility = Visibility.Collapsed;
+        MatchedItemVisibility = Visibility.Collapsed;
+        CanQuery = false;
 
         try
         {
@@ -476,6 +479,8 @@ public partial class MainWindowViewModel : ObservableObject
                 Poe2ItemInfoVisibility = Visibility.Visible;
                 break;
         }
+
+        CanQuery = true;
 
         if (!_showOverlay)
         {
