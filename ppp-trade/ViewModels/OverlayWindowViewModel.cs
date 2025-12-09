@@ -1,8 +1,7 @@
 ﻿using System.Collections.ObjectModel;
+using System.Runtime.InteropServices;
 using System.Windows;
-using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
 using LiveCharts;
 using LiveCharts.Wpf;
 using ppp_trade.Services;
@@ -11,10 +10,16 @@ namespace ppp_trade.ViewModels;
 
 public partial class OverlayWindowViewModel : ObservableObject
 {
-    public OverlayWindowViewModel(OverlayWindowService windowService, DisplayOption displayOption)
+    public OverlayWindowViewModel(OverlayWindowService windowService, DisplayOption displayOption) : this()
     {
         _displayOption = displayOption;
         _overlayWindowService = windowService;
+        _isQuerying = true;
+
+        if (_displayOption.CloseOnMouseMove)
+        {
+            StartMonitoring();
+        }
     }
 
     public OverlayWindowViewModel()
@@ -76,6 +81,9 @@ public partial class OverlayWindowViewModel : ObservableObject
     private readonly OverlayWindowService? _overlayWindowService;
 
     [ObservableProperty]
+    private bool _isQuerying;
+
+    [ObservableProperty]
     private MatchedCurrencyVM? _matchedCurrency;
 
     [ObservableProperty]
@@ -89,25 +97,37 @@ public partial class OverlayWindowViewModel : ObservableObject
 
     private Point _previousMousePoint;
 
-    [RelayCommand]
-    private void OnMouseMove(MouseEventArgs e)
+    [DllImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    private static extern bool GetCursorPos(ref Win32Point pt);
+
+    private void StartMonitoring()
     {
-        if (_displayOption.CloseOnMouseMove)
+        Task.Factory.StartNew(async () =>
         {
-            var p = e.GetPosition(null);
-            if (_previousMousePoint is { X: 0, Y: 0 })
+            var pt = new Win32Point();
+            GetCursorPos(ref pt);
+            _previousMousePoint = new Point(pt.X, pt.Y);
+
+            while (true)
             {
-                _previousMousePoint = p;
-            }
-            else
-            {
-                var distance = Point.Subtract(p, _previousMousePoint).Length;
-                if (distance > 50)
+                await Task.Delay(100);
+                GetCursorPos(ref pt);
+                var current = new Point(pt.X, pt.Y);
+                if (Point.Subtract(current, _previousMousePoint).Length > 50)
                 {
                     _overlayWindowService?.Close();
+                    break;
                 }
             }
-        }
+        }, TaskCreationOptions.LongRunning);
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    private struct Win32Point
+    {
+        public int X;
+        public int Y;
     }
 
     public class ExchangeRate

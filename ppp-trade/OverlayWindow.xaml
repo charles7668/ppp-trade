@@ -5,117 +5,152 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         xmlns:viewModels="clr-namespace:ppp_trade.ViewModels"
-        xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance Type=viewModels:OverlayWindowViewModel, IsDesignTimeCreatable=True}"
         Title="OverlayWindow" Height="600" Width="400"
-        AllowsTransparency="True" Background="White" WindowStyle="None" ResizeMode="NoResize"
+        AllowsTransparency="True" Background="Transparent" WindowStyle="None" ResizeMode="NoResize"
         ShowInTaskbar="False" Topmost="True" WindowStartupLocation="Manual"
         Left="0" Top="0">
-    <b:Interaction.Triggers>
-        <b:EventTrigger EventName="MouseMove">
-            <b:InvokeCommandAction Command="{Binding MouseMoveCommand}" PassEventArgsToCommand="True" />
-        </b:EventTrigger>
-    </b:Interaction.Triggers>
     <Border Background="White" CornerRadius="8" Margin="10" BorderBrush="#DDD" BorderThickness="1"
             VerticalAlignment="Top" HorizontalAlignment="Left">
         <Border.Effect>
             <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="0" Opacity="0.2" />
         </Border.Effect>
-        <ScrollViewer VerticalScrollBarVisibility="Auto">
-            <StackPanel Width="380">
-                <!-- Matched Item Result -->
-                <StackPanel Visibility="{Binding MatchedItemVisibility}">
-                    <TextBlock Text="{Binding MatchedItem.Count , StringFormat='共 {0} 筆資料符合'}"
-                               HorizontalAlignment="Center" FontWeight="Bold" FontSize="16" Margin="0,0,0,10" />
-                    <Image Width="80" Height="80" Margin="5" Source="{Binding MatchedItem.MatchedItemImage}"
-                           HorizontalAlignment="Center">
-                        <Image.Style>
-                            <Style TargetType="Image">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding MatchedItem.MatchedItemImage}" Value="{x:Null}">
-                                        <Setter Property="Visibility" Value="Collapsed" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Image.Style>
-                    </Image>
-                    <ItemsControl ItemsSource="{Binding MatchedItem.PriceAnalysisVMs}">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal" Margin="5" HorizontalAlignment="Center">
-                                    <TextBlock Text="報價: " VerticalAlignment="Center" FontSize="14" Foreground="#666" />
-                                    <TextBlock Text="{Binding Price}" VerticalAlignment="Center" FontSize="16"
-                                               FontWeight="Bold" />
-                                    <TextBlock Text=" x " VerticalAlignment="Center" FontSize="14" Foreground="#666"
-                                               Margin="5,0" />
-                                    <Image Source="{Binding CurrencyImageUrl}" Width="24" Height="24"
-                                           VerticalAlignment="Center" />
-                                    <TextBlock Text=" / " VerticalAlignment="Center" FontSize="14" Foreground="#666"
-                                               Margin="5,0" />
-                                    <TextBlock Text="{Binding Count}" FontWeight="Bold" VerticalAlignment="Center"
-                                               FontSize="16" Foreground="#0078D4" />
-                                    <TextBlock Text="筆" VerticalAlignment="Center" FontSize="14" Foreground="#666"
-                                               Margin="2,0,0,0" />
-                                </StackPanel>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </StackPanel>
-
-                <!-- Matched Currency Result -->
-                <StackPanel Visibility="{Binding MatchedCurrencyVisibility}">
-                    <Image Width="80" Height="80" Margin="5"
-                           Source="{Binding MatchedCurrency.MatchedCurrencyImage}" HorizontalAlignment="Center">
-                        <Image.Style>
-                            <Style TargetType="Image">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding MatchedCurrency.MatchedCurrencyImage}"
-                                                 Value="{x:Null}">
-                                        <Setter Property="Visibility" Value="Collapsed" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Image.Style>
-                    </Image>
-                    <ItemsControl ItemsSource="{Binding MatchedCurrency.ExchangeRateList}">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal" Margin="5" HorizontalAlignment="Center">
-                                    <TextBlock Text="匯率: " VerticalAlignment="Center" FontSize="14" Foreground="#666" />
-                                    <TextBlock Text="{Binding Value}" VerticalAlignment="Center" FontSize="16"
-                                               FontWeight="Bold" />
-                                    <TextBlock Text=" x " VerticalAlignment="Center" FontSize="14" Foreground="#666"
-                                               Margin="5,0" />
-                                    <Image Source="{Binding CurrencyImageUrl}" Width="24" Height="24"
-                                           VerticalAlignment="Center" />
-                                </StackPanel>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,15,0,5">
-                        <TextBlock Text="匯率走勢" FontSize="18" VerticalAlignment="Center" Margin="5,0"
-                                   Foreground="#666" FontWeight="Bold" />
-                        <Image Source="{Binding MatchedCurrency.MatchedCurrencyImage}" Width="20" Height="20"
-                               Margin="5,0" VerticalAlignment="Center" />
-                        <TextBlock Text="⇆" FontSize="18" VerticalAlignment="Center" Margin="5,0" Foreground="#666" />
-                        <Image Source="{Binding MatchedCurrency.PayCurrencyImage}" Width="20" Height="20"
-                               Margin="5,0" VerticalAlignment="Center" />
+        <Grid>
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel Width="380">
+                    <!-- Matched Item Result -->
+                    <StackPanel Visibility="{Binding MatchedItemVisibility}">
+                        <TextBlock Text="{Binding MatchedItem.Count , StringFormat='共 {0} 筆資料符合'}"
+                                   HorizontalAlignment="Center" FontWeight="Bold" FontSize="16" Margin="0,0,0,10" />
+                        <Image Width="80" Height="80" Margin="5" Source="{Binding MatchedItem.MatchedItemImage}"
+                               HorizontalAlignment="Center">
+                            <Image.Style>
+                                <Style TargetType="Image">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding MatchedItem.MatchedItemImage}" Value="{x:Null}">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Image.Style>
+                        </Image>
+                        <ItemsControl ItemsSource="{Binding MatchedItem.PriceAnalysisVMs}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" Margin="5" HorizontalAlignment="Center">
+                                        <TextBlock Text="報價: " VerticalAlignment="Center" FontSize="14"
+                                                   Foreground="#666" />
+                                        <TextBlock Text="{Binding Price}" VerticalAlignment="Center" FontSize="16"
+                                                   FontWeight="Bold" />
+                                        <TextBlock Text=" x " VerticalAlignment="Center" FontSize="14"
+                                                   Foreground="#666"
+                                                   Margin="5,0" />
+                                        <Image Source="{Binding CurrencyImageUrl}" Width="24" Height="24"
+                                               VerticalAlignment="Center" />
+                                        <TextBlock Text=" / " VerticalAlignment="Center" FontSize="14"
+                                                   Foreground="#666"
+                                                   Margin="5,0" />
+                                        <TextBlock Text="{Binding Count}" FontWeight="Bold" VerticalAlignment="Center"
+                                                   FontSize="16" Foreground="#0078D4" />
+                                        <TextBlock Text="筆" VerticalAlignment="Center" FontSize="14" Foreground="#666"
+                                                   Margin="2,0,0,0" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
                     </StackPanel>
 
-                    <lvc:CartesianChart Series="{Binding MatchedCurrency.SeriesCollection}" Height="150"
-                                        Margin="5,0" LegendLocation="None">
-                        <lvc:CartesianChart.AxisX>
-                            <lvc:Axis Labels="{Binding MatchedCurrency.Labels}"
-                                      Separator="{x:Static lvc:DefaultAxes.CleanSeparator}" />
-                        </lvc:CartesianChart.AxisX>
-                        <lvc:CartesianChart.AxisY>
-                            <lvc:Axis Title="Value" LabelFormatter="{Binding MatchedCurrency.YFormatter}" />
-                        </lvc:CartesianChart.AxisY>
-                    </lvc:CartesianChart>
+                    <!-- Matched Currency Result -->
+                    <StackPanel Visibility="{Binding MatchedCurrencyVisibility}">
+                        <Image Width="80" Height="80" Margin="5"
+                               Source="{Binding MatchedCurrency.MatchedCurrencyImage}" HorizontalAlignment="Center">
+                            <Image.Style>
+                                <Style TargetType="Image">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding MatchedCurrency.MatchedCurrencyImage}"
+                                                     Value="{x:Null}">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Image.Style>
+                        </Image>
+                        <ItemsControl ItemsSource="{Binding MatchedCurrency.ExchangeRateList}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" Margin="5" HorizontalAlignment="Center">
+                                        <TextBlock Text="匯率: " VerticalAlignment="Center" FontSize="14"
+                                                   Foreground="#666" />
+                                        <TextBlock Text="{Binding Value}" VerticalAlignment="Center" FontSize="16"
+                                                   FontWeight="Bold" />
+                                        <TextBlock Text=" x " VerticalAlignment="Center" FontSize="14"
+                                                   Foreground="#666"
+                                                   Margin="5,0" />
+                                        <Image Source="{Binding CurrencyImageUrl}" Width="24" Height="24"
+                                               VerticalAlignment="Center" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,15,0,5">
+                            <TextBlock Text="匯率走勢" FontSize="18" VerticalAlignment="Center" Margin="5,0"
+                                       Foreground="#666" FontWeight="Bold" />
+                            <Image Source="{Binding MatchedCurrency.MatchedCurrencyImage}" Width="20" Height="20"
+                                   Margin="5,0" VerticalAlignment="Center" />
+                            <TextBlock Text="⇆" FontSize="18" VerticalAlignment="Center" Margin="5,0"
+                                       Foreground="#666" />
+                            <Image Source="{Binding MatchedCurrency.PayCurrencyImage}" Width="20" Height="20"
+                                   Margin="5,0" VerticalAlignment="Center" />
+                        </StackPanel>
+
+                        <lvc:CartesianChart Series="{Binding MatchedCurrency.SeriesCollection}" Height="150"
+                                            Margin="5,0" LegendLocation="None">
+                            <lvc:CartesianChart.AxisX>
+                                <lvc:Axis Labels="{Binding MatchedCurrency.Labels}"
+                                          Separator="{x:Static lvc:DefaultAxes.CleanSeparator}" />
+                            </lvc:CartesianChart.AxisX>
+                            <lvc:CartesianChart.AxisY>
+                                <lvc:Axis Title="Value" LabelFormatter="{Binding MatchedCurrency.YFormatter}" />
+                            </lvc:CartesianChart.AxisY>
+                        </lvc:CartesianChart>
+                    </StackPanel>
                 </StackPanel>
-            </StackPanel>
-        </ScrollViewer>
+            </ScrollViewer>
+            <Grid Background="#E6FFFFFF" d:IsHidden="True">
+                <Grid.Style>
+                    <Style TargetType="Grid">
+                        <Setter Property="Visibility" Value="Collapsed" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsQuerying}" Value="True">
+                                <Setter Property="Visibility" Value="Visible" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Grid.Style>
+                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <Path Stroke="#0078D4" StrokeThickness="5" Width="50" Height="50" RenderTransformOrigin="0.5,0.5"
+                          Data="M 25,5 A 20,20 0 1 1 5,25" Margin="0,0,0,10">
+                        <Path.RenderTransform>
+                            <RotateTransform />
+                        </Path.RenderTransform>
+                        <Path.Triggers>
+                            <EventTrigger RoutedEvent="Loaded">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation
+                                            Storyboard.TargetProperty="(Path.RenderTransform).(RotateTransform.Angle)"
+                                            From="0" To="360" Duration="0:0:1" RepeatBehavior="Forever" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                        </Path.Triggers>
+                    </Path>
+                    <TextBlock Text="查詢中..." FontSize="24" FontWeight="Bold" Foreground="#555"
+                               HorizontalAlignment="Center" />
+                </StackPanel>
+            </Grid>
+        </Grid>
     </Border>
 </Window>
