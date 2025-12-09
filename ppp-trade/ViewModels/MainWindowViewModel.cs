@@ -124,6 +124,7 @@ public partial class MainWindowViewModel : ObservableObject
         _selectedTradeType = _tradeTypeList[1];
 
         _globalHotkeyService.Register(ModifierKeys.Control, Key.D, OnCtrlDPressed);
+        _globalHotkeyService.Register(ModifierKeys.Control | ModifierKeys.Alt, Key.D, OnCtrlAltDPressed);
     }
 
     private readonly ClipboardMonitorService _clipboardMonitorService = null!;
@@ -449,6 +450,29 @@ public partial class MainWindowViewModel : ObservableObject
                 Poe2ItemInfoVisibility = Visibility.Visible;
                 break;
         }
+    }
+
+    private void OnCtrlAltDPressed()
+    {
+        Application.Current.Dispatcher.Invoke(() =>
+        {
+            var mainWindow = Application.Current.MainWindow;
+            if (mainWindow == null)
+            {
+                return;
+            }
+
+            if (mainWindow.WindowState == WindowState.Minimized)
+            {
+                mainWindow.WindowState = WindowState.Normal;
+            }
+
+            mainWindow.Show();
+            mainWindow.Activate();
+            mainWindow.Topmost = true;
+            mainWindow.Topmost = false;
+            mainWindow.Focus();
+        });
     }
 
     private void OnCtrlDPressed()
