@@ -4,6 +4,7 @@ using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using LiveCharts;
 using LiveCharts.Wpf;
+using ppp_trade.Models;
 using ppp_trade.Services;
 
 namespace ppp_trade.ViewModels;
@@ -176,6 +177,10 @@ public partial class OverlayWindowViewModel : ObservableObject
 
     public class DisplayOption
     {
+        public ItemBase Item { get; set; }
+
+        public GameInfo GameInfo { get; set; }
+
         public bool CloseOnMouseMove { get; set; }
     }
 }

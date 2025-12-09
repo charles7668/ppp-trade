@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
@@ -220,6 +221,8 @@ public partial class MainWindowViewModel : ObservableObject
     [ObservableProperty]
     private IList<string> _serverList = ["台服", "國際服"];
 
+    private bool _showOverlay;
+
     [ObservableProperty]
     private IList<string> _tradeTypeList = ["即刻購買以及面交", "僅限即刻購買", "僅限面交", "任何"];
 
@@ -351,6 +354,9 @@ public partial class MainWindowViewModel : ObservableObject
         _parsedItem = null;
     }
 
+    [DllImport("user32.dll")]
+    private static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, uint dwExtraInfo);
+
     private async Task LoadLeagues()
     {
         try
@@ -450,6 +456,22 @@ public partial class MainWindowViewModel : ObservableObject
                 Poe2ItemInfoVisibility = Visibility.Visible;
                 break;
         }
+
+        if (!_showOverlay)
+        {
+            return;
+        }
+
+        _showOverlay = false;
+        if (_parsedItem != null)
+        {
+            _overlayWindowService.Show(_parsedItem, new GameInfo
+            {
+                Game = SelectedGame,
+                League = SelectedLeague!,
+                Server = SelectedServer!
+            });
+        }
     }
 
     private void OnCtrlAltDPressed()
@@ -477,7 +499,17 @@ public partial class MainWindowViewModel : ObservableObject
 
     private void OnCtrlDPressed()
     {
-        _overlayWindowService.Show();
+        // ReSharper disable InconsistentNaming
+        const int KEYEVENTF_KEYUP = 0x0002;
+        const int VK_CONTROL = 0x11;
+        const int VK_C = 0x43;
+        // ReSharper restore InconsistentNaming
+
+        keybd_event(VK_CONTROL, 0, 0, 0);
+        keybd_event(VK_C, 0, 0, 0);
+        keybd_event(VK_C, 0, KEYEVENTF_KEYUP, 0);
+        keybd_event(VK_CONTROL, 0, KEYEVENTF_KEYUP, 0);
+        _showOverlay = true;
     }
 
     partial void OnSelectedGameChanged(string? value)
