@@ -2,6 +2,8 @@
 
 PPP-Trade 是一個為了 Path of Exile (POE1 & POE2) 設計的查價工具，旨在提供快速、便捷的物品價格查詢體驗。
 
+[![Download](https://img.shields.io/github/v/release/charles7668/ppp-trade?style=for-the-badge&label=Download&logo=github)](https://github.com/charles7668/ppp-trade/releases)
+
 ![image](./docs/image/screenshot1.png)
 ![image](./docs/image/screenshot2.png)
 ![image](./docs/image/screenshot3.png)
