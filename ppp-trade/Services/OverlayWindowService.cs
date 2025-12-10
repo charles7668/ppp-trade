@@ -20,6 +20,16 @@ public class OverlayWindowService(IServiceProvider serviceProvider)
         Application.Current.Dispatcher.Invoke(() => { _currentItemOverlay.Close(); });
     }
 
+    public void CloseRegexOverlay()
+    {
+        if (_currentRegexOverlay == null)
+        {
+            return;
+        }
+
+        Application.Current.Dispatcher.Invoke(() => { _currentRegexOverlay.Close(); });
+    }
+
     public void ShowItemOverlay(ItemBase item, GameInfo gameInfo)
     {
         CloseItemOverlay();

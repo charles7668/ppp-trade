@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModels="clr-namespace:ppp_trade.ViewModels"
+        xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance Type=viewModels:OverlayRegexWindowViewModel, IsDesignTimeCreatable=True}"
         Title="Regex Overlay" Height="400" Width="300"
@@ -26,11 +27,13 @@
                                     Background="Transparent"
                                     BorderBrush="#555" BorderThickness="1"
                                     CornerRadius="4" Padding="8">
-                                <Border.InputBindings>
-                                    <MouseBinding MouseAction="LeftDoubleClick"
-                                                  Command="{Binding DataContext.RegexDoubleClickCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                                                  CommandParameter="{Binding}" />
-                                </Border.InputBindings>
+                                <b:Interaction.Triggers>
+                                    <b:EventTrigger EventName="MouseLeftButtonDown">
+                                        <b:InvokeCommandAction
+                                            PassEventArgsToCommand="True"
+                                            Command="{Binding DataContext.RegexMouseDownCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" />
+                                    </b:EventTrigger>
+                                </b:Interaction.Triggers>
                                 <Border.Style>
                                     <Style TargetType="Border">
                                         <Style.Triggers>
