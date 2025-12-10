@@ -1,0 +1,62 @@
+﻿<Window x:Class="ppp_trade.OverlayRegexWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewModels="clr-namespace:ppp_trade.ViewModels"
+        mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance Type=viewModels:OverlayRegexWindowViewModel, IsDesignTimeCreatable=True}"
+        Title="Regex Overlay" Height="400" Width="300"
+        WindowStyle="None" ResizeMode="NoResize"
+        AllowsTransparency="True" Background="Transparent"
+        Topmost="True" ShowInTaskbar="False">
+
+    <Border Background="White" CornerRadius="5" BorderBrush="#3E3E42" BorderThickness="1">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="5">
+                <ItemsControl ItemsSource="{Binding RegexSettings}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Margin="0,0,0,5"
+                                    Background="Transparent"
+                                    BorderBrush="#555" BorderThickness="1"
+                                    CornerRadius="4" Padding="8">
+                                <Border.InputBindings>
+                                    <MouseBinding MouseAction="LeftDoubleClick"
+                                                  Command="{Binding DataContext.RegexDoubleClickCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                  CommandParameter="{Binding}" />
+                                </Border.InputBindings>
+                                <Border.Style>
+                                    <Style TargetType="Border">
+                                        <Style.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Background" Value="#44FFFFFF" />
+                                                <Setter Property="Cursor" Value="Hand" />
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <TextBlock Text="{Binding Name}" Foreground="#FFF"
+                                               FontWeight="Bold" FontSize="13" />
+                                    <TextBlock Grid.Row="1" Text="{Binding Description}"
+                                               Foreground="#BBB" FontSize="11"
+                                               TextWrapping="Wrap" Margin="0,2,0,0" />
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Grid>
+    </Border>
+</Window>

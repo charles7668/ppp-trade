@@ -32,6 +32,7 @@ public partial class App
         services.AddScoped<IParser, Poe1TWParser>();
         services.AddScoped<IParser, Poe2TWParser>();
         services.AddSingleton<ParserFactory>();
+        services.AddTransient<OverlayRegexWindowViewModel>();
         services.AddAutoMapper(_ => { }, typeof(MappingProfile));
         services.AddLogging();
         

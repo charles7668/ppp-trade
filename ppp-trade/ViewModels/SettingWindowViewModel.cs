@@ -6,17 +6,21 @@ using CommunityToolkit.Mvvm.Input;
 using HandyControl.Controls;
 using HandyControl.Data;
 using ppp_trade.Models;
+using ppp_trade.Services;
 
 namespace ppp_trade.ViewModels;
 
 public partial class SettingWindowViewModel : ObservableObject
 {
-    public SettingWindowViewModel()
+    public SettingWindowViewModel(CacheService cacheService)
     {
+        _cacheService = cacheService;
         LoadSettings();
     }
 
     private const string SettingsFileName = "regex_settings.json";
+    private const string CacheKey = "RegexSettings";
+    private readonly CacheService _cacheService;
 
     [ObservableProperty]
     private ObservableCollection<RegexSetting> _regexSettings = [];
@@ -49,6 +53,7 @@ public partial class SettingWindowViewModel : ObservableObject
         {
             var json = JsonSerializer.Serialize(RegexSettings, new JsonSerializerOptions { WriteIndented = true });
             File.WriteAllText(SettingsFileName, json);
+            _cacheService.Set(CacheKey, RegexSettings);
             Growl.Success(new GrowlInfo
             {
                 Message = "設定已儲存",
@@ -69,6 +74,13 @@ public partial class SettingWindowViewModel : ObservableObject
 
     private void LoadSettings()
     {
+        if (_cacheService.TryGet(CacheKey, out ObservableCollection<RegexSetting>? cachedSettings) &&
+            cachedSettings != null)
+        {
+            RegexSettings = cachedSettings;
+            return;
+        }
+
         if (File.Exists(SettingsFileName))
         {
             try
@@ -78,6 +90,7 @@ public partial class SettingWindowViewModel : ObservableObject
                 if (loaded != null)
                 {
                     RegexSettings = loaded;
+                    _cacheService.Set(CacheKey, loaded);
                 }
             }
             catch
