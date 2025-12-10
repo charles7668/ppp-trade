@@ -14,6 +14,8 @@ public class ExchangeRateVM
 
 public class MatchedCurrencyVM
 {
+    public string? DetailsId { get; set; }
+    
     public string? MatchedCurrencyImage { get; set; }
 
     public string? PayCurrencyImage { get; set; }

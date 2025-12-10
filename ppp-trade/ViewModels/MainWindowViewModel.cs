@@ -610,6 +610,26 @@ public partial class MainWindowViewModel : ObservableObject
     }
 
     [RelayCommand]
+    private void OpenPoeNinja()
+    {
+        if (string.IsNullOrEmpty(SelectedLeague) || string.IsNullOrEmpty(SelectedGame) || MatchedCurrency is null)
+        {
+            return;
+        }
+
+        var league = SelectedLeague!.ToLower().Replace(" ", "-");
+        var game = SelectedGame == "POE2" ? "poe2" : "poe1";
+
+        var url = $"https://poe.ninja/{game}/economy/{league}/currency/{MatchedCurrency.DetailsId}";
+
+        Process.Start(new ProcessStartInfo
+        {
+            FileName = url,
+            UseShellExecute = true
+        });
+    }
+
+    [RelayCommand]
     private void OpenTradeSite()
     {
         Process.Start(new ProcessStartInfo
@@ -693,10 +713,12 @@ public partial class MainWindowViewModel : ObservableObject
 
         var response = await _poeApiService.GetCurrencyExchangeRate(currencyName, SelectedLeague!, SelectedGame!);
         var imgUrl = response["item"]?["image"]?.ToString();
+        var detailsId = response["item"]?["detailsId"]?.ToString();
         var matchedCurrency = new MatchedCurrencyVM
         {
             MatchedCurrencyImage = "https://web.poecdn.com" + imgUrl,
-            YFormatter = value => value.ToString("F4")
+            YFormatter = value => value.ToString("F4"),
+            DetailsId = detailsId
         };
         var exchangeList = response["pairs"]?.AsArray();
         if (exchangeList == null)
