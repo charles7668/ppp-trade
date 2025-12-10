@@ -43,4 +43,28 @@ public class OverlayWindowService
             _currentOverlay.Show();
         });
     }
+
+    public void ShowRegex()
+    {
+        Application.Current.Dispatcher.Invoke(() =>
+        {
+            // Close any existing regex window if needed, or just allow multiple?
+            // Usually only one overlay of this type.
+            var existing = Application.Current.Windows.OfType<OverlayRegexWindow>().FirstOrDefault();
+            if (existing != null)
+            {
+                existing.Close();
+                return;
+            }
+
+            var viewModel = App.ServiceProvider.GetService(typeof(OverlayRegexWindowViewModel));
+            var window = new OverlayRegexWindow
+            {
+                DataContext = viewModel,
+                WindowStartupLocation = WindowStartupLocation.CenterScreen
+            };
+            window.Show();
+            window.Activate();
+        });
+    }
 }

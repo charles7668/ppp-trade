@@ -126,6 +126,7 @@ public partial class MainWindowViewModel : ObservableObject
 
         _globalHotkeyService.Register(ModifierKeys.Control, Key.D, OnCtrlDPressed);
         _globalHotkeyService.Register(ModifierKeys.Control | ModifierKeys.Alt, Key.D, OnCtrlAltDPressed);
+        _globalHotkeyService.Register(ModifierKeys.Control, Key.G, OnCtrlGPressed);
     }
 
     private readonly ClipboardMonitorService _clipboardMonitorService = null!;
@@ -567,6 +568,16 @@ public partial class MainWindowViewModel : ObservableObject
         SelectedGame = poeGameVersion;
         CopyText();
         _showOverlay = true;
+    }
+
+    private void OnCtrlGPressed()
+    {
+        if (!IsPoeGame(out _))
+        {
+            return;
+        }
+
+        _overlayWindowService.ShowRegex();
     }
 
     partial void OnSelectedGameChanged(string? value)
