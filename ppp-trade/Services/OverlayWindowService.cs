@@ -1,30 +1,28 @@
 using System.Windows;
+using Microsoft.Extensions.DependencyInjection;
 using ppp_trade.Models;
 using ppp_trade.ViewModels;
 
 namespace ppp_trade.Services;
 
-public class OverlayWindowService
+public class OverlayWindowService(IServiceProvider serviceProvider)
 {
-    private OverlayWindow? _currentOverlay;
+    private OverlayWindow? _currentItemOverlay;
+    private OverlayRegexWindow? _currentRegexOverlay;
 
-    public void Close()
+    public void CloseItemOverlay()
     {
-        if (_currentOverlay == null)
+        if (_currentItemOverlay == null)
         {
             return;
         }
 
-        Application.Current.Dispatcher.Invoke(() =>
-        {
-            _currentOverlay.Close();
-            _currentOverlay = null;
-        });
+        Application.Current.Dispatcher.Invoke(() => { _currentItemOverlay.Close(); });
     }
 
-    public void Show(ItemBase item, GameInfo gameInfo)
+    public void ShowItemOverlay(ItemBase item, GameInfo gameInfo)
     {
-        Close();
+        CloseItemOverlay();
 
         Application.Current.Dispatcher.Invoke(() =>
         {
@@ -34,37 +32,38 @@ public class OverlayWindowService
                 GameInfo = gameInfo,
                 CloseOnMouseMove = true
             });
-            _currentOverlay = new OverlayWindow
+            _currentItemOverlay = new OverlayWindow
             {
                 DataContext = viewModel,
                 WindowStartupLocation = WindowStartupLocation.CenterScreen
             };
+            _currentItemOverlay.Closed += (_, _) => { _currentItemOverlay = null; };
 
-            _currentOverlay.Show();
+            _currentItemOverlay.Show();
         });
     }
 
-    public void ShowRegex()
+    public void ShowRegexOverlay()
     {
         Application.Current.Dispatcher.Invoke(() =>
         {
-            // Close any existing regex window if needed, or just allow multiple?
-            // Usually only one overlay of this type.
-            var existing = Application.Current.Windows.OfType<OverlayRegexWindow>().FirstOrDefault();
-            if (existing != null)
+            if (_currentRegexOverlay != null)
             {
-                existing.Close();
+                _currentRegexOverlay.Activate();
                 return;
             }
 
-            var viewModel = App.ServiceProvider.GetService(typeof(OverlayRegexWindowViewModel));
-            var window = new OverlayRegexWindow
+            var viewModel = serviceProvider.GetRequiredService<OverlayRegexWindowViewModel>();
+            _currentRegexOverlay = new OverlayRegexWindow
             {
                 DataContext = viewModel,
                 WindowStartupLocation = WindowStartupLocation.CenterScreen
             };
-            window.Show();
-            window.Activate();
+
+            _currentRegexOverlay.Closed += (_, _) => _currentRegexOverlay = null;
+
+            _currentRegexOverlay.Show();
+            _currentRegexOverlay.Activate();
         });
     }
 }

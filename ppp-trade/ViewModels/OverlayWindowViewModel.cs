@@ -462,7 +462,7 @@ public partial class OverlayWindowViewModel : ObservableObject
                 if (Point.Subtract(current, _previousMousePoint).Length > 50)
                 {
                     await _queryCts.CancelAsync();
-                    _overlayWindowService?.Close();
+                    _overlayWindowService?.CloseItemOverlay();
                     break;
                 }
             }

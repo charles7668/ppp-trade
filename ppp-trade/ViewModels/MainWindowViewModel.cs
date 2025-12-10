@@ -497,7 +497,7 @@ public partial class MainWindowViewModel : ObservableObject
         _showOverlay = false;
         if (_parsedItem != null)
         {
-            _overlayWindowService.Show(_parsedItem, new GameInfo
+            _overlayWindowService.ShowItemOverlay(_parsedItem, new GameInfo
             {
                 Game = SelectedGame,
                 League = SelectedLeague!,
@@ -577,7 +577,7 @@ public partial class MainWindowViewModel : ObservableObject
             return;
         }
 
-        _overlayWindowService.ShowRegex();
+        _overlayWindowService.ShowRegexOverlay();
     }
 
     partial void OnSelectedGameChanged(string? value)
