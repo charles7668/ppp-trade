@@ -4,6 +4,7 @@ using ppp_trade.Builders;
 using ppp_trade.Mappings;
 using ppp_trade.Models.Parsers;
 using ppp_trade.Services;
+using ppp_trade.ViewModels;
 
 namespace ppp_trade;
 
@@ -33,6 +34,8 @@ public partial class App
         services.AddSingleton<ParserFactory>();
         services.AddAutoMapper(_ => { }, typeof(MappingProfile));
         services.AddLogging();
+        
+        services.AddTransient<SettingWindowViewModel>();
     }
 
     protected override void OnStartup(StartupEventArgs e)

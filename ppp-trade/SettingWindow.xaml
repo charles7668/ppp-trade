@@ -1,0 +1,96 @@
+﻿<Window x:Class="ppp_trade.SettingWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:hc="https://handyorg.github.io/handycontrol"
+        xmlns:viewModels="clr-namespace:ppp_trade.ViewModels"
+        mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance Type=viewModels:SettingWindowViewModel, IsDesignTimeCreatable=True}"
+        Title="設定" Height="500" Width="800"
+        WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <TabControl Grid.Row="1" TabStripPlacement="Left">
+            <TabItem Header="正則表達式管理" Height="40" Padding="10">
+                <Grid Margin="10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="250" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Left: List -->
+                    <Grid Grid.Column="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <ListBox ItemsSource="{Binding RegexSettings}"
+                                 SelectedItem="{Binding SelectedRegexSetting}"
+                                 BorderThickness="1" BorderBrush="#EEE"
+                                 Margin="0,0,10,10">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Name}" Padding="5" />
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+
+                        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,10,0">
+                            <Button Content="新增" Command="{Binding AddRegexCommand}" Width="60" Margin="0,0,5,0"
+                                    Style="{StaticResource ButtonPrimary}" />
+                            <Button Content="刪除" Command="{Binding DeleteRegexCommand}" Width="60"
+                                    Style="{StaticResource ButtonDanger}" />
+                        </StackPanel>
+                    </Grid>
+
+                    <!-- Right: Edit Details -->
+                    <Border Grid.Column="1" BorderBrush="#EEE" BorderThickness="1" CornerRadius="5" Padding="20">
+                        <StackPanel IsEnabled="{Binding SelectedRegexSetting}">
+                            <!-- Helper Text if nothing selected -->
+                            <TextBlock Text="請選擇或新增一個項目以編輯" Foreground="#AAA"
+                                       HorizontalAlignment="Center" VerticalAlignment="Center"
+                                       Visibility="{Binding SelectedRegexSetting}" />
+
+                            <StackPanel Visibility="{Binding SelectedRegexSetting}">
+                                <hc:TextBox hc:InfoElement.Placeholder="名稱"
+                                            hc:TitleElement.Title="名稱"
+                                            Text="{Binding SelectedRegexSetting.Name, UpdateSourceTrigger=PropertyChanged}"
+                                            Margin="0,0,0,15" />
+
+                                <hc:TextBox hc:InfoElement.Placeholder="說明"
+                                            hc:TitleElement.Title="說明"
+                                            Text="{Binding SelectedRegexSetting.Description, UpdateSourceTrigger=PropertyChanged}"
+                                            Margin="0,0,0,15"
+                                            Height="60" TextWrapping="Wrap" VerticalContentAlignment="Top" />
+
+                                <hc:TextBox hc:InfoElement.Placeholder="正則表達式 (Regex)"
+                                            hc:TitleElement.Title="Regex"
+                                            Text="{Binding SelectedRegexSetting.Regex, UpdateSourceTrigger=PropertyChanged}"
+                                            Margin="0,0,0,15"
+                                            Style="{StaticResource TextBoxExtend}"
+                                            Height="100" TextWrapping="Wrap" VerticalContentAlignment="Top"
+                                            FontFamily="Consolas, Courier New" />
+
+                                <Button Content="儲存設定" Command="{Binding SaveSettingsCommand}"
+                                        Style="{StaticResource ButtonPrimary}"
+                                        HorizontalAlignment="Right" Width="100" />
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </TabItem>
+            <!-- Future tabs can go here -->
+        </TabControl>
+
+        <ScrollViewer Grid.RowSpan="2" VerticalScrollBarVisibility="Hidden" HorizontalAlignment="Right"
+                      VerticalAlignment="Top">
+            <StackPanel hc:Growl.Token="LogMsg" Margin="0,10,10,10" />
+        </ScrollViewer>
+    </Grid>
+</Window>

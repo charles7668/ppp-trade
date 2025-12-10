@@ -610,6 +610,17 @@ public partial class MainWindowViewModel : ObservableObject
     }
 
     [RelayCommand]
+    private void OpenSettings()
+    {
+        var settingVm = App.ServiceProvider.GetRequiredService<SettingWindowViewModel>();
+        var win = new SettingWindow
+        {
+            DataContext = settingVm
+        };
+        win.ShowDialog();
+    }
+
+    [RelayCommand]
     private void OpenPoeNinja()
     {
         if (string.IsNullOrEmpty(SelectedLeague) || string.IsNullOrEmpty(SelectedGame) || MatchedCurrency is null)

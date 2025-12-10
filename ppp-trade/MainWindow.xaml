@@ -704,6 +704,40 @@
                 <StackPanel hc:Growl.Token="LogMsg" VerticalAlignment="Top"
                             Margin="0,10,10,10" />
             </ScrollViewer>
+
+            <Button HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                    Margin="20"
+                    Panel.ZIndex="100"
+                    Width="40" Height="40"
+                    Background="White" BorderBrush="#DDD" BorderThickness="1"
+                    Cursor="Hand"
+                    ToolTip="設定">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="20">
+                            <TextBlock x:Name="Gear" Text="⚙" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                       FontSize="24" Foreground="#666" RenderTransformOrigin="0.5,0.5">
+                                <TextBlock.RenderTransform>
+                                    <RotateTransform Angle="0" />
+                                </TextBlock.RenderTransform>
+                            </TextBlock>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Gear" Property="Foreground" Value="#333" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Template>
+                <b:Interaction.Triggers>
+                    <b:EventTrigger EventName="Click">
+                        <b:InvokeCommandAction Command="{Binding OpenSettingsCommand}" />
+                    </b:EventTrigger>
+                </b:Interaction.Triggers>
+            </Button>
         </Grid>
     </Grid>
 </Window>
