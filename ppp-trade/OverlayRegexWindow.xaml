@@ -49,7 +49,7 @@
                                         <RowDefinition Height="Auto" />
                                         <RowDefinition Height="Auto" />
                                     </Grid.RowDefinitions>
-                                    <TextBlock Text="{Binding Name}" Foreground="#FFF"
+                                    <TextBlock Text="{Binding Name}" Foreground="Black"
                                                FontWeight="Bold" FontSize="13" />
                                     <TextBlock Grid.Row="1" Text="{Binding Description}"
                                                Foreground="#BBB" FontSize="11"
