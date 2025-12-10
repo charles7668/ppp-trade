@@ -4,6 +4,7 @@ PPP-Trade 是一個為了 Path of Exile (POE1 & POE2) 設計的查價工具，�
 
 ![image](./docs/image/screenshot1.png)
 ![image](./docs/image/screenshot2.png)
+![image](./docs/image/screenshot3.png)
 
 ## ✨ 主要功能
 
@@ -20,6 +21,9 @@ PPP-Trade 是一個為了 Path of Exile (POE1 & POE2) 設計的查價工具，�
 - **進階過濾器**：
   - 可自訂過濾條件：腐化狀態 (Corrupted)、物品等級 (Item Level)、插槽數量/連線 (Sockets/Links)。
   - 支援 POE2 特有的過濾選項 (如符文插槽)。
+- **Regex 輔助工具**：
+  - 提供常用正則表達式列表。
+  - 支援一鍵快速輸入至遊戲搜尋列。
 
 ## ⌨️ 快捷鍵
 
@@ -36,6 +40,10 @@ PPP-Trade 是一個為了 Path of Exile (POE1 & POE2) 設計的查價工具，�
   - 在遊戲中按下此組合鍵，自動複製游標下的物品資訊。
   - 喚起主視窗並填入物品資訊，顯示詳細的篩選條件與搜尋結果。
   - 適合需要調整詳細過濾條件 (如詞綴數值範圍) 時使用。
+
+- **Ctrl + G**:
+  - 開啟 Regex 輔助視窗(視窗開啟直到 Ctrl 鍵放開)。
+  - 雙擊列表中的項目後，程式會自動切換至遊戲視窗，並模擬鍵盤輸入 (Ctrl+F -> 貼上) 將正則表達式填入搜尋框。
 
 ## 🚀 快速開始
 
