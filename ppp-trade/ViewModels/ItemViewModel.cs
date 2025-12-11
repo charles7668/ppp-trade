@@ -15,7 +15,7 @@ public class ExchangeRateVM
 public class MatchedCurrencyVM
 {
     public string? DetailsId { get; set; }
-    
+
     public string? MatchedCurrencyImage { get; set; }
 
     public string? PayCurrencyImage { get; set; }
@@ -42,6 +42,9 @@ public class MatchedItemVM
 
 public partial class ItemStatVM : ObservableObject
 {
+    [ObservableProperty]
+    private HazardLevel _hazardLevel = HazardLevel.SAFE;
+
     [ObservableProperty]
     private bool _isSelected;
 

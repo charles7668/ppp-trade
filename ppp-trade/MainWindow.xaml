@@ -407,6 +407,33 @@
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellTemplate>
                                     </DataGridTemplateColumn>
+                                    <DataGridTemplateColumn Header="警告" Width="50">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="⚠️" FontSize="14" HorizontalAlignment="Center">
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="TextBlock">
+                                                            <Setter Property="Visibility" Value="Collapsed" />
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding HazardLevel}"
+                                                                             Value="{x:Static enums:HazardLevel.DANGER}">
+                                                                    <Setter Property="Visibility" Value="Visible" />
+                                                                    <Setter Property="Foreground" Value="Red" />
+                                                                    <Setter Property="ToolTip" Value="危險詞綴" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding HazardLevel}"
+                                                                             Value="{x:Static enums:HazardLevel.WARNING}">
+                                                                    <Setter Property="Visibility" Value="Visible" />
+                                                                    <Setter Property="Foreground" Value="Orange" />
+                                                                    <Setter Property="ToolTip" Value="警告詞綴" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                </TextBlock>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
                                 </DataGrid.Columns>
                             </DataGrid>
                             <hc:SimplePanel Width="500px">
@@ -560,6 +587,33 @@
                                                 <TextBox
                                                     Text="{Binding MaxValue,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                                                     Margin="2" />
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTemplateColumn Header="警告" Width="50">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="⚠️" FontSize="14" HorizontalAlignment="Center">
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="TextBlock">
+                                                            <Setter Property="Visibility" Value="Collapsed" />
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding HazardLevel}"
+                                                                             Value="{x:Static enums:HazardLevel.DANGER}">
+                                                                    <Setter Property="Visibility" Value="Visible" />
+                                                                    <Setter Property="Foreground" Value="Red" />
+                                                                    <Setter Property="ToolTip" Value="危險詞綴" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding HazardLevel}"
+                                                                             Value="{x:Static enums:HazardLevel.WARNING}">
+                                                                    <Setter Property="Visibility" Value="Visible" />
+                                                                    <Setter Property="Foreground" Value="Orange" />
+                                                                    <Setter Property="ToolTip" Value="警告詞綴" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                </TextBlock>
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellTemplate>
                                     </DataGridTemplateColumn>
