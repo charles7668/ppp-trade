@@ -111,6 +111,7 @@ public partial class MainWindowViewModel : ObservableObject
         _mapper = App.ServiceProvider.GetRequiredService<IMapper>();
         _globalHotkeyService = App.ServiceProvider.GetRequiredService<GlobalHotkeyService>();
         _overlayWindowService = App.ServiceProvider.GetRequiredService<OverlayWindowService>();
+        _settingWindowViewModel = App.ServiceProvider.GetRequiredService<SettingWindowViewModel>();
 
         _selectedServer = _serverList[1];
         _selectedGame = _gameList[0];
@@ -143,6 +144,8 @@ public partial class MainWindowViewModel : ObservableObject
     private readonly ParserFactory _parserFactory = null!;
 
     private readonly PoeApiService _poeApiService = null!;
+
+    private readonly SettingWindowViewModel _settingWindowViewModel = null!;
 
     private readonly RateLimitParser _rateLimitParser = null!;
 
@@ -418,6 +421,19 @@ public partial class MainWindowViewModel : ObservableObject
                     _ => _gameStringService.Get(GameString.NORMAL)!
                 };
                 dest.FoulBorn = item.IsFoulBorn ? YesNoAnyOption.YES : YesNoAnyOption.NO;
+
+                if (item.ItemType is ItemType.MAP or ItemType.WAY_STONE)
+                {
+                    foreach (var stat in dest.StatVMs)
+                    {
+                        var hazardParams =
+                            _settingWindowViewModel.Poe1MapHazardSettings.FirstOrDefault(x => x.Id == stat.Id);
+                        if (hazardParams != null)
+                        {
+                            stat.HazardLevel = hazardParams.HazardLevel;
+                        }
+                    }
+                }
             });
         });
     }
@@ -435,6 +451,19 @@ public partial class MainWindowViewModel : ObservableObject
                     Rarity.UNIQUE => _gameStringService.Get(GameString.UNIQUE)!,
                     _ => _gameStringService.Get(GameString.NORMAL)!
                 };
+
+                if (item.ItemType is ItemType.MAP or ItemType.WAY_STONE)
+                {
+                    foreach (var stat in dest.StatVMs)
+                    {
+                        var hazardParams =
+                            _settingWindowViewModel.Poe2MapHazardSettings.FirstOrDefault(x => x.Id == stat.Id);
+                        if (hazardParams != null)
+                        {
+                            stat.HazardLevel = hazardParams.HazardLevel;
+                        }
+                    }
+                }
             });
         });
     }
