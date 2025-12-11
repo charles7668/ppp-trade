@@ -194,21 +194,31 @@ public partial class SettingWindowViewModel : ObservableObject
 
     private void LoadSettings()
     {
-        if (_cacheService.TryGet(CacheKey, out ObservableCollection<RegexSetting>? cachedSettings) &&
-            cachedSettings != null)
+        TryLoadSetting<ObservableCollection<RegexSetting>>(CacheKey, SettingsFileName, s => RegexSettings = s);
+        TryLoadSetting<ObservableCollection<MapHazardSetting>>(Poe1MapHazardCacheKey, Poe1MapHazardSettingsFileName,
+            s => Poe1MapHazardSettings = s);
+        TryLoadSetting<ObservableCollection<MapHazardSetting>>(Poe2MapHazardCacheKey, Poe2MapHazardSettingsFileName,
+            s => Poe2MapHazardSettings = s);
+
+        InitializeDefaultMapHazards();
+    }
+
+    private void TryLoadSetting<T>(string cacheKey, string fileName, Action<T> onSuccess)
+    {
+        if (_cacheService.TryGet(cacheKey, out T? cachedSettings) && cachedSettings != null)
         {
-            RegexSettings = cachedSettings;
+            onSuccess(cachedSettings);
         }
-        else if (File.Exists(SettingsFileName))
+        else if (File.Exists(fileName))
         {
             try
             {
-                var json = File.ReadAllText(SettingsFileName);
-                var loaded = JsonSerializer.Deserialize<ObservableCollection<RegexSetting>>(json);
-                if (loaded != null)
+                var json = File.ReadAllText(fileName);
+                var loaded = JsonSerializer.Deserialize<T>(json);
+                if (!Equals(loaded, default(T)))
                 {
-                    RegexSettings = loaded;
-                    _cacheService.Set(CacheKey, loaded);
+                    onSuccess(loaded!);
+                    _cacheService.Set(cacheKey, loaded);
                 }
             }
             catch
@@ -216,56 +226,6 @@ public partial class SettingWindowViewModel : ObservableObject
                 // ignore
             }
         }
-
-        // Load POE 1
-        if (_cacheService.TryGet(Poe1MapHazardCacheKey, out ObservableCollection<MapHazardSetting>? cachedPoe1) &&
-            cachedPoe1 != null)
-        {
-            Poe1MapHazardSettings = cachedPoe1;
-        }
-        else if (File.Exists(Poe1MapHazardSettingsFileName))
-        {
-            try
-            {
-                var json = File.ReadAllText(Poe1MapHazardSettingsFileName);
-                var loaded = JsonSerializer.Deserialize<ObservableCollection<MapHazardSetting>>(json);
-                if (loaded != null)
-                {
-                    Poe1MapHazardSettings = loaded;
-                    _cacheService.Set(Poe1MapHazardCacheKey, loaded);
-                }
-            }
-            catch
-            {
-                /* ignore */
-            }
-        }
-
-        // Load POE 2
-        if (_cacheService.TryGet(Poe2MapHazardCacheKey, out ObservableCollection<MapHazardSetting>? cachedPoe2) &&
-            cachedPoe2 != null)
-        {
-            Poe2MapHazardSettings = cachedPoe2;
-        }
-        else if (File.Exists(Poe2MapHazardSettingsFileName))
-        {
-            try
-            {
-                var json = File.ReadAllText(Poe2MapHazardSettingsFileName);
-                var loaded = JsonSerializer.Deserialize<ObservableCollection<MapHazardSetting>>(json);
-                if (loaded != null)
-                {
-                    Poe2MapHazardSettings = loaded;
-                    _cacheService.Set(Poe2MapHazardCacheKey, loaded);
-                }
-            }
-            catch
-            {
-                /* ignore */
-            }
-        }
-
-        InitializeDefaultMapHazards();
     }
 
     private class MapHazardRoot
