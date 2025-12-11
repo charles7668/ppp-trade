@@ -1,10 +1,12 @@
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using HandyControl.Controls;
 using HandyControl.Data;
+using JetBrains.Annotations;
 using ppp_trade.Enums;
 using ppp_trade.Models;
 using ppp_trade.Services;
@@ -123,51 +125,70 @@ public partial class SettingWindowViewModel : ObservableObject
 
     private void InitializeDefaultMapHazards()
     {
-        // todo example list for both games for now, can be specialized later
-        var defaultHazards = new List<MapHazardSetting>
-        {
-            new() { Id = "reflect_phys", Stat = "怪物反射 % 物理傷害", HazardLevel = HazardLevel.SAFE },
-            new() { Id = "reflect_ele", Stat = "怪物反射 % 元素傷害", HazardLevel = HazardLevel.SAFE },
-            new() { Id = "no_regen", Stat = "玩家無法回復生命、魔力或護盾", HazardLevel = HazardLevel.SAFE },
-            new() { Id = "less_recovery", Stat = "玩家回復率更加無效", HazardLevel = HazardLevel.SAFE },
-            new() { Id = "no_leech", Stat = "怪物無法被偷取", HazardLevel = HazardLevel.SAFE }
-        };
+        var poe1Hazards = LoadMapHazardsFromData(Path.Combine("datas", "poe", "map_hazard.json"));
+        var poe2Hazards = LoadMapHazardsFromData(Path.Combine("datas", "poe2", "map_hazard.json"));
 
         // Initialize POE 1
         if (Poe1MapHazardSettings.Any())
         {
-            foreach (var defaultHazard in defaultHazards)
+            foreach (var h in poe1Hazards)
             {
-                var existing = Poe1MapHazardSettings.FirstOrDefault(x => x.Id == defaultHazard.Id);
+                var existing = Poe1MapHazardSettings.FirstOrDefault(x => x.Id == h.Id);
                 if (existing != null)
                 {
-                    defaultHazard.HazardLevel = existing.HazardLevel;
+                    h.HazardLevel = existing.HazardLevel;
                 }
             }
         }
 
-        Poe1MapHazardSettings = new ObservableCollection<MapHazardSetting>(defaultHazards.Select(x =>
-            new MapHazardSetting { Id = x.Id, Stat = x.Stat, HazardLevel = x.HazardLevel }));
+        Poe1MapHazardSettings = new ObservableCollection<MapHazardSetting>(poe1Hazards);
 
-        foreach (var h in defaultHazards)
-        {
-            h.HazardLevel = HazardLevel.SAFE;
-        }
-
+        // Initialize POE 2
         if (Poe2MapHazardSettings.Any())
         {
-            foreach (var defaultHazard in defaultHazards)
+            foreach (var h in poe2Hazards)
             {
-                var existing = Poe2MapHazardSettings.FirstOrDefault(x => x.Id == defaultHazard.Id);
+                var existing = Poe2MapHazardSettings.FirstOrDefault(x => x.Id == h.Id);
                 if (existing != null)
                 {
-                    defaultHazard.HazardLevel = existing.HazardLevel;
+                    h.HazardLevel = existing.HazardLevel;
                 }
             }
         }
 
-        Poe2MapHazardSettings = new ObservableCollection<MapHazardSetting>(defaultHazards.Select(x =>
-            new MapHazardSetting { Id = x.Id, Stat = x.Stat, HazardLevel = x.HazardLevel }));
+        Poe2MapHazardSettings = new ObservableCollection<MapHazardSetting>(poe2Hazards);
+    }
+
+    private static List<MapHazardSetting> LoadMapHazardsFromData(string relativePath)
+    {
+        var result = new List<MapHazardSetting>();
+        try
+        {
+            var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, relativePath);
+            if (File.Exists(path))
+            {
+                var json = File.ReadAllText(path);
+                var data = JsonSerializer.Deserialize<MapHazardRoot>(json);
+                if (data?.DangerStats != null)
+                {
+                    foreach (var s in data.DangerStats)
+                    {
+                        result.Add(new MapHazardSetting
+                        {
+                            Id = s.StatId,
+                            Stat = s.StatText,
+                            HazardLevel = HazardLevel.SAFE
+                        });
+                    }
+                }
+            }
+        }
+        catch
+        {
+            // ignore
+        }
+
+        return result;
     }
 
 
@@ -245,5 +266,23 @@ public partial class SettingWindowViewModel : ObservableObject
         }
 
         InitializeDefaultMapHazards();
+    }
+
+    private class MapHazardRoot
+    {
+        [JsonPropertyName("danger_stats")]
+        [UsedImplicitly]
+        public List<MapHazardDto> DangerStats { get; set; } = [];
+    }
+
+    private class MapHazardDto
+    {
+        [JsonPropertyName("stat_text")]
+        [UsedImplicitly]
+        public string StatText { get; set; } = "";
+
+        [JsonPropertyName("stat_id")]
+        [UsedImplicitly]
+        public string StatId { get; set; } = "";
     }
 }
