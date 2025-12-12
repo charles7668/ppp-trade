@@ -33,6 +33,8 @@ public class Poe2TWParser(CacheService cacheService) : IParser
     protected virtual string DesecratedKeyword => "(desecrated)";
 
     protected virtual string AugmentedKeyword => "(augmented)";
+    
+    protected virtual string UnmetKeyword => "(unmet)";
 
     private string EnchantKeyword => "(enchant)";
 
@@ -376,14 +378,14 @@ public class Poe2TWParser(CacheService cacheService) : IParser
 
     protected virtual IEnumerable<ItemRequirement> ResolveItemRequirements(string line)
     {
-        var replaceAugmented =
-            line.Replace(AugmentedKeyword, "").AsSpan(ItemRequirementKeyword.Length);
+        var replaced =
+            line.Replace(AugmentedKeyword, "").Replace(UnmetKeyword, "").AsSpan(ItemRequirementKeyword.Length);
         Span<Range> reqList = stackalloc Range[6];
-        replaceAugmented.Split(reqList, ',');
+        replaced.Split(reqList, ',');
         List<ItemRequirement> itemRequirements = [];
         foreach (var range in reqList)
         {
-            var req = replaceAugmented.Slice(range.Start.Value, range.End.Value - range.Start.Value)
+            var req = replaced.Slice(range.Start.Value, range.End.Value - range.Start.Value)
                 .ToString();
             string[] keywords = [ReqLevelKeyword, ReqIntKeyword, ReqDexKeyword, ReqStrKeyword];
             foreach (var keyword in keywords)
