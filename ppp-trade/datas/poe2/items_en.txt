@@ -30,6 +30,7 @@ Ancestral Cry
 Ancestral Warrior Totem
 Hammer of the Gods
 Berserk
+Eternal Rage
 
 ### GREEN GEM
 Companion: {0}
@@ -44,7 +45,7 @@ Twister
 Whirling Slash
 Cull The Weak
 Fangs of Frost
-Ice-Tipped Arrows
+Freezing Salvo
 Lightning Spear
 Rake
 Snipe
@@ -55,7 +56,7 @@ Plague Bearer
 Wind Dancer
 Barrage
 Electrocuting Arrow
-Freezing Salvo
+Ice-Tipped Arrows
 Rapid Assault
 Spearfield
 Storm Lance
@@ -96,6 +97,7 @@ Cast on Shock
 Chaos Bolt
 Conductivity
 Decompose
+[DNT] Crushing Earth
 Dark Pact
 Discipline
 Enervating Nova
@@ -112,6 +114,7 @@ Impurity
 Lightning Bolt
 Malice
 Mana Drain
+Mirror of Refraction
 Power Siphon
 Purity of Fire
 Purity of Ice
@@ -147,6 +150,7 @@ Orb of Storms
 Skeletal Arsonist
 Arctic Armour
 Convalescence
+Grim Feast
 Mana Remnants
 Raging Spirits
 Ravenous Swarm
@@ -196,7 +200,18 @@ Sacrifice
 
 ### GEN Item
 Ancestral Spirits
+Apocalypse
+Align Fate
 Bleeding Concoction
+Ruzhan's Trap
+Ruzhan's Fury
+Ruzhan's Reckoning
+Kelari's Deception
+Kelari's Judgment
+Navira's Well
+Navira's Fracturing
+Navira's Oasis
+Kelari's Malediction
 Elemental Expression
 Elemental Storm
 Encase in Jade
@@ -204,9 +219,13 @@ Explosive Concoction
 Fulminating Concoction
 Life Remnants
 Meditate
+Moment of Vulnerability
 Acidic Concoction
 Shattering Concoction
+Ruzhan, the Blazing Sword
 Summon Infernal Hound
+Kelari, the Tainted Sands
+Navira, the Last Mirage
 Elemental Surge
 Unbound Avatar
 Unleash
@@ -216,11 +235,11 @@ Fire Spell on Hit
 Cast on Block
 Decompose
 Demon Form
-Future-Past
 Inevitable Agony
 Into the Breach
 Manifest Weapon
 Called Shots
+Mirage Deadeye
 Parry
 Axe Slash
 Mace Strike
@@ -255,64 +274,90 @@ Time Snap
 Herald of Ice
 Void Illusion
 Armour Piercing Rounds
+Entangle
 Explosive Grenade
 Falling Thunder
 Fragmentation Rounds
 Frozen Locus
+Furious Slam
 Glacial Cascade
 Killing Palm
+Lunar Assault
 Permafrost Bolts
+Volcano
 Flash Grenade
 High Velocity Rounds
 Incendiary Shot
+Rolling Magma
 Staggering Palm
 Tempest Bell
-Vaulting Impact
+Wind Blast
+Wing Blast
+Pounce
+Attrition
+Briarpatch
 Ghost Dance
 Herald of Blood
 Herald of Ice
+Savage Fury
 War Banner
+Fury of the Mountain
 Galvanic Shards
 Ice Shards
 Ice Strike
 Rapid Shot
 Tempest Flurry
+Thunderstorm
 Gas Grenade
-Wind Blast
+Vaulting Impact
+Arctic Howl
+Devour
 Artillery Ballista
 Explosive Shot
+Ferocious Roar
 Freezing Mark
 Glacial Bolt
+Spell Totem
 Voltaic Grenade
 Siphoning Strike
 Storm Wave
 Wave of Frost
+Cross Slash
+Barkskin
 Barrier Invocation
 Defiance Banner
 Elemental Invocation
 Lingering Illusion
 Shard Scavenger
+Wolf Pack
 Charged Staff
 Hand of Chayula
 Mantra of Destruction
+Oil Barrage
 Oil Grenade
 Siege Ballista
 Stormblast Bolts
+Thrashing Vines
+Rampage
 Emergency Reload
 Hailstorm Rounds
 Mortar Cannon
 Shattering Palm
 Shockburst Rounds
+Tornado
 Whirling Assault
 Cluster Grenade
 Flicker Strike
 Gathering Storm
 Plasma Blast
 Siege Cascade
-Attrition
+Walking Calamity
+Lunar Blessing
+Flame Breath
 Cast on Dodge
 Charge Regulation
 Dread Banner
+Feral Invocation
 Reaper's Invocation
 Trinity
 
@@ -322,12 +367,14 @@ Atalui's Bloodletting
 Auto Reload
 Bloodlust
 Brutus' Brain
+Cirel's Cultivation
 Paquate's Pact
 Daresso's Passion
 Dauntless
 Einhar's Beastrite
 Flamepierce
 Tawhoa's Tending
+Helbrym's Hide
 Kaom's Madness
 Rusted Spikes
 Spar
@@ -337,6 +384,7 @@ Uhtred's Omen
 Uruk's Smelting
 Uul-Netol's Embrace
 Xoph's Pyre
+Zerphi's Infamy
 Fire Attunement
 Armour Demolisher I
 Armour Explosion
@@ -354,6 +402,7 @@ Eternal Flame I
 Ignite I
 Impact Shockwave
 Meat Shield I
+Opening Move
 Prolonged Duration I
 Rage I
 Steadfast I
@@ -376,6 +425,7 @@ Direstrike I
 Double Barrel II
 Elemental Armament II
 Exploit Weakness
+Fan The Flames
 Fire Penetration I
 Fresh Clip I
 Hardy Totems I
@@ -383,6 +433,7 @@ Herbalism I
 Infernal Legion I
 Jagged Ground I
 Life Leech I
+Mark for Death
 Persistent Ground I
 Raging Cry
 Refraction I
@@ -391,6 +442,7 @@ Retaliate I
 Selfless Remnants
 Short Fuse I
 Skittering Stone I
+Tectonic Slams
 Stun I
 Thornskin I
 Urgent Totems I
@@ -408,10 +460,10 @@ Clash
 Compressed Duration II
 Cool Headed
 Corrupting Cry I
+Deadly Resolve
 Searing Flame I
 Deep Cuts I
 Fist of War II
-Greatwood I
 Haemocrystals
 Eternal Flame II
 Ignite II
@@ -422,12 +474,13 @@ Meat Shield II
 Persistent Ground II
 Prolonged Duration II
 Quill Burst
-Font of Rage
 Refraction II
 Reinforced Totems I
 Remnant Potency II
+Rending Apex
 Rip
 Rupture
+Splinter Totem I
 Steadfast II
 Stoicism I
 Tear
@@ -439,12 +492,14 @@ Cannibalism II
 Concoct II
 Searing Flame II
 Direstrike II
+Echoing Cry
 Efficiency II
 Enraged Warcry I
 Execute II
+Exposing Cry
+Fan The Flames II
 Fire Exposure
 Fresh Clip II
-Greatwood II
 Hardy Totems II
 Enduring Impact II
 Herbalism II
@@ -452,6 +507,7 @@ Eternal Flame III
 Incision
 Infernal Legion II
 Long Fuse I
+Mark for Death II
 Heavy Swing
 Rage II
 Rageforged I
@@ -469,6 +525,7 @@ Barbs III
 Barbs II
 Bleed IV
 Bleed III
+Brambleslam
 Branching Fissures II
 Brutality III
 Corrupting Cry II
@@ -492,6 +549,7 @@ Rage III
 Rageforged II
 Refraction III
 Reinforced Totems II
+Splinter Totem II
 Stoicism II
 Stun III
 Upheaval II
@@ -500,7 +558,10 @@ Upheaval II
 Ailith's Chimes
 Arjun's Medal
 Arakaali's Lust
+Atziri's Impatience
 Ratha's Assault
+Dreamer's Knell
+Eonyr's Thunder
 Murderous Intent
 Ferocity
 Garukhan's Resolve
@@ -509,11 +570,13 @@ Life Bounty
 Lockdown
 Malady
 Mana Bounty
-Piety's Mercy
+Dominus' Grasp
 Rakiata's Flow
 Rigwald's Ferocity
 Stormchain
 Tacati's Ire
+Tasalio's Rhythm
+Ricochet III
 Tul's Stillness
 Lightning Attunement
 Blindside
@@ -521,14 +584,12 @@ Chain I
 Charge Profusion I
 Combo Finisher I
 Corrosion
-Crescendo I
 Escalating Poison
 Heightened Accuracy I
 Overabundance I
 Innervate
 Life Drain
 Multishot I
-Perpetual Charge
 Pierce I
 Pin I
 Poison I
@@ -562,9 +623,9 @@ Heightened Charges
 Lasting Shock
 Lightning Penetration
 Maim
-Mark for Death
 Momentum
 Multishot II
+Nova Projectiles I
 Overextend
 Overreach
 Pin II
@@ -585,12 +646,12 @@ Deadly Herald
 Deliberation
 Longshot II
 Fork
-Gambleshot
 Heightened Accuracy II
 Soul Drain
 Mobility
 Neural Overload
 Pierce II
+Poison Spores
 Poison II
 Practiced Combo
 Projectile Deceleration II
@@ -605,8 +666,8 @@ Warm Blooded
 Alignment II
 Ammo Conservation II
 Bounty II
+Controlled Hazard
 Cooldown Recovery II
-Crescendo II
 Culling Strike I
 Deadly Poison II
 Delayed Reaction
@@ -615,7 +676,7 @@ Impale
 Overabundance II
 Lightning Exposure
 Nimble Reload
-Nova Projectiles
+Nova Projectiles II
 Overcharge
 Payload
 Perfected Endurance
@@ -629,12 +690,11 @@ Ricochet II
 Alignment III
 Ammo Conservation III
 Blind II
-Brambleslam
 Chain III
 Charge Profusion II
+Charged Mark
 Charged Shots II
 Close Combat II
-Crescendo III
 Culling Strike II
 Culmination II
 Pierce III
@@ -647,13 +707,15 @@ Rearm II
 Retreat III
 Second Wind III
 Swift Affliction III
-Ricochet III
 Window of Opportunity II
 
 ### Support BLUE GEM
 Ahn's Citadel
 Arbiter's Ignition
 Atziri's Allure
+Atziri's Call
+Atziri's Communion
+Bhatair's Vengeance
 Commandment
 Dialla's Desire
 Doedre's Undoing
@@ -661,15 +723,22 @@ Shock Siphon
 Esh's Radiance
 Ixchel's Torment
 Freezefork
+Guatelitzi's Ablation
+Hayoxi's Fulmination
 Kalisa's Crescendo
+Khatal's Rejuvenation
 Kulemak's Dominion
 Kurgal's Leash
+Morgana's Tempest
+Oisín's Oath
 Romira's Requital
 Tecrod's Revenge
 Varashta's Blessing
 Vilenta's Propulsion
 Sione's Temper
+Xibaqua's Rending
 Zarokh's Refrain
+Zarokh's Revolt
 Cold Attunement
 Ambush
 Arcane Surge
@@ -677,27 +746,34 @@ Burgeon I
 Clarity I
 Concentrated Area
 Controlled Destruction
+Creeping Chill
+Crescendo I
 Crystalline Shards
 Heightened Curse
+Coursing Current
 Elemental Army
 Expanse
 Hourglass
-Ice Bite
+Ice Bite I
 Impending Doom
 Last Gasp
 Deep Freeze
 Magnified Area I
+Mark of Siphoning
 Minion Pact I
+Perpetual Charge
 Profanity I
 Rapid Casting I
 Sacrificial Lamb I
 Spell Cascade
+Thrill of the Kill
 Unleash
 Fortress I
 Withering Touch
 Zenith I
 Abiding Hex
 Acrimony
+Ambrosia
 Bidding I
 Bone Shrapnel
 Boundless Energy I
@@ -709,13 +785,16 @@ Crackling Barrier
 Danse Macabre
 Deathmarch
 Embitter
+Empowered Sparks I
 Encroaching Ground
 Excise
+Accelerated Growth
 Fiery Death
 Harmonic Remnants I
 Focused Curse
 Freeze
 Glacier
+Gorge
 Icicle
 Intense Agony
 Living Lightning
@@ -727,15 +806,16 @@ Minion Instability
 Mysticism I
 Pinpoint Critical
 Potent Exposure
-Shock Conduction
+Shock Conduction I
 Spell Echo
 Rising Tempest
 Upwelling I
 Wildfire
 Chaos Attunement
-Ambrosia
+Ambrosia II
 Astral Projection
-Biting Frost
+Biting Frost I
+Brittle Armour
 Chaotic Freeze
 Corpse Conservation
 Cursed Ground
@@ -746,51 +826,72 @@ Elemental Focus
 Energy Capacitor
 Energy Retention
 Essence Harvest
+Eternal Mark
 Execrate
 Extraction
 Feeding Frenzy I
 Harmonic Remnants II
 Fluke
 Frostfire
+Gambleshot
 Hex Bloom
+Ice Bite II
 Supercritical
-Inevitable Critical
+Inexorable Critical I
 Magnified Area II
 Muster
+Practical Magic I
 Ritualistic Curse
 Sacrificial Lamb II
 Sacrificial Offering
+Electromagnetism
+Static Shocks
 Stormfire
 Strong Hearted
+Thrill of the Kill II
 Verglas
 Volatility
 Fortress II
 Wildshards I
 Zenith II
+Advancing Storm
 Bidding II
+Blazing Critical
 Boundless Energy II
 Burgeon II
 Burning Inscription
 Clarity II
 Cold Exposure
+Concussive Spells
 Crazed Minions
+Crescendo II
 Derange
+Empowered Sparks II
 Feeding Frenzy II
 Hulking Minions
+Inexorable Critical II
 Living Lightning II
+Mark of Siphoning II
 Minion Pact II
 Mysticism II
 Rapid Casting II
 Upwelling II
 Bidding III
+Biting Frost II
+Catalysing Elements
 Chaos Mastery
 Cold Mastery
+Crescendo III
+Expand
+Accelerated Growth II
 Fire Mastery
 Lightning Mastery
 Minion Mastery
 Physical Mastery
+Practical Magic II
 Profanity II
 Rapid Casting III
+Shock Conduction II
 Wildshards II
 
 ### 爪物品
@@ -940,11 +1041,13 @@ Branched Spear
 Jagged Spear
 Massive Spear
 Orichalcum Spear
+Soaring Spear
 Pronged Spear
 Stalking Spear
 Flying Spear
 Grand Spear
 Spiked Spear
+Guardian Spear
 Akoyan Spear
 
 ### 鏈錘物品
@@ -1006,6 +1109,7 @@ Sanctified Staff
 Dark Staff
 Ravenous Staff
 Permafrost Staff
+Reflecting Staff
 
 ### 雙手劍物品
 Energy Blade
@@ -1092,6 +1196,7 @@ Striking Quarterstaff
 Bolting Quarterstaff
 Aegis Quarterstaff
 Razor Quarterstaff
+Skullcrusher Quarterstaff
 Dreaming Quarterstaff
 
 ### 魚竿物品
@@ -1139,6 +1244,33 @@ Lead Trap
 Medallion Trap
 Intricate Trap
 Refined Trap
+
+### 魔符物品
+Changeling Talisman
+Nettle Talisman
+Cinderbark Talisman
+Familial Talisman
+Frenzied Talisman
+Primal Talisman
+Rabid Talisman
+Vicious Talisman
+Voltfang Talisman
+Lumbering Talisman
+Roaring Talisman
+Wingbeat Talisman
+Condemned Talisman
+Howling Talisman
+Fury Talisman
+Cruel Talisman
+Spiny Talisman
+Ashbark Talisman
+Fang Talisman
+Fungal Talisman
+Alpha Talisman
+Maji Talisman
+Wildwood Talisman
+Thunder Talisman
+Jade Talisman
 
 ### 箭袋物品
 Broadhead Quiver
@@ -1363,6 +1495,7 @@ War Wraps
 Elegant Wraps
 Vaal Wraps
 Secured Wraps
+[DNT-UNUSED] Hand Wraps
 
 ### 鞋子物品
 Golden Caligae
@@ -1546,6 +1679,7 @@ Devout Garb
 Assassin Garb
 Garment
 Grand Regalia
+Sacrificial Regalia
 Golden Plate
 Barbarian Plate
 Rugged Cuirass
@@ -1852,6 +1986,14 @@ Transmutation Shard
 Chance Shard
 Albino Rhoa Feather
 Vaal Orb
+Architect's Orb
+Crystallised Corruption
+Core Destabiliser
+Ancient Infuser
+Vaal Cultivation Orb
+Vaal Infuser
+Orb of Extraction
+Orb of Extraction
 Orb of Annulment
 Fracturing Orb
 Regal Shard
@@ -1883,127 +2025,6 @@ Preserved Collarbone
 Ancient Collarbone
 Preserved Cranium
 Preserved Vertebrae
-
-### 可鑲嵌物品
-Desert Rune
-Glacial Rune
-Storm Rune
-Iron Rune
-Body Rune
-Mind Rune
-Rebirth Rune
-Inspiration Rune
-Stone Rune
-Vision Rune
-Lesser Desert Rune
-Lesser Glacial Rune
-Lesser Storm Rune
-Lesser Iron Rune
-Lesser Body Rune
-Lesser Mind Rune
-Lesser Rebirth Rune
-Lesser Inspiration Rune
-Lesser Stone Rune
-Lesser Vision Rune
-Greater Desert Rune
-Greater Glacial Rune
-Greater Storm Rune
-Greater Iron Rune
-Greater Body Rune
-Greater Mind Rune
-Greater Rebirth Rune
-Greater Inspiration Rune
-Greater Stone Rune
-Greater Vision Rune
-Lesser Robust Rune
-Robust Rune
-Greater Robust Rune
-Lesser Adept Rune
-Adept Rune
-Greater Adept Rune
-Lesser Resolve Rune
-Resolve Rune
-Greater Resolve Rune
-Lesser Tempered Rune
-Tempered Rune
-Greater Tempered Rune
-Greater Rune of Leadership
-Greater Rune of Tithing
-Greater Rune of Alacrity
-Greater Rune of Nobility
-Hedgewitch Assandra's Rune of Wisdom
-Saqawal's Rune of the Sky
-Fenumus' Rune of Agony
-Farrul's Rune of Grace
-Farrul's Rune of the Chase
-Craiceann's Rune of Warding
-Saqawal's Rune of Memory
-Saqawal's Rune of Erosion
-Farrul's Rune of the Hunt
-Craiceann's Rune of Recovery
-Courtesan Mannan's Rune of Cruelty
-Thane Grannell's Rune of Mastery
-Fenumus' Rune of Spinning
-Countess Seske's Rune of Archery
-Thane Girt's Rune of Wildness
-Fenumus' Rune of Draining
-Thane Myrk's Rune of Summer
-Lady Hestra's Rune of Winter
-Thane Leld's Rune of Spring
-The Greatwolf's Rune of Claws
-The Greatwolf's Rune of Willpower
-Talisman of Sirrius
-Talisman of Thruldana
-Talisman of Grold
-Talisman of Eeshta
-Talisman of Egrin
-Talisman of Maxarius
-Talisman of Ralakesh
-Hayoxi's Soul Core of Heatproofing
-Zalatl's Soul Core of Insulation
-Topotante's Soul Core of Dampening
-Atmohua's Soul Core of Retreat
-Quipolatl's Soul Core of Flow
-Tzamoto's Soul Core of Ferocity
-Uromoti's Soul Core of Attenuation
-Opiloti's Soul Core of Assault
-Guatelitzi's Soul Core of Endurance
-Xopec's Soul Core of Power
-Estazunti's Soul Core of Convalescence
-Tacati's Soul Core of Affliction
-Cholotl's Soul Core of War
-Citaqualotl's Soul Core of Foulness
-Xipocado's Soul Core of Dominion
-Soul Core of Tacati
-Soul Core of Opiloti
-Soul Core of Jiquani
-Soul Core of Zalatl
-Soul Core of Citaqualotl
-Soul Core of Puhuarte
-Soul Core of Tzamoto
-Soul Core of Xopec
-Soul Core of Azcapa
-Soul Core of Topotante
-Soul Core of Quipolatl
-Soul Core of Ticaba
-Soul Core of Atmohua
-Soul Core of Cholotl
-Soul Core of Zantipi
-Serpent Talisman
-Primate Talisman
-Owl Talisman
-Cat Talisman
-Wolf Talisman
-Stag Talisman
-Boar Talisman
-Bear Talisman
-Ox Talisman
-Rabbit Talisman
-Fox Talisman
-Amanamu's Gaze
-Tecrod's Gaze
-Kurgal's Gaze
-Ulaman's Gaze
 
 ### 預兆物品
 Omen of Refreshment
@@ -2199,6 +2220,8 @@ Expedition Logbook
 ### 最後通牒雕刻物品
 Inscribed Ultimatum
 Inscribed Ultimatum
+Inscribed Ultimatum
+Inscribed Ultimatum
 
 ### 碑牌物品
 Breach Precursor Tablet
@@ -2207,6 +2230,7 @@ Delirium Precursor Tablet
 Ritual Precursor Tablet
 Precursor Tablet
 Overseer Precursor Tablet
+Abyss Precursor Tablet
 
 ### 試煉代幣 物品
 Djinn Barya
@@ -2245,6 +2269,7 @@ Archive Reliquary Key
 Oubliette Reliquary Key
 Cosmic Reliquary Key
 Decaying Reliquary Key
+Voidborn Reliquary Key
 Voidborn Reliquary Key
 Twilight Reliquary Key
 Xesht's Reliquary Key
