@@ -69,6 +69,7 @@ public class Poe2TWParser(CacheService cacheService) : IParser
         { "魚竿", ItemType.FISHING_ROD },
         { "十字弓", ItemType.CROSSBOW },
         { "陷阱", ItemType.TRAP },
+        { "魔符", ItemType.TALISMAN },
 
         { "箭袋", ItemType.QUIVER },
         { "盾牌", ItemType.SHIELD },
@@ -580,6 +581,7 @@ public class Poe2TWParser(CacheService cacheService) : IParser
         return rarityStr switch
         {
             "普通" => Rarity.NORMAL,
+            "中" => Rarity.NORMAL,
             "魔法" => Rarity.MAGIC,
             "稀有" => Rarity.RARE,
             "傳奇" => Rarity.UNIQUE,
