@@ -206,6 +206,7 @@ public class RequestBodyBuilder(NameMappingService nameMappingService)
             ItemType.FLAIL => "weapon.flail",
             ItemType.QUARTERSTAFF => "weapon.warstaff",
             ItemType.CROSSBOW => "weapon.crossbow",
+            ItemType.TALISMAN => "weapon.talisman",
             ItemType.FOCI => "armour.focus",
             ItemType.BUCKLER => "armour.buckler",
             ItemType.TABLET => "map.tablet",
