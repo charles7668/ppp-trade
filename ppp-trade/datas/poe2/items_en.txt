@@ -2416,3 +2416,10 @@ Seal Relic
 Coffer Relic
 Tapestry Relic
 Incense Relic
+
+### 未切割的輔助寶石物品
+Uncut Support Gem (Level 1)
+Uncut Support Gem (Level 2)
+Uncut Support Gem (Level 3)
+Uncut Support Gem (Level 4)
+Uncut Support Gem (Level 5)
