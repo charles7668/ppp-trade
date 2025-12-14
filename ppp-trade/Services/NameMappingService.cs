@@ -1,10 +1,21 @@
 ﻿using System.IO;
 using System.Text.Json;
+using ppp_trade.Enums;
 
 namespace ppp_trade.Services;
 
 public class NameMappingService(CacheService cacheService)
 {
+    public string? MapPoeNinjaCurrencyType(ItemType itemType)
+    {
+        return itemType switch
+        {
+            ItemType.STACKABLE_CURRENCY => "Currency",
+            ItemType.UNCUT_SKILL_GEM or ItemType.UNCUT_SPIRIT_GEM or ItemType.UNCUT_SUPPORT_GEM => "UncutGems",
+            _ => null
+        };
+    }
+
     public async Task<string?> MapBaseItemNameAsync(string name, string forGame)
     {
         var dataFolder = forGame == "POE2" ? "datas\\poe2" : "datas\\poe";

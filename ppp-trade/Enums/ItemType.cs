@@ -63,6 +63,9 @@ public enum ItemType
     TABLET,
     VAULT_KEY,
     TALISMAN,
+    UNCUT_SKILL_GEM,
+    UNCUT_SUPPORT_GEM,
+    UNCUT_SPIRIT_GEM,
 
     #endregion
 

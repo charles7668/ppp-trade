@@ -319,7 +319,15 @@ public partial class OverlayWindowViewModel : ObservableObject
             return;
         }
 
-        var response = await _poeApiService.GetCurrencyExchangeRate(currencyName, league, game);
+        var currencyType = nameMappingService.MapPoeNinjaCurrencyType(item.ItemType);
+        if (currencyType == null)
+        {
+            ErrorMessage = "無法解析通貨類型";
+            ErrorVisibility = Visibility.Visible;
+            return;
+        }
+
+        var response = await _poeApiService.GetCurrencyExchangeRate(currencyName, currencyType, league, game);
         var imgUrl = response["item"]?["image"]?.ToString();
         var matchedCurrency = new MatchedCurrencyVM
         {

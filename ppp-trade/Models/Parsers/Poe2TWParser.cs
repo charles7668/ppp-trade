@@ -33,7 +33,7 @@ public class Poe2TWParser(CacheService cacheService) : IParser
     protected virtual string DesecratedKeyword => "(desecrated)";
 
     protected virtual string AugmentedKeyword => "(augmented)";
-    
+
     protected virtual string UnmetKeyword => "(unmet)";
 
     private string EnchantKeyword => "(enchant)";
@@ -98,7 +98,10 @@ public class Poe2TWParser(CacheService cacheService) : IParser
         { "魔力藥劑", ItemType.FLASK },
 
         { "換界石", ItemType.WAY_STONE },
-        { "遺鑰", ItemType.VAULT_KEY }
+        { "遺鑰", ItemType.VAULT_KEY },
+        { "未切割的技能寶石", ItemType.UNCUT_SKILL_GEM },
+        { "未切割的輔助寶石", ItemType.UNCUT_SUPPORT_GEM },
+        { "未切割的精魂寶石", ItemType.UNCUT_SUPPORT_GEM }
     };
 
     protected virtual Dictionary<string, Func<Stat, string, ItemBase, (bool, int?, int?)>> SpecialCaseStat { get; } =

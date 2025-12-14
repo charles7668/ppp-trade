@@ -2,6 +2,7 @@ using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using System.Text.RegularExpressions;
 using ppp_trade.Models;
 
 namespace ppp_trade.Services;
@@ -34,7 +35,8 @@ public class PoeApiService(CacheService cacheService)
                throw new InvalidOperationException("Empty response");
     }
 
-    public async Task<JsonObject> GetCurrencyExchangeRate(string queryCurrencyName, string league, string forGame)
+    public async Task<JsonObject> GetCurrencyExchangeRate(string queryCurrencyName, string currencyType, string league,
+        string forGame)
     {
         var cacheKey = $"{queryCurrencyName}:{league}:{forGame}";
         if (cacheService.TryGet(cacheKey, out JsonObject? value))
@@ -43,9 +45,10 @@ public class PoeApiService(CacheService cacheService)
         }
 
         var gameString = forGame == "POE2" ? "poe2" : "poe1";
-        var normalizedCurrencyName = queryCurrencyName.Replace("'", "").Replace(" ", "-").ToLower();
+        var normalizedCurrencyName = queryCurrencyName.Replace("'", "").Replace("(", "").Replace(")", "")
+            .Replace(" ", "-").ToLower();
         var reqUrl =
-            $"https://poe.ninja/{gameString}/api/economy/exchange/current/details?league={league}&type=Currency&id={normalizedCurrencyName}";
+            $"https://poe.ninja/{gameString}/api/economy/exchange/current/details?league={league}&type={currencyType}&id={normalizedCurrencyName}";
         using var client = new HttpClient();
         client.DefaultRequestHeaders.Add("User-Agent", "ppp-trade/1.0");
         client.DefaultRequestHeaders.Add("Accept", "*/*");
@@ -60,7 +63,7 @@ public class PoeApiService(CacheService cacheService)
         return result;
     }
 
-    public async Task<string> GetPoeNinjaWebUrlAsync(string league, string detailsId)
+    public async Task<string> GetPoeNinjaWebUrlAsync(string currencyType, string league, string detailsId)
     {
         var gameUrl = _game == "POE2" ? "poe2" : "poe1";
         if (!cacheService.TryGet(_poeNinjaLeagueMapCacheKey, out Dictionary<string, string>? leagueMap) ||
@@ -91,7 +94,8 @@ public class PoeApiService(CacheService cacheService)
             throw new InvalidOperationException("League not found");
         }
 
-        return $"https://poe.ninja/{gameUrl}/economy/{leagueMap[league]}/currency/{detailsId}";
+        var normalizedCurrencyType = Regex.Replace(currencyType, "([a-z])([A-Z])", "$1-$2").ToLower();
+        return $"https://poe.ninja/{gameUrl}/economy/{leagueMap[league]}/{normalizedCurrencyType}/{detailsId}";
     }
 
     public async Task<List<LeagueInfo>> GetLeaguesAsync()

@@ -671,7 +671,8 @@ public partial class MainWindowViewModel : ObservableObject
         string url;
         try
         {
-            url = await _poeApiService.GetPoeNinjaWebUrlAsync(SelectedLeague, MatchedCurrency.DetailsId!);
+            url = await _poeApiService.GetPoeNinjaWebUrlAsync(MatchedCurrency.CurrencyType, SelectedLeague,
+                MatchedCurrency.DetailsId!);
         }
         catch (Exception ex)
         {
@@ -734,6 +735,9 @@ public partial class MainWindowViewModel : ObservableObject
             {
                 case ItemType.STACKABLE_CURRENCY:
                 case ItemType.VAULT_KEY:
+                case ItemType.UNCUT_SPIRIT_GEM:
+                case ItemType.UNCUT_SUPPORT_GEM:
+                case ItemType.UNCUT_SKILL_GEM:
                     await QueryCurrency();
                     break;
                 default:
@@ -768,14 +772,23 @@ public partial class MainWindowViewModel : ObservableObject
             return;
         }
 
-        var response = await _poeApiService.GetCurrencyExchangeRate(currencyName, SelectedLeague!, SelectedGame!);
+        var currencyType = nameMappingService.MapPoeNinjaCurrencyType(_parsedItem.ItemType);
+        if (currencyType == null)
+        {
+            ShowWarning("無法解析通貨類型");
+            return;
+        }
+
+        var response =
+            await _poeApiService.GetCurrencyExchangeRate(currencyName, currencyType, SelectedLeague!, SelectedGame!);
         var imgUrl = response["item"]?["image"]?.ToString();
         var detailsId = response["item"]?["detailsId"]?.ToString();
         var matchedCurrency = new MatchedCurrencyVM
         {
             MatchedCurrencyImage = "https://web.poecdn.com" + imgUrl,
             YFormatter = value => value.ToString("F4"),
-            DetailsId = detailsId
+            DetailsId = detailsId,
+            CurrencyType = currencyType
         };
         var exchangeList = response["pairs"]?.AsArray();
         if (exchangeList == null)
