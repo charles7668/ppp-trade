@@ -2345,8 +2345,6 @@ Expedition Logbook
 ### 最後通牒雕刻物品
 Inscribed Ultimatum
 Inscribed Ultimatum
-Inscribed Ultimatum
-Inscribed Ultimatum
 
 ### 碑牌物品
 Breach Precursor Tablet
@@ -2394,7 +2392,6 @@ Archive Reliquary Key
 Oubliette Reliquary Key
 Cosmic Reliquary Key
 Decaying Reliquary Key
-Voidborn Reliquary Key
 Voidborn Reliquary Key
 Twilight Reliquary Key
 Xesht's Reliquary Key
