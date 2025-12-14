@@ -77,7 +77,8 @@ public class Poe2EnParser(CacheService cacheService) : Poe2TWParser(cacheService
         { "Mana Flasks", ItemType.FLASK },
 
         { "Waystones", ItemType.WAY_STONE },
-        { "Vault Keys", ItemType.VAULT_KEY }
+        { "Vault Keys", ItemType.VAULT_KEY },
+        { "Uncut Support Gem", ItemType.UNCUT_SUPPORT_GEM }
     };
 
     protected override Dictionary<string, Func<Stat, string, ItemBase, (bool, int?, int?)>> SpecialCaseStat { get; } =
