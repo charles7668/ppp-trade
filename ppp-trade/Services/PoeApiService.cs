@@ -8,6 +8,7 @@ namespace ppp_trade.Services;
 
 public class PoeApiService(CacheService cacheService)
 {
+    private readonly string _poeNinjaLeagueMapCacheKey = "api:poe-ninja:league-map";
     private string _domain = "http://localhost";
     private string _game = "POE1";
 
@@ -57,6 +58,40 @@ public class PoeApiService(CacheService cacheService)
                      throw new InvalidOperationException("Empty response");
         cacheService.Set(cacheKey, result, TimeSpan.FromHours(1));
         return result;
+    }
+
+    public async Task<string> GetPoeNinjaWebUrlAsync(string league, string detailsId)
+    {
+        var gameUrl = _game == "POE2" ? "poe2" : "poe1";
+        if (!cacheService.TryGet(_poeNinjaLeagueMapCacheKey, out Dictionary<string, string>? leagueMap) ||
+            leagueMap == null)
+        {
+            using var poeNinjaClient = new HttpClient();
+            poeNinjaClient.DefaultRequestHeaders.Add("User-Agent", "ppp-trade/1.0");
+            var poeNinjaResponse = await poeNinjaClient.GetAsync($"https://poe.ninja/{gameUrl}/api/data/index-state");
+            poeNinjaResponse.EnsureSuccessStatusCode();
+            var dataContents = await poeNinjaResponse.Content.ReadAsStringAsync();
+            var dataObj = JsonSerializer.Deserialize<JsonObject>(dataContents);
+            var economyLeagueArray = dataObj?["economyLeagues"]?.AsArray();
+            if (economyLeagueArray != null)
+            {
+                leagueMap = economyLeagueArray.Select(x => (x?["name"]?.ToString(), x?["url"]?.ToString()))
+                    .Where(x => x is { Item1: not null, Item2: not null })
+                    .ToDictionary(x => x.Item1!, x => x.Item2!);
+                cacheService.Set(_poeNinjaLeagueMapCacheKey, leagueMap, TimeSpan.FromHours(1));
+            }
+            else
+            {
+                throw new InvalidOperationException("Failed to retrieve economy leagues from poe.ninja");
+            }
+        }
+
+        if (!leagueMap!.ContainsKey(league))
+        {
+            throw new InvalidOperationException("League not found");
+        }
+
+        return $"https://poe.ninja/{gameUrl}/economy/{leagueMap[league]}/currency/{detailsId}";
     }
 
     public async Task<JsonObject> GetCurrencyHistoryAsync(string currencyId, string league, string forGame)

@@ -661,17 +661,23 @@ public partial class MainWindowViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private void OpenPoeNinja()
+    private async Task OpenPoeNinja()
     {
         if (string.IsNullOrEmpty(SelectedLeague) || string.IsNullOrEmpty(SelectedGame) || MatchedCurrency is null)
         {
             return;
         }
 
-        var league = SelectedLeague!.ToLower().Replace(" ", "-");
-        var game = SelectedGame == "POE2" ? "poe2" : "poe1";
-
-        var url = $"https://poe.ninja/{game}/economy/{league}/currency/{MatchedCurrency.DetailsId}";
+        string url;
+        try
+        {
+            url = await _poeApiService.GetPoeNinjaWebUrlAsync(SelectedLeague, MatchedCurrency.DetailsId!);
+        }
+        catch (Exception ex)
+        {
+            ShowWarning(ex.Message);
+            return;
+        }
 
         Process.Start(new ProcessStartInfo
         {
