@@ -88,29 +88,6 @@ internal static class ParserHelper
         return (false, null, null);
     }
 
-    public static (bool, int?, int?) TryResolvePoe2ReversedIncreased(Stat stat, string statText, ItemBase itemBase)
-    {
-        const string regex = "^(增加\\s*\\d+%\\s*)(.+)$";
-        var match = Regex.Match(TrimEndOfBraces(statText), regex);
-        if (!match.Success || match.Groups.Count != 3)
-        {
-            return (false, null, null);
-        }
-
-        var newCompareStatText = match.Groups[2].Value + match.Groups[1].Value;
-        return TryMatchStat(stat, newCompareStatText, out var value, out var optionId)
-            ? (true, value, optionId)
-            : (false, null, null);
-    }
-
-    public static (bool, int?, int?) TryResolvePoe2SkillLevel(Stat stat, string statText, ItemBase itemBase)
-    {
-        var newCompareText = statText.Replace("全部", "所有").Replace("技能等級", "技能的等級");
-        return TryMatchStat(stat, newCompareText, out var value, out var optionId)
-            ? (true, value, optionId)
-            : (false, null, null);
-    }
-
     public static bool TryMatchStat(Stat stat, string statText, out int? outValue, out int? outOptionId)
     {
         outValue = null;
@@ -128,7 +105,7 @@ internal static class ParserHelper
                 var regex = splitEntry.Replace("(", "\\(");
                 regex = regex.Replace(")", "\\)");
                 regex = regex.Replace("+#", "([+-][\\d.]+)");
-                regex = regex.Replace("#", "([+-]?[\\d.]+)");
+                regex = regex.Replace("#", "([\\d.]+)");
                 regex = $"^{regex}$";
                 try
                 {
