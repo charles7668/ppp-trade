@@ -30,6 +30,8 @@ public partial class SettingWindowViewModel : ObservableObject
     private const string Poe2MapHazardSettingsFileName = "poe2_map_hazard_settings.json";
     private const string Poe2MapHazardCacheKey = "Poe2MapHazardSettings";
 
+    private const string MsgToken = "SettingWinLogMsg";
+
     private readonly CacheService _cacheService;
 
     [ObservableProperty]
@@ -75,7 +77,7 @@ public partial class SettingWindowViewModel : ObservableObject
             Growl.Success(new GrowlInfo
             {
                 Message = "設定已儲存",
-                Token = "LogMsg",
+                Token = MsgToken,
                 WaitTime = 2
             });
         }
@@ -84,7 +86,7 @@ public partial class SettingWindowViewModel : ObservableObject
             Growl.Error(new GrowlInfo
             {
                 Message = $"儲存失敗: {ex.Message}",
-                Token = "LogMsg",
+                Token = MsgToken,
                 WaitTime = 2
             });
         }
@@ -108,7 +110,7 @@ public partial class SettingWindowViewModel : ObservableObject
             Growl.Success(new GrowlInfo
             {
                 Message = "地圖詞綴設定已儲存",
-                Token = "LogMsg",
+                Token = MsgToken,
                 WaitTime = 2
             });
         }
@@ -117,7 +119,7 @@ public partial class SettingWindowViewModel : ObservableObject
             Growl.Error(new GrowlInfo
             {
                 Message = $"儲存失敗: {ex.Message}",
-                Token = "LogMsg",
+                Token = MsgToken,
                 WaitTime = 2
             });
         }
