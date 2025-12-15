@@ -813,17 +813,20 @@ public partial class MainWindowViewModel : ObservableObject
 
             matchedCurrency.ExchangeRateList.Add(new ExchangeRateVM
             {
+                CurrencyId = exchange?["id"]?.ToString(),
                 CurrencyImageUrl = "https://web.poecdn.com" + imgUrl,
                 Value = double.Parse(rate)
             });
         }
 
+        string? targetId = null;
         if (matchedCurrency.ExchangeRateList.Count > 0)
         {
             matchedCurrency.PayCurrencyImage = matchedCurrency.ExchangeRateList[0].CurrencyImageUrl;
+            targetId = matchedCurrency.ExchangeRateList[0].CurrencyId;
         }
 
-        var history = exchangeList.First()?["history"]?.AsArray();
+        var history = exchangeList.First(x => x?["id"]?.ToString() == targetId)?["history"]?.AsArray();
         if (history != null)
         {
             var rateHistories = history.Select(x => double.Parse(x?["rate"]!.ToString()!)).Reverse().ToList();

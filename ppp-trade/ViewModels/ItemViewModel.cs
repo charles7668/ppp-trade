@@ -7,6 +7,8 @@ namespace ppp_trade.ViewModels;
 
 public class ExchangeRateVM
 {
+    public string? CurrencyId { get; set; }
+    
     public string? CurrencyImageUrl { get; set; }
 
     public double Value { get; set; }
