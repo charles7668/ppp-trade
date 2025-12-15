@@ -107,7 +107,12 @@ public class Poe2TWParser(CacheService cacheService) : IParser
     protected virtual Dictionary<string, Func<Stat, string, ItemBase, (bool, int?, int?)>> SpecialCaseStat { get; } =
         new()
         {
-            { "stat_3639275092", ParserHelper.TryResolveIncreasedAndDecreased }
+            { "stat_3639275092", ParserHelper.TryResolveIncreasedAndDecreased },
+            { "stat_1509134228", ParserHelper.TryResolvePoe2ReversedIncreased },
+            { "stat_2866361420", ParserHelper.TryResolvePoe2ReversedIncreased },
+            { "stat_1412217137", ParserHelper.TryResolvePoe2ReversedIncreased },
+            { "stat_2222186378", ParserHelper.TryResolvePoe2ReversedIncreased },
+            { "stat_1202301673", ParserHelper.TryResolvePoe2SkillLevel }
         };
 
     private string UnidentifiedKeyword => "Unidentified";
