@@ -94,34 +94,6 @@ public class PoeApiService(CacheService cacheService)
         return $"https://poe.ninja/{gameUrl}/economy/{leagueMap[league]}/currency/{detailsId}";
     }
 
-    public async Task<JsonObject> GetCurrencyHistoryAsync(string currencyId, string league, string forGame)
-    {
-        var cacheKey = $"history:{currencyId}:{league}:{forGame}";
-        if (cacheService.TryGet(cacheKey, out JsonObject? value))
-        {
-            return value ?? new JsonObject();
-        }
-
-        var gameString = forGame == "POE2" ? "poe2" : "poe1";
-        var normalizedCurrencyName = currencyId.Replace("'", "").Replace(" ", "-").ToLower();
-        var reqUrl =
-            $"https://poe.ninja/{gameString}/api/data/currencyhistory?league={league}&type=Currency&currencyId={normalizedCurrencyName}";
-        
-        using var client = new HttpClient();
-        client.DefaultRequestHeaders.Add("User-Agent", "ppp-trade/1.0");
-        client.DefaultRequestHeaders.Add("Accept", "*/*");
-        
-        var response = await client.GetAsync(reqUrl);
-        if (!response.IsSuccessStatusCode) return new JsonObject();
-        
-        var content = await response.Content.ReadAsStringAsync();
-        var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-        var result = JsonSerializer.Deserialize<JsonObject>(content, options) ?? new JsonObject();
-        
-        cacheService.Set(cacheKey, result, TimeSpan.FromHours(1));
-        return result;
-    }
-
     public async Task<List<LeagueInfo>> GetLeaguesAsync()
     {
         using var client = new HttpClient();
