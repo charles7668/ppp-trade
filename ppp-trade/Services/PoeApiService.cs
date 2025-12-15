@@ -9,30 +9,21 @@ namespace ppp_trade.Services;
 
 public class PoeApiService(CacheService cacheService)
 {
-    private readonly string _poeNinjaLeagueMapCacheKey = "api:poe-ninja:league-map";
+    private const string UserAgent = "ppp-trade/1.0";
+    private const string PoeNinjaLeagueMapCacheKey = "api:poe-ninja:league-map";
+    private readonly JsonSerializerOptions _jsonOptions = new() { PropertyNameCaseInsensitive = true };
+
     private string _domain = "http://localhost";
     private string _game = "POE1";
 
     public async Task<JsonObject> FetchItems(IEnumerable<string> ids, string queryId)
     {
         var idStrings = string.Join(',', ids);
-        using var client = new HttpClient();
-        client.DefaultRequestHeaders.Add("User-Agent", "ppp-trade/1.0");
-        client.DefaultRequestHeaders.Add("Accept", "*/*");
-        var normalizeDomain = _domain.TrimEnd('/') + "/";
-        var requestUrl = $"{normalizeDomain}api/trade/fetch/{idStrings}?query={queryId}";
-        if (_game == "POE2")
-        {
-            requestUrl = $"{normalizeDomain}api/trade2/fetch/{idStrings}?query={queryId}";
-        }
+        var path = _game == "POE2"
+            ? $"api/trade2/fetch/{idStrings}?query={queryId}"
+            : $"api/trade/fetch/{idStrings}?query={queryId}";
 
-        var response = await client.GetAsync(requestUrl);
-        response.EnsureSuccessStatusCode();
-        var content = await response.Content.ReadAsStringAsync();
-
-        var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-        return JsonSerializer.Deserialize<JsonObject>(content, options) ??
-               throw new InvalidOperationException("Empty response");
+        return await GetJsonAsync(GetFullUrl(path));
     }
 
     public async Task<JsonObject> GetCurrencyExchangeRate(string queryCurrencyName, string currencyType, string league,
@@ -47,18 +38,10 @@ public class PoeApiService(CacheService cacheService)
         var gameString = forGame == "POE2" ? "poe2" : "poe1";
         var normalizedCurrencyName = queryCurrencyName.Replace("'", "").Replace("(", "").Replace(")", "")
             .Replace(" ", "-").ToLower();
-        var reqUrl =
+        var url =
             $"https://poe.ninja/{gameString}/api/economy/exchange/current/details?league={league}&type={currencyType}&id={normalizedCurrencyName}";
-        using var client = new HttpClient();
-        client.DefaultRequestHeaders.Add("User-Agent", "ppp-trade/1.0");
-        client.DefaultRequestHeaders.Add("Accept", "*/*");
-        var response = await client.GetAsync(reqUrl);
-        response.EnsureSuccessStatusCode();
-        var content = await response.Content.ReadAsStringAsync();
 
-        var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-        var result = JsonSerializer.Deserialize<JsonObject>(content, options) ??
-                     throw new InvalidOperationException("Empty response");
+        var result = await GetJsonAsync(url);
         cacheService.Set(cacheKey, result, TimeSpan.FromHours(1));
         return result;
     }
@@ -66,22 +49,17 @@ public class PoeApiService(CacheService cacheService)
     public async Task<string> GetPoeNinjaWebUrlAsync(string currencyType, string league, string detailsId)
     {
         var gameUrl = _game == "POE2" ? "poe2" : "poe1";
-        if (!cacheService.TryGet(_poeNinjaLeagueMapCacheKey, out Dictionary<string, string>? leagueMap) ||
+        if (!cacheService.TryGet(PoeNinjaLeagueMapCacheKey, out Dictionary<string, string>? leagueMap) ||
             leagueMap == null)
         {
-            using var poeNinjaClient = new HttpClient();
-            poeNinjaClient.DefaultRequestHeaders.Add("User-Agent", "ppp-trade/1.0");
-            var poeNinjaResponse = await poeNinjaClient.GetAsync($"https://poe.ninja/{gameUrl}/api/data/index-state");
-            poeNinjaResponse.EnsureSuccessStatusCode();
-            var dataContents = await poeNinjaResponse.Content.ReadAsStringAsync();
-            var dataObj = JsonSerializer.Deserialize<JsonObject>(dataContents);
-            var economyLeagueArray = dataObj?["economyLeagues"]?.AsArray();
+            var dataObj = await GetJsonAsync($"https://poe.ninja/{gameUrl}/api/data/index-state");
+            var economyLeagueArray = dataObj["economyLeagues"]?.AsArray();
             if (economyLeagueArray != null)
             {
                 leagueMap = economyLeagueArray.Select(x => (x?["name"]?.ToString(), x?["url"]?.ToString()))
                     .Where(x => x is { Item1: not null, Item2: not null })
                     .ToDictionary(x => x.Item1!, x => x.Item2!);
-                cacheService.Set(_poeNinjaLeagueMapCacheKey, leagueMap, TimeSpan.FromHours(1));
+                cacheService.Set(PoeNinjaLeagueMapCacheKey, leagueMap, TimeSpan.FromHours(1));
             }
             else
             {
@@ -89,82 +67,53 @@ public class PoeApiService(CacheService cacheService)
             }
         }
 
-        if (!leagueMap!.ContainsKey(league))
+        if (!leagueMap.TryGetValue(league, out var leagueId))
         {
             throw new InvalidOperationException("League not found");
         }
 
         var normalizedCurrencyType = Regex.Replace(currencyType, "([a-z])([A-Z])", "$1-$2").ToLower();
-        return $"https://poe.ninja/{gameUrl}/economy/{leagueMap[league]}/{normalizedCurrencyType}/{detailsId}";
+        return $"https://poe.ninja/{gameUrl}/economy/{leagueId}/{normalizedCurrencyType}/{detailsId}";
     }
 
     public async Task<List<LeagueInfo>> GetLeaguesAsync()
     {
-        using var client = new HttpClient();
-        client.DefaultRequestHeaders.Add("User-Agent", "ppp-trade/1.0");
-        var normalizeDomain = _domain.TrimEnd('/') + "/";
-        var requestUrl = $"{normalizeDomain}api/trade/data/leagues";
-        if (_game == "POE2")
-        {
-            requestUrl = $"{normalizeDomain}api/trade2/data/leagues";
-        }
+        var path = _game == "POE2" ? "api/trade2/data/leagues" : "api/trade/data/leagues";
+        var response = await GetJsonAsync(GetFullUrl(path));
 
-        var response = await client.GetAsync(requestUrl);
-        response.EnsureSuccessStatusCode();
-        var content = await response.Content.ReadAsStringAsync();
-
-        var options = new JsonSerializerOptions
-        {
-            PropertyNameCaseInsensitive = true
-        };
-
-        using var doc = JsonDocument.Parse(content);
-        if (!doc.RootElement.TryGetProperty("result", out var resultElement))
+        const string field = "result";
+        if (response[field] == null)
         {
             throw new InvalidOperationException("API response structure is invalid: missing 'result' property.");
         }
 
-        var result = resultElement.GetRawText();
-        return JsonSerializer.Deserialize<List<LeagueInfo>>(result, options) ??
+        var result = response[field]!.ToJsonString();
+        return JsonSerializer.Deserialize<List<LeagueInfo>>(result, _jsonOptions) ??
                throw new InvalidOperationException("API returned null for league list.");
     }
 
     public string GetSearchWebsiteUrl(string queryId, string league)
     {
-        var normalizeDomain = _domain.TrimEnd('/') + "/";
-        var url = $"{normalizeDomain}trade/search/{league}/{queryId}";
-        if (_game == "POE2")
-        {
-            url = $"{normalizeDomain}trade2/search/poe2/{league}/{queryId}";
-        }
-
-        return url;
+        var path = _game == "POE2"
+            ? $"trade2/search/poe2/{league}/{queryId}"
+            : $"trade/search/{league}/{queryId}";
+        return GetFullUrl(path);
     }
 
     public async Task<JsonObject> GetTradeSearchResultAsync(string league, string query)
     {
-        using var client = new HttpClient();
-        client.DefaultRequestHeaders.Add("User-Agent", "ppp-trade/1.0");
-        client.DefaultRequestHeaders.Add("Accept", "*/*");
-        var normalizeDomain = _domain.TrimEnd('/') + "/";
-        var reqContent = new StringContent(query, Encoding.UTF8, "application/json");
         league = Uri.EscapeDataString(league);
-        var requestUrl = $"{normalizeDomain}api/trade/search/{league}";
-        if (_game == "POE2")
-        {
-            requestUrl = $"{normalizeDomain}api/trade2/search/poe2/{league}";
-        }
+        var path = _game == "POE2"
+            ? $"api/trade2/search/poe2/{league}"
+            : $"api/trade/search/{league}";
 
-        var request = new HttpRequestMessage(HttpMethod.Post, requestUrl)
-        {
-            Content = reqContent
-        };
-        var response = await client.SendAsync(request);
+        using var client = CreateClient();
+        var response = await client.PostAsync(GetFullUrl(path),
+            new StringContent(query, Encoding.UTF8, "application/json"));
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync();
 
-        var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-        return JsonSerializer.Deserialize<JsonObject>(content, options) ??
+        return JsonSerializer.Deserialize<JsonObject>(content, _jsonOptions) ??
                throw new InvalidOperationException("Empty response");
     }
 
@@ -176,5 +125,33 @@ public class PoeApiService(CacheService cacheService)
     public void SwitchGame(string game)
     {
         _game = game;
+    }
+
+    private static HttpClient CreateClient()
+    {
+        var client = new HttpClient();
+        client.DefaultRequestHeaders.Add("User-Agent", UserAgent);
+        client.DefaultRequestHeaders.Add("Accept", "*/*");
+        return client;
+    }
+
+    private string GetFullUrl(string relativePath)
+    {
+        return $"{_domain.TrimEnd('/')}/{relativePath}";
+    }
+
+    private async Task<JsonObject> GetJsonAsync(string url)
+    {
+        var content = await GetStringAsync(url);
+        return JsonSerializer.Deserialize<JsonObject>(content, _jsonOptions) ??
+               throw new InvalidOperationException("Empty response");
+    }
+
+    private static async Task<string> GetStringAsync(string url)
+    {
+        using var client = CreateClient();
+        var response = await client.GetAsync(url);
+        response.EnsureSuccessStatusCode();
+        return await response.Content.ReadAsStringAsync();
     }
 }
