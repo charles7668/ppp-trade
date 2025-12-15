@@ -88,4 +88,12 @@
     </None>
   </ItemGroup>
 
+  <Target Name="SetVersionInfo" BeforeTargets="PrepareForBuild">
+    <Exec Command="git rev-parse --short HEAD" ConsoleToMSBuild="true" StandardOutputImportance="low">
+      <Output TaskParameter="ConsoleOutput" PropertyName="GitCommitHash" />
+    </Exec>
+    <PropertyGroup>
+      <InformationalVersion>$(AssemblyVersion)+$(GitCommitHash)</InformationalVersion>
+    </PropertyGroup>
+  </Target>
 </Project>
