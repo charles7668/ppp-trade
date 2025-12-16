@@ -105,7 +105,7 @@ internal static class ParserHelper
                 var regex = splitEntry.Replace("(", "\\(");
                 regex = regex.Replace(")", "\\)");
                 regex = regex.Replace("+#", "([+-][\\d.]+)");
-                regex = regex.Replace("#", "([\\d.]+)");
+                regex = regex.Replace("#", "([+-]?[\\d.]+)");
                 regex = $"^{regex}$";
                 try
                 {
