@@ -30,6 +30,8 @@ public partial class OverlayRegexWindowViewModel : ObservableObject
     private const int VK_CONTROL = 0x11;
     private const int VK_F = 0x46;
     private const int VK_V = 0x56;
+    private const int WM_IME_CONTROL = 0x0283;
+    private const int IMC_SETOPENSTATUS = 0x0006;
     private readonly CacheService _cacheService;
     private readonly OverlayWindowService _overlayWindowService;
 
@@ -128,6 +130,13 @@ public partial class OverlayRegexWindowViewModel : ObservableObject
                 if (handle != IntPtr.Zero)
                 {
                     SetForegroundWindow(handle);
+
+                    var imeHandle = ImmGetDefaultIMEWnd(handle);
+                    if (imeHandle != IntPtr.Zero)
+                    {
+                        SendMessage(imeHandle, WM_IME_CONTROL, IMC_SETOPENSTATUS, IntPtr.Zero);
+                    }
+
                     return true;
                 }
             }
@@ -141,4 +150,10 @@ public partial class OverlayRegexWindowViewModel : ObservableObject
 
     [DllImport("user32.dll")]
     private static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, uint dwExtraInfo);
+
+    [DllImport("imm32.dll")]
+    private static extern IntPtr ImmGetDefaultIMEWnd(IntPtr hWnd);
+
+    [DllImport("user32.dll")]
+    private static extern IntPtr SendMessage(IntPtr hWnd, int Msg, IntPtr wParam, IntPtr lParam);
 }
