@@ -233,6 +233,10 @@ public class Poe2TWParser(CacheService cacheService) : IParser
                         hasNextStatArea = false;
                         var needSkip = false;
                         i++;
+                        if (i >= lines.Length)
+                        {
+                            break;
+                        }
                         if (lines[i] == UnidentifiedKeyword)
                         {
                             parsedItem.Unidentified = true;
