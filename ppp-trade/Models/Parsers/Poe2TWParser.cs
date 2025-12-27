@@ -718,7 +718,10 @@ public class Poe2TWParser(CacheService cacheService) : IParser
                 "weapon", new Dictionary<string, string>()
             },
             {
-                "armour", new Dictionary<string, string>()
+                "armour", new Dictionary<string, string>
+                {
+                    { "stat_3489782002", "stat_4052037485" }, // # to maximum Energy Shield (Local)
+                }
             }
         };
         var result = new List<ItemStat>();
